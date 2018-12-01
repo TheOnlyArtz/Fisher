@@ -14,10 +14,3 @@ class Client {
     wsManager->start();
   }
 }
-
-int main() {
-  Client client = Client("NDcxNjkzNjgyMzE2NDEwODgw.DuReww.7JTiq_jEr-7vrmpmWQWTzWJPNpM");
-  client->login();
-
-  return -1;
-}
