@@ -64,9 +64,6 @@ class WSManager {
 
     if (anActualJSON) {
       mapping json = Standards.JSON.decode(frame->data);
-      Iterator b = get_iterator(json);
-
-      write("%O\n", json.t);
     }
   }
 
