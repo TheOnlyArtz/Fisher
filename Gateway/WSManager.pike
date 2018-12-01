@@ -1,9 +1,14 @@
+#include "WSHandler.pike"
+
 class WSManager {
+
   Client client;
+  WSHandler wsHandler;
   Protocols.WebSocket.Connection ws;
 
   void create(Client c) {
     client = c;
+    wsHandler = WSHandler(this);
   }
 
   void start() {
@@ -64,6 +69,8 @@ class WSManager {
 
     if (anActualJSON) {
       mapping json = Standards.JSON.decode(frame->data);
+
+      WSHandler->handle(json); // TODO: Figure out why it crashes!
     }
   }
 
