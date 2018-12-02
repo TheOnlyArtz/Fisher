@@ -3,15 +3,17 @@
 /**
  * WebSocket manager - Managing all of the Websocket traffic.
  * @param {Client} client - The client.
- * @property {WSHandler} wsHandler - The Websocket handler
  * @property {string} wsSessionID - The Websocket session ID
- * @property {Protocols.WebSocket.Connection} ws]- The WS connection object
+ * @property {int} heartbeat_interval - The heartbeat interval
+ * @property {WSHandler} wsHandler - The Websocket handler
+ * @property {Protocols.WebSocket.Connection} ws- The WS connection object
  */
 class WSManager {
 
   Client client;
-  WSHandler wsHandler;
   string wsSessionID;
+  WSHandler wsHandler;
+
   Protocols.WebSocket.Connection ws;
 
   /**
