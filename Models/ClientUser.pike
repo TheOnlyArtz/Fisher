@@ -18,7 +18,7 @@ class ClientUser {
   bool verified;
   bool bot;
   bool mfa_enabled;
-  string|null email;
+  string | Val.Null email;
 
   /**
   * The constructor
