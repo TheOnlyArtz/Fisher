@@ -4,5 +4,7 @@
 class EventHandlers {
   function ready;
 
-  void create() {};
+  void create() {
+    ready = lambda() {};
+  }
 }
