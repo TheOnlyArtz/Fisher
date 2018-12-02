@@ -9,6 +9,6 @@ class EventHandlers {
 
   void create() {
     ready = lambda() {};
-    guild_create = lambda() {}
+    guild_create = lambda() {};
   }
 }
