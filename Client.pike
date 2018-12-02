@@ -37,7 +37,7 @@ class Client {
   void create(string t) {
     token = t;
     wsManager = WSManager(this);
-
+    handlers = EventHandlers();
     // Caching
     users = ([]);
     presences = ([]);
