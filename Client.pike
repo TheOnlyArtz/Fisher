@@ -5,7 +5,7 @@
 * @param {string} token - The client's token
 * @property {WSManager} wsManager - The Websocket Manager
 * @property {Protocols.WebSocket.Connection} ws - The Websocket connection object
-* CACHING UTILS:
+* Caching utils:
 * @property {mapping} users - All of the cached users
 * @property {mapping} presences - All of the cached presences
 * @property {mapping} guilds - All of the cached guilds
