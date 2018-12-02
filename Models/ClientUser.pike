@@ -1,14 +1,15 @@
 /**
-* The ClientUser is a User with more features
-* @property {string} avatar - The avatar hash
-* @property {string} descriminator - The descriminator
-* @property {string} id - The ID
-* @property {string} username - The username
-* @property {bool} verified - If the user is verified or not
-* @property {string|null} email - The user's email
-* @property {bool} mfa_enabled - If mfa enabled or not
-* @property {bool} bot - If the client is a bot or not
-*/
+ * The ClientUser is a User with more features
+ * @property {string} avatar - The avatar hash
+ * @property {string} descriminator - The descriminator
+ * @property {string} id - The ID
+ * @property {string} username - The username
+ * @property {bool} verified - If the user is verified or not
+ * @property {string|null} email - The user's email
+ * @property {bool} mfa_enabled - If mfa enabled or not
+ * @property {bool} bot - If the client is a bot or not
+ */
+
 class ClientUser {
   string avatar;
   string descriminator;

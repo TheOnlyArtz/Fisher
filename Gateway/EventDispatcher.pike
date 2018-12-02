@@ -3,10 +3,10 @@
 #include "../Models/ClientUser.pike"
 
 /**
-* Here all the events with OP code 0 will be handled!
-* @property {WSHandler} wsHandler - The websocket handler
-* @param {Client} client - The client.
-*/
+ * Here all the events with OP code 0 will be handled!
+ * @property {WSHandler} wsHandler - The websocket handler
+ * @param {Client} client - The client.
+ */
 class EventDispatcher {
   WSHandler wsHandler;
   Client client;
@@ -20,9 +20,9 @@ class EventDispatcher {
   }
 
   /**
-  * handles the READY event
-  * @param {mapping} data
-  */
+   * handles the READY event
+   * @param {mapping} data
+   */
   void handleReadyEvent(mapping data) {
     client.user = ClientUser(data.user);
     wsHandler.wsManager.wsSessionID = data.session_id;
@@ -32,9 +32,9 @@ class EventDispatcher {
   }
 
   /**
-  * handles the GUILD_CREATE event
-  * @param {mapping} data
-  */
+   * handles the GUILD_CREATE event
+   * @param {mapping} data
+   */
   void handleGuildCreateEvent(mapping data) {
     write("%O", data);
   }

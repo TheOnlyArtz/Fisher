@@ -1,12 +1,12 @@
 #include "WSHandler.pike"
 
 /**
-* WebSocket manager - Managing all of the Websocket traffic.
-* @param {Client} client - The client.
-* @property {WSHandler} wsHandler - The Websocket handler
-* @property {string} wsSessionID - The Websocket session ID
-* @property {Protocols.WebSocket.Connection} ws]- The WS connection object
-*/
+ * WebSocket manager - Managing all of the Websocket traffic.
+ * @param {Client} client - The client.
+ * @property {WSHandler} wsHandler - The Websocket handler
+ * @property {string} wsSessionID - The Websocket session ID
+ * @property {Protocols.WebSocket.Connection} ws]- The WS connection object
+ */
 class WSManager {
 
   Client client;
@@ -15,16 +15,16 @@ class WSManager {
   Protocols.WebSocket.Connection ws;
 
   /**
-  * The constructor
-  */
+   * The constructor
+   */
   void create(Client c) {
     client = c;
     wsHandler = WSHandler(this);
   }
 
   /**
-    Used to start the process of connection the bot to the websocket
-  */
+   * Used to start the process of connection the bot to the websocket
+   */
   void start() {
     ws = connectWS();
     ws->onmessage = onmessage;
@@ -33,9 +33,9 @@ class WSManager {
   }
 
   /**
-    Used to establish a websocket connection and return the connection object.
-    Returns <Protocols.WebSocket.Connection>
-  */
+   * Used to establish a websocket connection and return the connection object.
+   * Returns <Protocols.WebSocket.Connection>
+   */
   Protocols.WebSocket.Connection connectWS() {
     // The Websocket/Gateway link for Discord.
     Standards.URI wsLink = Standards.URI("wss://gateway.discord.gg/?v=6&encoding=json");
@@ -48,9 +48,9 @@ class WSManager {
   }
 
   /**
-  * Dispatches whenever the socket opens.
-  * Sends an identification payload to the websocket.
-  */
+   * Dispatches whenever the socket opens.
+   * Sends an identification payload to the websocket.
+   */
   void onopen() {
     mapping identifyPayload = ([
         "op": 2,
@@ -80,9 +80,9 @@ class WSManager {
   }
 
   /**
-  * Dispatches whenever a new packet frame comes from the Websocket.
-  * Lets the WSHandler to handle the packets
-  */
+   * Dispatches whenever a new packet frame comes from the Websocket.
+   * Lets the WSHandler to handle the packets
+   */
   void onmessage(Protocols.WebSocket.Frame frame) {
     int anActualJSON = Standards.JSON.validate(frame->data);
 
@@ -93,9 +93,9 @@ class WSManager {
   }
 
   /**
-  *  Dispatches whenever the socket closes
-  *  And exists the program
-  */
+   *  Dispatches whenever the socket closes
+   *  And exists the program
+   */
   void onclose() {
     write("Socket closed!");
     exit(1);
