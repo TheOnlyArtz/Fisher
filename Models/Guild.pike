@@ -2,16 +2,16 @@
 * The Guild class houses all of the Guild functions and properties
 * @param {string} id - The guild's ID
 * @param {string} name - The guild's name
-* @param {string|null} icon - The guild's icon hash
-* @param {string|null} splash - The guild's splash has
+* @param {string|Val.Null} icon - The guild's icon hash
+* @param {string|Val.Null} splash - The guild's splash has
 * @param {string} owner_id - The guild's owner ID
 * @param {bool} owner - Whether or not the user is the owner of the guild
 * @param {int} permissions - The user's permissions
 * @param {string} region - Voice region ID for the guild
-* @param {string} afk_channel_id - ID of afk channel
+* @param {string|Val.Null} afk_channel_id - ID of afk channel
 * @param {int} afk_timeout - afk timeout in SECONDS
 * @param {bool} embed_enabled - Is this guild embeddable (e.g widget)
-* @param {string} embed_channel_id - The channel ID that the widget will generate an invite to
+* @param {string|Val.Null} embed_channel_id - The channel ID that the widget will generate an invite to
 * @param {int} verification_level - verification level required for the guild
 * @param {int} default_message_notifications - default message notifications level
 * @param {int} explicit_content_filter - Explicit content filter level
@@ -19,10 +19,10 @@
 * @param {mapping} emojis - Custom guild emojis
 * @param {array(string)} features - Enabled guild features
 * @param {int} mfa_level - Required MFA level for the guild
-* param {string} application_id - Application id of the guild creator if it's bot-created
+* param {string|Val.Null} application_id - Application id of the guild creator if it's bot-created
 * @param {bool} widget_enabled - Whether or not the server widget is enabled
 * @param {string} widget_channel_id - The channel ID for server widget
-* @param {string} system_channel_id - The ID of the channel to which system messages are sent
+* @param {string|Val.Null} system_channel_id - The ID of the channel to which system messages are sent
 * @param {mixed} joined_at - When this guild was joined at
 * @param {bool} large - Whether this is considered a large guild
 * @param {bool} unavailable - Whether the guild is unavailable
@@ -35,16 +35,16 @@
 class Guild {
   string id;
   string name;
-  string|null icon;
-  string|null splash;
+  string|Val.Null icon;
+  string|Val.Null splash;
   bool owner;
   string owner_id;
   int client_permissions;
   string region;
-  string|null afk_channel_id;
+  string|Val.Null afk_channel_id;
   int afk_timeout;
   bool embed_enabled;
-  string|null embed_channel_id;
+  string|Val.Null embed_channel_id;
   int verification_level;
   int default_message_notifications;
   int explicit_content_filter;
@@ -59,10 +59,10 @@ class Guild {
   array(string) features;
 
   int mfa_level;
-  string|null application_id;
+  string|Val.Null application_id;
   bool widget_enabled;
   string widget_channel_id;
-  string|null system_channel_id;
+  string|Val.Null system_channel_id;
   mixed joined_at // CHECK WHAT FORMAT IT IS (SHOULD BE ISO8601)
   bool large;
   bool unavailable;
