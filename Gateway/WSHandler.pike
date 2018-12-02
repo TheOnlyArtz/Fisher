@@ -18,6 +18,7 @@ class WSHandler {
   void handle(mapping a) {
     int opCode = a.op;
     mapping data = a.d;
+    wsManager.sequence = a.s;
 
     if (opCode != 0) {
 
