@@ -1,28 +1,40 @@
 #include "EventDispatcher.pike"
+#include "GatewayDispatcher.pike"
 
 class WSHandler {
   Client client;
   WSManager wsManager;
-  EventDispatcher dispatcher;
+  EventDispatcher eventDispatcher;
+  GatewayDispatcher gatewayDispatcher;
   int sequence;
 
   void create(WSManager w) {
     wsManager = w;
     client = w.client;
-    dispatcher = EventDispatcher(this);
+    eventDispatcher = EventDispatcher(this);
+    gatewayDispatcher = GatewayDispatcher(this);
   }
 
   void handle(mapping a) {
     int opCode = a.op;
     mapping data = a.d;
-    if (opCode != 0) return;
 
-    switch(a.t) {
-      case "READY":
-        dispatcher->handleReadyEvent(data);
-        break;
-      case "GUILD_CREATE":
-        dispatcher->handleGuildCreateEvent(data);
+    if (opCode != 0) {
+
+      switch(opCode) {
+        case 10:
+          gatewayDispatcher->handleHelloEvent(data);
+          break;
+      }
+
+    } else {
+      switch(a.t) {
+        case "READY":
+          eventDispatcher->handleReadyEvent(data);
+          break;
+        case "GUILD_CREATE":
+          eventDispatcher->handleGuildCreateEvent(data);
+      }
     }
   }
 }
