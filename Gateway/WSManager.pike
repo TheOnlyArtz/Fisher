@@ -1,16 +1,28 @@
 #include "WSHandler.pike"
 
+/*
+* WebSocket manager - Managing all of the websocket traffic.
+* @param {Client} client - The client.
+* @param {WSHandler} [wsHandler] - The websocket handler
+* @param {Protocols.WebSocket.Connection} [ws] - The WS connection object
+*/
 class WSManager {
 
   Client client;
   WSHandler wsHandler;
   Protocols.WebSocket.Connection ws;
 
+  /*
+  * The constructor
+  */
   void create(Client c) {
     client = c;
     wsHandler = WSHandler(this);
   }
 
+  /*
+    Used to start the process of connection the bot to the websocket
+  */
   void start() {
     ws = connectWS();
     ws->onmessage = onmessage;
@@ -20,6 +32,7 @@ class WSManager {
 
   /*
     Used to establish a websocket connection and return the connection object.
+    Returns <Protocols.WebSocket.Connection>
   */
   Protocols.WebSocket.Connection connectWS() {
 
@@ -35,6 +48,10 @@ class WSManager {
     return wsClient;
   }
 
+  /*
+  * Dispatches whenever the socket opens.
+  * Sends an identification payload to the websocket.
+  */
   void onopen() {
     mapping identifyPayload = ([
         "op": 2,
@@ -63,17 +80,23 @@ class WSManager {
     ws->send_text(payload);
   }
 
+  /*
+  * Dispatches whenever a new packet frame comes from the Websocket.
+  * Lets the WSHandler to handle the packets
+  */
   void onmessage(Protocols.WebSocket.Frame frame) {
 
     int anActualJSON = Standards.JSON.validate(frame->data);
 
     if (anActualJSON) {
       mapping json = Standards.JSON.decode(frame->data);
-
-      WSHandler->handle(json); // TODO: Figure out why it crashes!
+      wsHandler->handle(json); // TODO: Figure out why it crashes!
     }
   }
 
+  /*
+  *  Dispatches whenever the socket closes
+  */
   void onclose() {
     write("Socket closed!");
   }
