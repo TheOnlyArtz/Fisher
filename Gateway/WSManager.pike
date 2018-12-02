@@ -96,9 +96,11 @@ class WSManager {
 
   /*
   *  Dispatches whenever the socket closes
+  *  And exists the program
   */
   void onclose() {
     write("Socket closed!");
+    exit(1);
   }
 
 }
