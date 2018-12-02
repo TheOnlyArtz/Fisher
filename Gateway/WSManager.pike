@@ -12,6 +12,8 @@ class WSManager {
 
   Client client;
   string wsSessionID;
+  int heartbeat_interval;
+  int sequence;
   WSHandler wsHandler;
 
   Protocols.WebSocket.Connection ws;
@@ -103,4 +105,20 @@ class WSManager {
     exit(1);
   }
 
+  /*
+  * Make the client to start heartbeating
+  * @param {int} time - The time for the interval to repeat
+  */
+  void heartbeat(int time) {
+    mapping mappingPayload = ([
+        "op": 1,
+        "d": sequence
+      ]);
+
+      // Send heartbeat payload
+    string payload = Standards.JSON.encode(mappingPayload);
+    ws->send_text(payload);
+
+    call_out(heartbeat, time, time);
+  }
 }
