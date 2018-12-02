@@ -3,8 +3,8 @@
 /*
 * WebSocket manager - Managing all of the websocket traffic.
 * @param {Client} client - The client.
-* @param {WSHandler} [wsHandler] - The websocket handler
-* @param {Protocols.WebSocket.Connection} [ws] - The WS connection object
+* @property {WSHandler} wsHandler - The websocket handler
+* @property {Protocols.WebSocket.Connection} ws]- The WS connection object
 */
 class WSManager {
 
