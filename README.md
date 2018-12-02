@@ -7,7 +7,7 @@
 #include "Client.pike"
 
 int main() {
-  Client client = Client("NDcxNjkzNjgyMzE2NDEwODgw.DuRzIQ.cXmiqL9yXIgL61WjfGydRNPgpDI");
+  Client client = Client("TOKEN");
   client->login();
   client.handlers->ready = handlem;
 
