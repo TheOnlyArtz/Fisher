@@ -12,7 +12,6 @@ class WSManager {
   Client client;
   WSHandler wsHandler;
   string wsSessionID;
-
   Protocols.WebSocket.Connection ws;
 
   /*
