@@ -49,12 +49,15 @@ class Guild {
   int default_message_notifications;
   int explicit_content_filter;
 
-  mapping roles;
-  mapping emojis;
-  mapping voice_states;
-  mapping members;
-  mapping channels;
-  mapping presences;
+  /*
+  * Change to mapping when done with GuildCacher
+  */
+  array roles;
+  array emojis;
+  array voice_states;
+  array members;
+  array channels;
+  array presences;
 
   array(string) features;
 
@@ -63,7 +66,7 @@ class Guild {
   bool widget_enabled;
   string widget_channel_id;
   string|Val.Null system_channel_id;
-  mixed joined_at // CHECK WHAT FORMAT IT IS (SHOULD BE ISO8601)
+  mixed joined_at; // CHECK WHAT FORMAT IT IS (SHOULD BE ISO8601)
   bool large;
   bool unavailable;
   int member_count;
