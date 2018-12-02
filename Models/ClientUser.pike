@@ -4,10 +4,10 @@
 * @property {string} descriminator - The descriminator
 * @property {string} id - The ID
 * @property {string} username - The username
-* @property {Val.Boolean} verified - If the user is verified or not
-* @property {string|Val.Null} email - The user's email
-* @property {Val.Boolean} mfa_enabled - If mfa enabled or not
-* @property {Val.Boolean} bot - If the client is a bot or not
+* @property {bool} verified - If the user is verified or not
+* @property {string|null} email - The user's email
+* @property {bool} mfa_enabled - If mfa enabled or not
+* @property {bool} bot - If the client is a bot or not
 */
 class ClientUser {
   string avatar;
@@ -17,7 +17,7 @@ class ClientUser {
   bool verified;
   bool bot;
   bool mfa_enabled;
-  string|Val.Null email;
+  string|null email;
 
   /*
   * The constructor
