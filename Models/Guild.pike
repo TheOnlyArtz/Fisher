@@ -68,4 +68,42 @@ class Guild {
   bool unavailable;
   int member_count;
 
+  /*
+  * The constructor
+  * @param {mapping} data - The guild data
+  */
+  void create(mapping data) {
+    id = data.id;
+    name = data.name;
+    icon = data.icon;
+    splash = data.splash;
+    owner = data.owner;
+    owner_id = data.owner_id;
+    client_permissions = data.permissions;
+    region = data.region;
+    afk_channel_id = data.afk_channel_id;
+    afk_timeout = data.afk_timeout;
+    embed_enabled = data.embed_enabled;
+    embed_channel_id = data.embed_channel_id;
+    verification_level = data.verification_level;
+    default_message_notifications = data.default_message_notifications;
+    explicit_content_filter = data.explicit_content_filter;
+    roles = data.roles;
+    emojis = data.emojis;
+    voice_states = data.voice_states;
+    members = data.members;
+    channels = data.channels;
+    presences = data.presences;
+
+    features = data.features;
+
+    mfa_level = data.mfa_level;
+    application_id = data.application_id;
+    widget_enabled = data.widget_enabled;
+    widget_channel_id = data.widget_channel_id;
+    system_channel_id = data.system_channel_id;
+    joined_at = data.joined_at;
+    large = data.large;
+    member_count = data.member_count;
+  }
 }
