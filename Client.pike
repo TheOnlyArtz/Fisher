@@ -1,5 +1,5 @@
 #include "Gateway/WSManager.pike"
-
+#include "Gateway/EventHandlers.pike"
 /*
 * Client - The Discord API Client itself
 * @param {string} token - The client's token
@@ -16,6 +16,8 @@
 class Client {
   string token;
   WSManager wsManager;
+  EventHandlers handlers;
+  
   Protocols.WebSocket.Connection ws;
 
   // Caching
