@@ -70,7 +70,7 @@ class WSManager {
                 "since": Val.null,
                 "afk": Val.false
             ]),
-          "compress": Val.true,
+          "compress": Val.false,
           "large_threshold": 250,
           "shard": ({0, 1})
           ])
@@ -85,7 +85,6 @@ class WSManager {
   * Lets the WSHandler to handle the packets
   */
   void onmessage(Protocols.WebSocket.Frame frame) {
-
     int anActualJSON = Standards.JSON.validate(frame->data);
 
     if (anActualJSON) {
