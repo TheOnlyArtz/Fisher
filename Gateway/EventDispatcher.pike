@@ -1,6 +1,6 @@
 /*
 * Here all the events with OP code 0 will be handled!
-* @param {WSHandler} [wsHandler] - The websocket handler
+* @property {WSHandler} wsHandler - The websocket handler
 * @param {Client} client - The client.
 */
 class EventDispatcher {
