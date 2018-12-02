@@ -32,6 +32,10 @@ class Client {
 
     // Caching
     users = ([]);
+    presences = ([]);
+    guilds = ([]);
+    channels = ([]);
+    
   }
 
   void login() {
