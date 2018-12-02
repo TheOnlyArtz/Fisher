@@ -28,5 +28,6 @@ class EventDispatcher {
     wsHandler.wsManager.wsSessionID = data.session_id;
 
     // Emit the event
+    client.handlers->ready(client);
   }
 }
