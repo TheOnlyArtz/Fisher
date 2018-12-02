@@ -1,9 +1,11 @@
 #include "Gateway/WSManager.pike"
 #include "Gateway/EventHandlers.pike"
+
 /*
 * Client - The Discord API Client itself
 * @param {string} token - The client's token
 * @property {WSManager} wsManager - The Websocket Manager
+* @property {EventHandlers} handlers - The Client handlers callbacks (for events)
 * @property {Protocols.WebSocket.Connection} ws - The Websocket connection object
 * Caching utils:
 * @property {mapping} users - All of the cached users
@@ -17,7 +19,7 @@ class Client {
   string token;
   WSManager wsManager;
   EventHandlers handlers;
-  
+
   Protocols.WebSocket.Connection ws;
 
   // Caching
