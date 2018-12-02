@@ -1,15 +1,18 @@
 #include "WSHandler.pike"
 
 /*
-* WebSocket manager - Managing all of the websocket traffic.
+* WebSocket manager - Managing all of the Websocket traffic.
 * @param {Client} client - The client.
-* @property {WSHandler} wsHandler - The websocket handler
+* @property {WSHandler} wsHandler - The Websocket handler
+* @property {string} wsSessionID - The Websocket session ID
 * @property {Protocols.WebSocket.Connection} ws]- The WS connection object
 */
 class WSManager {
 
   Client client;
   WSHandler wsHandler;
+  string wsSessionID;
+
   Protocols.WebSocket.Connection ws;
 
   /*
