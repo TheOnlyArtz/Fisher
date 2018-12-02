@@ -32,6 +32,9 @@ class EventDispatcher {
 
     // Emit the event
     client.handlers->ready(client);
+
+    // Start heartbeating
+    wsHandler.wsManager->heartbeat(wsHandler.wsManager.heartbeat_interval/1000);
   }
 
   /**
@@ -39,6 +42,7 @@ class EventDispatcher {
    * @param {mapping} data
    */
   void handleGuildCreateEvent(mapping data) {
-    write("%O", data);
+    Guild guild = Guild(data);
+    client.guilds[guild.id] = guild;
   }
 }

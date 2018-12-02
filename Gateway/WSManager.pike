@@ -5,6 +5,8 @@
  * @param {Client} client - The client.
  * @property {string} wsSessionID - The Websocket session ID
  * @property {int} heartbeat_interval - The heartbeat interval
+ * @property {int} curr_heartbeat_time - Updates everytime the client attempts to send a heartbeat
+ * @property {int} perv_heartbeat_ack - The most recent (cached) heartbeat ack to compare with the new one
  * @property {WSHandler} wsHandler - The Websocket handler
  * @property {Protocols.WebSocket.Connection} ws- The WS connection object
  */
@@ -12,18 +14,27 @@ class WSManager {
 
   Client client;
   string wsSessionID;
+
   int heartbeat_interval;
+  int curr_heartbeat_time;
+  int perv_heartbeat_ack;
+
   int sequence;
   WSHandler wsHandler;
 
   Protocols.WebSocket.Connection ws;
 
+
+  bool uslessHBrun = true;
   /**
    * The constructor
    */
   void create(Client c) {
     client = c;
     wsHandler = WSHandler(this);
+
+    curr_heartbeat_time = 0;
+    perv_heartbeat_ack = 0;
   }
 
   /**
@@ -107,18 +118,27 @@ class WSManager {
 
   /*
   * Make the client to start heartbeating
-  * @param {int} time - The time for the interval to repeat
+  * @param {int} ms - The time for the interval to repeat
   */
-  void heartbeat(int time) {
-    mapping mappingPayload = ([
-        "op": 1,
-        "d": sequence
-      ]);
+  void heartbeat(int ms) {
+    if (uslessHBrun == false) {
 
-      // Send heartbeat payload
-    string payload = Standards.JSON.encode(mappingPayload);
-    ws->send_text(payload);
+      // if (curr_heartbeat_time > perv_heartbeat_ack) TODO: Reconnect and RESUME
 
-    call_out(heartbeat, time, time);
+      mapping mappingPayload = ([
+          "op": 1,
+          "d": sequence
+        ]);
+
+        // Send heartbeat payload
+      string payload = Standards.JSON.encode(mappingPayload);
+      ws->send_text(payload);
+
+      curr_heartbeat_time = time();
+    } else {
+      uslessHBrun = false;;
+    }
+
+    call_out(heartbeat, ms, ms);
   }
 }
