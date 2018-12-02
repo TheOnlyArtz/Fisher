@@ -25,6 +25,8 @@ class EventDispatcher {
   */
   void handleReadyEvent(mapping data) {
     client.user = ClientUser(data.user);
+    wsHandler.wsManager.wsSessionID = data.session_id;
 
+    // Emit the event
   }
 }
