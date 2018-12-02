@@ -20,11 +20,14 @@ class WSHandler {
     mapping data = a.d;
     wsManager.sequence = a.s;
 
+    write((string) opCode);
     if (opCode != 0) {
-
       switch(opCode) {
         case 10:
           gatewayDispatcher->handleHelloEvent(data);
+          break;
+        case 11:
+          wsManager.perv_heartbeat_ack = time();
           break;
       }
 
