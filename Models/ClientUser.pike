@@ -14,10 +14,10 @@ class ClientUser {
   string descriminator;
   string id;
   string username;
-  Val.Boolean verified;
+  bool verified;
+  bool bot;
+  bool mfa_enabled;
   string|Val.Null email;
-  Val.Boolean mfa_enabled;
-  Val.Boolean bot;
 
   /*
   * The constructor
