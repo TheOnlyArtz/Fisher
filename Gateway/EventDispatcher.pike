@@ -1,8 +1,8 @@
 // MODELS:
-/* READY EVENT */
+/** READY EVENT */
 #include "../Models/ClientUser.pike"
 
-/*
+/**
 * Here all the events with OP code 0 will be handled!
 * @property {WSHandler} wsHandler - The websocket handler
 * @param {Client} client - The client.
@@ -11,7 +11,7 @@ class EventDispatcher {
   WSHandler wsHandler;
   Client client;
 
-  /*
+  /**
   * The constructor
   */
   void create(WSHandler w) {
@@ -19,9 +19,9 @@ class EventDispatcher {
     client = w.client;
   }
 
-  /*
+  /**
   * handles the READY event
-  * @param data
+  * @param {mapping} data
   */
   void handleReadyEvent(mapping data) {
     client.user = ClientUser(data.user);
@@ -29,5 +29,13 @@ class EventDispatcher {
 
     // Emit the event
     client.handlers->ready(client);
+  }
+
+  /**
+  * handles the GUILD_CREATE event
+  * @param {mapping} data
+  */
+  void handleGuildCreateEvent(mapping data) {
+    write("%O", data);
   }
 }

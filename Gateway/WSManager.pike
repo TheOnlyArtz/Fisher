@@ -1,6 +1,6 @@
 #include "WSHandler.pike"
 
-/*
+/**
 * WebSocket manager - Managing all of the Websocket traffic.
 * @param {Client} client - The client.
 * @property {WSHandler} wsHandler - The Websocket handler
@@ -14,7 +14,7 @@ class WSManager {
   string wsSessionID;
   Protocols.WebSocket.Connection ws;
 
-  /*
+  /**
   * The constructor
   */
   void create(Client c) {
@@ -22,7 +22,7 @@ class WSManager {
     wsHandler = WSHandler(this);
   }
 
-  /*
+  /**
     Used to start the process of connection the bot to the websocket
   */
   void start() {
@@ -32,7 +32,7 @@ class WSManager {
     ws->onclose;
   }
 
-  /*
+  /**
     Used to establish a websocket connection and return the connection object.
     Returns <Protocols.WebSocket.Connection>
   */
@@ -47,7 +47,7 @@ class WSManager {
     return wsClient;
   }
 
-  /*
+  /**
   * Dispatches whenever the socket opens.
   * Sends an identification payload to the websocket.
   */
@@ -79,7 +79,7 @@ class WSManager {
     ws->send_text(payload);
   }
 
-  /*
+  /**
   * Dispatches whenever a new packet frame comes from the Websocket.
   * Lets the WSHandler to handle the packets
   */
@@ -92,7 +92,7 @@ class WSManager {
     }
   }
 
-  /*
+  /**
   *  Dispatches whenever the socket closes
   *  And exists the program
   */

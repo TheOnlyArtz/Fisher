@@ -1,4 +1,4 @@
-/*
+/**
 * The ClientUser is a User with more features
 * @property {string} avatar - The avatar hash
 * @property {string} descriminator - The descriminator
@@ -19,7 +19,7 @@ class ClientUser {
   bool mfa_enabled;
   string|null email;
 
-  /*
+  /**
   * The constructor
   * @param {mapping} data - The user data
   */

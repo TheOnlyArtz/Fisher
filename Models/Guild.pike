@@ -1,4 +1,4 @@
-/*
+/**
 * The Guild class houses all of the Guild functions and properties
 * @param {string} id - The guild's ID
 * @param {string} name - The guild's name
@@ -19,7 +19,7 @@
 * @param {mapping} emojis - Custom guild emojis
 * @param {array(string)} features - Enabled guild features
 * @param {int} mfa_level - Required MFA level for the guild
-* @param {string} application_id - Application id of the guild creator if it's bot-created
+* param {string} application_id - Application id of the guild creator if it's bot-created
 * @param {bool} widget_enabled - Whether or not the server widget is enabled
 * @param {string} widget_channel_id - The channel ID for server widget
 * @param {string} system_channel_id - The ID of the channel to which system messages are sent
@@ -68,7 +68,7 @@ class Guild {
   bool unavailable;
   int member_count;
 
-  /*
+  /**
   * The constructor
   * @param {mapping} data - The guild data
   */
