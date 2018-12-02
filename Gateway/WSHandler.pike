@@ -21,6 +21,8 @@ class WSHandler {
       case "READY":
         dispatcher->handleReadyEvent(data);
         break;
+      case "GUILD_CREATE":
+        dispatcher->handleGuildCreateEvent(data);
     }
   }
 }
