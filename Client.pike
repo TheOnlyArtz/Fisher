@@ -10,6 +10,8 @@
 * @property {mapping} presences - All of the cached presences
 * @property {mapping} guilds - All of the cached guilds
 * @property {mapping} channels - All of the cached channels
+* Others:
+* @property {ClientUser} user - The user of the client (User with more features)
 */
 class Client {
   string token;
@@ -22,6 +24,8 @@ class Client {
   mapping guilds;
   mapping channels;
 
+  // Others
+  ClientUser user;
 
   /*
   * The constructor
@@ -35,7 +39,7 @@ class Client {
     presences = ([]);
     guilds = ([]);
     channels = ([]);
-    
+
   }
 
   void login() {
