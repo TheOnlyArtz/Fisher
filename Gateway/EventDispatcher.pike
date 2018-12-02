@@ -14,4 +14,12 @@ class EventDispatcher {
     wsHandler = w;
     client = w.client;
   }
+
+  /*
+  * handles the READY event
+  * @param data
+  */
+  void handleReadyEvent(mapping data) {
+    
+  }
 }
