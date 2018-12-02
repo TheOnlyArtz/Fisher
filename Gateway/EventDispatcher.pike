@@ -1,3 +1,7 @@
+// MODELS:
+/* READY EVENT */
+#include "../Models/ClientUser.pike"
+
 /*
 * Here all the events with OP code 0 will be handled!
 * @property {WSHandler} wsHandler - The websocket handler
@@ -20,6 +24,7 @@ class EventDispatcher {
   * @param data
   */
   void handleReadyEvent(mapping data) {
-    
+    client.user = ClientUser(data.user);
+
   }
 }
