@@ -37,13 +37,10 @@ class WSManager {
     Returns <Protocols.WebSocket.Connection>
   */
   Protocols.WebSocket.Connection connectWS() {
-
     // The Websocket/Gateway link for Discord.
     Standards.URI wsLink = Standards.URI("wss://gateway.discord.gg/?v=6&encoding=json");
-
     // The WS client in this scope.
     Protocols.WebSocket.Connection wsClient = Protocols.WebSocket.Connection();
-
     // Connect to the WS
     wsClient->connect(wsLink);
 
