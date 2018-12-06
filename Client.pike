@@ -47,6 +47,6 @@ class Client {
   }
 
   void login() {
-    wsManager->start();
+    wsManager->start(false, false);
   }
 }

@@ -34,7 +34,7 @@ class EventDispatcher {
     client.handlers->ready(client);
 
     // Start heartbeating
-    wsHandler.wsManager->heartbeat(wsHandler.wsManager.heartbeat_interval/1000);
+    wsHandler.wsManager->heartbeat((wsHandler.wsManager.heartbeat_interval/1000) - 20);
   }
 
   /**

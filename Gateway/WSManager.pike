@@ -16,13 +16,15 @@ class WSManager {
   string wsSessionID;
 
   int heartbeat_interval;
-  int curr_heartbeat_time;
   int perv_heartbeat_ack;
+  protected int curr_heartbeat_time;
+  protected bool resuming;
+  protected bool reconnecting;
 
   int sequence;
   WSHandler wsHandler;
 
-  Protocols.WebSocket.Connection ws;
+  Protocols.WebSocket.Connection|Val.Null ws;
 
 
   bool uslessHBrun = true;
@@ -40,13 +42,23 @@ class WSManager {
   /**
    * Used to start the process of connection the bot to the websocket
    */
-  void start() {
+  void start(bool reconnect, bool resume) {
+    resuming = resume;
+    reconnecting = reconnect;
+    if (reconnect) {
+      write("\nRECONNECTING\n"); // SAYS THAT WS IS NOT OPEN
+      ws->close(1023);
+      ws = connectWS();
+      ws->onmessage = onmessage;
+      ws->onopen = onopen;
+      ws->onclose = onclose;
+  } else {
     ws = connectWS();
     ws->onmessage = onmessage;
     ws->onopen = onopen;
-    ws->onclose;
+    ws->onclose = onclose;
   }
-
+}
   /**
    * Used to establish a websocket connection and return the connection object.
    * Returns <Protocols.WebSocket.Connection>
@@ -58,7 +70,7 @@ class WSManager {
     Protocols.WebSocket.Connection wsClient = Protocols.WebSocket.Connection();
     // Connect to the WS
     wsClient->connect(wsLink);
-
+    write("WOOO Reconnecting");
     return wsClient;
   }
 
@@ -67,31 +79,44 @@ class WSManager {
    * Sends an identification payload to the websocket.
    */
   void onopen() {
-    mapping identifyPayload = ([
-        "op": 2,
-        "d": ([
-          "token": client.token,
-          "properties": ([
-              "$os": "Fisher",
-              "$browser": "Fisher",
-              "$device": "Fisher",
-              "$referrer": "",
-              "$referring_domain": ""
-            ]),
-          "presence": ([
-              "game": Val.null,
-                "status": "online",
-                "since": Val.null,
-                "afk": Val.false
-            ]),
-          "compress": Val.false,
-          "large_threshold": 250,
-          "shard": ({0, 1})
-          ])
-      ]);
+    mapping payload;
 
-    string payload = Standards.JSON.encode(identifyPayload);
-    ws->send_text(payload);
+    if (!resuming) {
+      payload = ([
+          "op": 2,
+          "d": ([
+            "token": client.token,
+            "properties": ([
+                "$os": "Fisher",
+                "$browser": "Fisher",
+                "$device": "Fisher",
+                "$referrer": "",
+                "$referring_domain": ""
+              ]),
+            "presence": ([
+                "game": Val.null,
+                  "status": "online",
+                  "since": Val.null,
+                  "afk": Val.false
+              ]),
+            "compress": Val.false,
+            "large_threshold": 250,
+            "shard": ({0, 1})
+            ])
+        ]);
+    } else {
+      payload = ([
+        "token": client.token,
+        "session_id": wsSessionID,
+        "seq": sequence
+      ]);
+    }
+
+    string jsonPayload = Standards.JSON.encode(payload);
+    ws->send_text(jsonPayload);
+    write("\nWe are connected\n");
+    resuming = false;
+    reconnecting = false;
   }
 
   /**
@@ -113,18 +138,26 @@ class WSManager {
    */
   void onclose() {
     write("Socket closed!");
-    exit(1);
+    // exit(1);
   }
 
   /*
   * Make the client to start heartbeating
   * @param {int} ms - The time for the interval to repeat
   */
+  // delete
+  int count = 0;
   void heartbeat(int ms) {
+    // write("AA");
     if (uslessHBrun == false) {
-
-      // if (curr_heartbeat_time > perv_heartbeat_ack) TODO: Reconnect and RESUME
-
+      if (curr_heartbeat_time > perv_heartbeat_ack) {
+        write("\n\nThe connection is DEAD %s", (string) count);
+        start(true, true);
+        // return;
+      } else {
+        write("\nThe connection is healthy %s\n", (string) count);
+      } // TODO: Reconnect and RESUME
+      count++;
       mapping mappingPayload = ([
           "op": 1,
           "d": sequence
@@ -132,6 +165,8 @@ class WSManager {
 
         // Send heartbeat payload
       string payload = Standards.JSON.encode(mappingPayload);
+
+      if (count != 2)
       ws->send_text(payload);
 
       curr_heartbeat_time = time();
