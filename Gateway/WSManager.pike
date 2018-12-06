@@ -1,4 +1,5 @@
 #include "WSHandler.pike"
+#include "../Utils/Constants.pike"
 
 /**
  * WebSocket manager - Managing all of the Websocket traffic.
@@ -6,7 +7,10 @@
  * @property {string} wsSessionID - The Websocket session ID
  * @property {int} heartbeat_interval - The heartbeat interval
  * @property {int} curr_heartbeat_time - Updates everytime the client attempts to send a heartbeat
- * @property {int} perv_heartbeat_ack - The most recent (cached) heartbeat ack to compare with the new one
+ * @property {int} perv_heartbeat_ack - The most recent (cached) heartbeat ack to compare with the new
+ * @property {bool} reconnecting - An indicator of whether or not the client is resuming
+ * @property {bool} reconnecting - An indicator of whether or not the client is reconnecting
+ * @property {object} constants - A set of important constant values
  * @property {WSHandler} wsHandler - The Websocket handler
  * @property {Protocols.WebSocket.Connection} ws- The WS connection object
  */
@@ -17,9 +21,12 @@ class WSManager {
 
   int heartbeat_interval;
   int perv_heartbeat_ack;
+
   protected int curr_heartbeat_time;
   protected bool resuming;
   protected bool reconnecting;
+
+  object constants = Constants();
 
   int sequence;
   WSHandler wsHandler;
@@ -80,37 +87,9 @@ class WSManager {
     mapping payload;
 
     if (!resuming) {
-      payload = ([
-          "op": 2,
-          "d": ([
-            "token": client.token,
-            "properties": ([
-                "$os": "Fisher",
-                "$browser": "Fisher",
-                "$device": "Fisher",
-                "$referrer": "",
-                "$referring_domain": ""
-              ]),
-            "presence": ([
-                "game": Val.null,
-                  "status": "online",
-                  "since": Val.null,
-                  "afk": Val.false
-              ]),
-            "compress": Val.false,
-            "large_threshold": 250,
-            "shard": ({0, 1})
-            ])
-        ]);
+      payload = constants.websocketPayloads->identificationPayload(client.token, ([]), Val.null, Val.false);
     } else {
-      payload = ([
-        "op": 6,
-        "d": ([
-          "token": client.token,
-          "session_id": wsSessionID,
-          "seq": sequence
-        ])
-      ]);
+      payload = constants.websocketPayloads->resumePayload(client.token, wsSessionID, sequence);
     }
 
     string jsonPayload = Standards.JSON.encode(payload);
@@ -136,8 +115,9 @@ class WSManager {
    *  Dispatches whenever the socket closes
    *  And exists the program
    */
-  void onclose() {
+  void onclose(Protocols.WebSocket.CLOSE_STATUS status) {
     write("Socket closed!");
+    write((string) status);
     // exit(1);
   }
 
