@@ -39,4 +39,18 @@ class Constants {
     }
 
   ]);
+
+  mapping wsClosingCodes = ([
+    // 4000 is not here because it requires a reconnect
+    "4001": "You sent an unknown OP code!\n",
+    "4002": "The payload you've sent is!\n",
+    "4003": "You've tried to send a payload before identifying!\n",
+    "4004": "The token which was provided is wrong!\n",
+    "4005": "You sent more than one identify payload!\n",
+    // 4006 is not here because it requires a reconnect
+    "4008": "You're being ratelimited!\n",
+    // 4009 is not here because it requires a reconnect
+    "4010": "Invalid shard!",
+    "4011": "Shard is required to operate the client since there are too many guilds!"
+  ]);
 }
