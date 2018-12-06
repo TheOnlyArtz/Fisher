@@ -12,7 +12,7 @@
 
 class ClientUser {
   string avatar;
-  string descriminator;
+  string discriminator;
   string id;
   string username;
   bool verified;
@@ -26,7 +26,7 @@ class ClientUser {
   */
   void create(mapping data) {
     avatar = data.avatar;
-    descriminator = data.discriminator;
+    discriminator = data.discriminator;
     id = data.id;
     username = data.username;
     email = data.email;
