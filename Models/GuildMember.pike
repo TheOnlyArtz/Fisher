@@ -15,7 +15,7 @@ class GuildMember {
   bool deafend;
   bool muted;
 
-  void create(data) {
+  void create(mapping data) {
     user = User(data.user);
     nick = data.nick;
     roles = data.roles;
