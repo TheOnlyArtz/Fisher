@@ -1,5 +1,5 @@
 class Constants {
-  mapping websocket = ([
+  mapping websocketPayloads = ([
     "websocketURI": "wss://gateway.discord.gg/?v=6&encoding=json",
 
     "identificationPayload": lambda(string token, mapping game, Val.Null|int since, bool afk) {
@@ -26,17 +26,17 @@ class Constants {
             ])
         ]);
       },
-      
-    "resumePayload": lambda(string token, string session, int sequence) {
-        return ([
-          "op": 6,
-          "d": ([
-            "token": token,
-            "session_id": session,
-            "seq": sequence
-          ])
-        ]);
-      }
+
+  "resumePayload": lambda(string token, string session, int sequence) {
+      return ([
+        "op": 6,
+        "d": ([
+          "token": token,
+          "session_id": session,
+          "seq": sequence
+        ])
+      ]);
+    }
 
 ]);
 
