@@ -25,21 +25,19 @@ class Constants {
             "shard": ({0, 1})
             ])
         ]);
+      },
+      
+    "resumePayload": lambda(string token, string session, int sequence) {
+        return ([
+          "op": 6,
+          "d": ([
+            "token": token,
+            "session_id": session,
+            "seq": sequence
+          ])
+        ]);
       }
 
-    "resumePayload": lambda(string token, string session, int sequence) {
-      return ([
-        "op": 6,
-        "d": ([
-          "token": token,
-          "session_id": session,
-          "seq", sequence
-        ])
-      ]);
-    }
-
-
-    
-  ]);
+]);
 
 }
