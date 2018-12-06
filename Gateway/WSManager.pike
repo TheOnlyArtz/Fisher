@@ -44,7 +44,6 @@ class WSManager {
    */
   void start(bool reconnect, bool resume) {
     if (reconnect) {
-      write("\nRECONNECTING\n"); // SAYS THAT WS IS NOT OPEN
       ws->close(1023);
 
       curr_heartbeat_time = 0;
@@ -164,7 +163,7 @@ class WSManager {
 
         // Send heartbeat payload
       string payload = Standards.JSON.encode(mappingPayload);
-      
+
       ws->send_text(payload);
 
       curr_heartbeat_time = time();
