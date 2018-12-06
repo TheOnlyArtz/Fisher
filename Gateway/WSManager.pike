@@ -51,7 +51,7 @@ class WSManager {
    */
   void start(bool reconnect, bool resume) {
     if (reconnect) {
-      ws->close(1023);
+      ws->close(resume ? 4000 : 1000);
 
       curr_heartbeat_time = 0;
       perv_heartbeat_ack = 0;
@@ -116,9 +116,20 @@ class WSManager {
    *  And exists the program
    */
   void onclose(Protocols.WebSocket.CLOSE_STATUS status) {
-    write("Socket closed!");
-    write((string) status);
-    // exit(1);
+    if (status == 0 || reconnecting) return;
+
+    // There are status codes which require a reconnection to the socket.
+    bool needAReconnect = status == 4000 || status == 4007 || status == 4009;
+    if (needAReconnect) {
+      start(true, false);
+      return;
+    }
+
+    string statusString = (string) status;
+    string errorMsg = "ERROR: " + constants.wsClosingCodes[statusString];
+
+    throw( ({errorMsg, backtrace()}) );
+    return;
   }
 
   /*
@@ -134,6 +145,7 @@ class WSManager {
         call_out(heartbeat, ms, ms);
         return;
       }
+
       mapping mappingPayload = ([
           "op": 1,
           "d": sequence
@@ -141,14 +153,12 @@ class WSManager {
 
         // Send heartbeat payload
       string payload = Standards.JSON.encode(mappingPayload);
-
       ws->send_text(payload);
-
       curr_heartbeat_time = time();
+
     } else {
       uslessHBrun = false;;
     }
-
     call_out(heartbeat, ms, ms);
   }
 }
