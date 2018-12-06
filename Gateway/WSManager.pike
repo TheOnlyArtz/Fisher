@@ -115,6 +115,8 @@ class WSManager {
 
     string jsonPayload = Standards.JSON.encode(payload);
     ws->send_text(jsonPayload);
+    resuming = false;
+    reconnecting = false;
   }
 
   /**
