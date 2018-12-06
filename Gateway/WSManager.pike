@@ -43,34 +43,33 @@ class WSManager {
    * Used to start the process of connection the bot to the websocket
    */
   void start(bool reconnect, bool resume) {
-    resuming = resume;
-    reconnecting = reconnect;
     if (reconnect) {
       write("\nRECONNECTING\n"); // SAYS THAT WS IS NOT OPEN
       ws->close(1023);
-      ws = connectWS();
-      ws->onmessage = onmessage;
-      ws->onopen = onopen;
-      ws->onclose = onclose;
-  } else {
-    ws = connectWS();
+
+      curr_heartbeat_time = 0;
+      perv_heartbeat_ack = 0;
+    }
+
+    ws = connectWS(reconnect, resume);
     ws->onmessage = onmessage;
     ws->onopen = onopen;
     ws->onclose = onclose;
-  }
+
 }
   /**
    * Used to establish a websocket connection and return the connection object.
    * Returns <Protocols.WebSocket.Connection>
    */
-  Protocols.WebSocket.Connection connectWS() {
+  Protocols.WebSocket.Connection connectWS(bool reconnect, bool resume) {
+    resuming = resume;
+    reconnecting = reconnect;
     // The Websocket/Gateway link for Discord.
     Standards.URI wsLink = Standards.URI("wss://gateway.discord.gg/?v=6&encoding=json");
     // The WS client in this scope.
     Protocols.WebSocket.Connection wsClient = Protocols.WebSocket.Connection();
     // Connect to the WS
     wsClient->connect(wsLink);
-    write("WOOO Reconnecting");
     return wsClient;
   }
 
@@ -106,9 +105,12 @@ class WSManager {
         ]);
     } else {
       payload = ([
-        "token": client.token,
-        "session_id": wsSessionID,
-        "seq": sequence
+        "op": 6,
+        "d": ([
+          "token": client.token,
+          "session_id": wsSessionID,
+          "seq": sequence
+        ])
       ]);
     }
 
@@ -145,19 +147,16 @@ class WSManager {
   * Make the client to start heartbeating
   * @param {int} ms - The time for the interval to repeat
   */
-  // delete
-  int count = 0;
   void heartbeat(int ms) {
     // write("AA");
     if (uslessHBrun == false) {
+
       if (curr_heartbeat_time > perv_heartbeat_ack) {
         write("\n\nThe connection is DEAD %s", (string) count);
         start(true, true);
-        // return;
-      } else {
-        write("\nThe connection is healthy %s\n", (string) count);
-      } // TODO: Reconnect and RESUME
-      count++;
+        call_out(heartbeat, ms, ms);
+        return;
+
       mapping mappingPayload = ([
           "op": 1,
           "d": sequence
@@ -165,8 +164,7 @@ class WSManager {
 
         // Send heartbeat payload
       string payload = Standards.JSON.encode(mappingPayload);
-
-      if (count != 2)
+      
       ws->send_text(payload);
 
       curr_heartbeat_time = time();
