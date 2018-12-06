@@ -19,4 +19,12 @@ class GatewayDispatcher {
   void handleHelloEvent(mapping data) {
     wsHandler.wsManager.heartbeat_interval = data.heartbeat_interval;
   }
+
+  void handleHBackEvent() {
+    wsHandler.wsManager.perv_heartbeat_ack = time();
+  }
+
+  void handleInvalidSessionEvent() {
+    wsHandler.wsManager->start(true, false);
+  }
 }

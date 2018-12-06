@@ -23,11 +23,13 @@ class WSHandler {
     write((string) opCode);
     if (opCode != 0) {
       switch(opCode) {
+        case 9:
+          gatewayDispatcher->handleInvalidSessionEvent();
         case 10:
           gatewayDispatcher->handleHelloEvent(data);
           break;
         case 11:
-          wsManager.perv_heartbeat_ack = time();
+          gatewayDispatcher->handleHBackEvent();
           break;
       }
 

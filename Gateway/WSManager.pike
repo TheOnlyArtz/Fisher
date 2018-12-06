@@ -150,11 +150,10 @@ class WSManager {
     if (uslessHBrun == false) {
 
       if (curr_heartbeat_time > perv_heartbeat_ack) {
-        write("\n\nThe connection is DEAD %s", (string) count);
         start(true, true);
         call_out(heartbeat, ms, ms);
         return;
-
+      }
       mapping mappingPayload = ([
           "op": 1,
           "d": sequence
