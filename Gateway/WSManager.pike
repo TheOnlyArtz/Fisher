@@ -137,7 +137,6 @@ class WSManager {
   * @param {int} ms - The time for the interval to repeat
   */
   void heartbeat(int ms) {
-    // write("AA");
     if (uslessHBrun == false) {
 
       if (curr_heartbeat_time > perv_heartbeat_ack) {
