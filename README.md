@@ -18,7 +18,7 @@ void handleReady(Client client) {
   write("==============\n");
   write("Connected as %s\n", client.user.username);
   write("ID: %s\n", client.user.id);
-  write("Descriminator: %s\n", client.user.descriminator);
+  write("Discriminator: %s\n", client.user.discriminator);
   write("Using Fisher v0.0.1");
 }
 ```
