@@ -1,3 +1,4 @@
+#include "../Models/Caching/GuildCacher.pike"
 // MODELS:
 /** READY EVENT */
 #include "../Models/ClientUser.pike"
@@ -14,6 +15,7 @@ class EventDispatcher {
   WSHandler wsHandler;
   Client client;
 
+  GuildCacher guildCacher = GuildCacher();
   /**
   * The constructor
   */
@@ -44,5 +46,7 @@ class EventDispatcher {
   void handleGuildCreateEvent(mapping data) {
     Guild guild = Guild(data);
     client.guilds[guild.id] = guild;
+
+    guildCacher->cacheMembers(guild, data.members);
   }
 }
