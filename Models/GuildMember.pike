@@ -1,3 +1,4 @@
+#include "User.pike"
 /**
 *
 * @param {User} user - The user object
@@ -17,10 +18,10 @@ class GuildMember {
 
   void create(mapping data) {
     user = User(data.user);
-    nick = data.nick;
+    nickname = data.nick;
     roles = data.roles;
     joined_at = data.joined_at;
     deafend = data.deaf;
-    muted = data.mute
+    muted = data.mute;
   }
 }
