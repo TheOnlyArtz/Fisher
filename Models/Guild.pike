@@ -52,12 +52,12 @@ class Guild {
   /*
   * Change to mapping when done with GuildCacher
   */
-  array roles;
-  array emojis;
-  array voice_states;
-  array members;
-  array channels;
-  array presences;
+  mapping roles;
+  mapping emojis;
+  mapping voice_states;
+  mapping members;
+  mapping channels;
+  mapping presences;
 
   array(string) features;
 
@@ -91,12 +91,12 @@ class Guild {
     verification_level = data.verification_level;
     default_message_notifications = data.default_message_notifications;
     explicit_content_filter = data.explicit_content_filter;
-    roles = data.roles;
-    emojis = data.emojis;
-    voice_states = data.voice_states;
-    members = data.members;
-    channels = data.channels;
-    presences = data.presences;
+    roles = ([]);
+    emojis = ([]);
+    voice_states = ([]);
+    members = ([]);
+    channels = ([]);
+    presences = ([]);
 
     features = data.features;
 
