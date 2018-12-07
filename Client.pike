@@ -1,6 +1,3 @@
-#include "Gateway/WSManager.pike"
-#include "Gateway/EventHandlers.pike"
-
 /*
 * Client - The Discord API Client itself
 * @param {string} token - The client's token
