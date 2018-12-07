@@ -1,5 +1,3 @@
-#include "../Utils/Snowflake.pike"
-
 /**
 * @param {string} id - The ID of the user
 * @param {string} username - The username of the user
