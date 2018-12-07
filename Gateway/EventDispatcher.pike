@@ -29,7 +29,7 @@ class EventDispatcher {
    * @param {mapping} data
    */
   void handleReadyEvent(mapping data) {
-    client.user = ClientUser(data.user);
+    client.user = ClientUser(client, data.user);
 
     foreach(data.guilds, mapping guild) {
       client.guilds[guild.id] = guild;
@@ -49,12 +49,14 @@ class EventDispatcher {
    * @param {mapping} data
    */
   void handleGuildCreateEvent(mapping data) {
-    Guild guild = Guild(data);
+    Guild guild = Guild(client, data);
     bool alreadyInside = client.guilds[data.id];
 
     client.guilds[guild.id] = guild;
-    guildCacher->cacheMembers(guild, data.members);
-    if (!alreadyInside)
+    guildCacher->cacheMembers(client, guild, data.members);
+    write("%O", data.channels);
+
+    // if (!alreadyInside)
       client.handlers->guild_create(client, guild);
   }
 }
