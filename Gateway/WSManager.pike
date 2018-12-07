@@ -99,16 +99,13 @@ class WSManager {
    * Dispatches whenever a new packet frame comes from the Websocket.
    * Lets the WSHandler to handle the packets
    */
-  void onmessage(Protocols.WebSocket.Frame frame) {
-    if (frame.opcode == Protocols.WebSocket.FRAME_TEXT) {
-      mapping json = Standards.JSON.decode(frame.data);
-      wsHandler->handle(json);
-    } else {
-      frame.data = handleCompression(frame);
-      frame.opcode = Protocols.WebSocket.FRAME_TEXT;
-      onmessage(frame);
-    }
-  }
+   void onmessage(Protocols.WebSocket.Frame frame) {
+     if (frame.opcode == Protocols.WebSocket.FRAME_BINARY) {
+        frame.data = handleCompression(frame);
+     }
+     mapping json = Standards.JSON.decode(frame.data);
+     wsHandler->handle(json);
+   }
 
   /**
   * Handles the compressed data from Discord
