@@ -100,12 +100,12 @@ class WSManager {
    * Lets the WSHandler to handle the packets
    */
   void onmessage(Protocols.WebSocket.Frame frame) {
-    int anActualJSON = Standards.JSON.validate(frame->data);
-    if (anActualJSON) {
-      mapping json = Standards.JSON.decode(frame->data);
-      wsHandler->handle(json); // TODO: Figure out why it crashes!
+    if (frame.opcode == Protocols.WebSocket.FRAME_TEXT) {
+      mapping json = Standards.JSON.decode(frame.data);
+      wsHandler->handle(json);
     } else {
-      frame->data = handleCompression(frame);
+      frame.data = handleCompression(frame);
+      frame.opcode = Protocols.WebSocket.FRAME_TEXT;
       onmessage(frame);
     }
   }
