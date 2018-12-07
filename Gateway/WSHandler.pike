@@ -1,6 +1,3 @@
-#include "EventDispatcher.pike"
-#include "GatewayDispatcher.pike"
-
 class WSHandler {
   Client client;
   WSManager wsManager;
