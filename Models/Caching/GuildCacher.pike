@@ -8,7 +8,7 @@
 * - Roles
 */
 class GuildCacher {
-  mapping cacheMembers(Client client, Guild guild, array data) {
+  void cacheMembers(Client client, Guild guild, array data) {
     foreach(data, mixed member) {
       member.user = User(client, member.user);
 
@@ -16,4 +16,6 @@ class GuildCacher {
       guild.members[member.user.id] = member;
     }
   }
+
+  // mapping 
 }
