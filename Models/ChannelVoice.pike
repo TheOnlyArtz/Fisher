@@ -15,7 +15,7 @@ class ChannelVoice {
     parent_id = data.parent_id;
     position = data.position;
     guild = client.guilds[data.guild_id];
-    nsfw = data.nsfw
+    nsfw = data.nsfw;
     user_limit = data.user_limit
     bitrate = data.bitrate;
   }
