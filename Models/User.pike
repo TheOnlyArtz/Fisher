@@ -29,7 +29,8 @@ class User {
   int flags;
   int premium_type;
 
-  void create(mapping data) {
+  protected Client client;
+  void create(Client c, mapping data) {
     id = data.id;
     username = data.username;
     discriminator = data.discriminator;
@@ -41,5 +42,7 @@ class User {
     email = data.email;
     flags = data.flags;
     premium_type = data.premium_type;
+
+    client = c;
   }
 }
