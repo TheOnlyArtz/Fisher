@@ -1,11 +1,3 @@
-#include "../Models/Caching/GuildCacher.pike"
-// MODELS:
-/** READY EVENT */
-#include "../Models/ClientUser.pike"
-
-/** GUILD_CREATE EVENT */
-#include "../Models/Guild.pike"
-
 /**
  * Here all the events with OP code 0 will be handled!
  * @property {WSHandler} wsHandler - The websocket handler
