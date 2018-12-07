@@ -19,11 +19,14 @@ class GuildChannel {
   protected Client client;
 
   void create(Client c, mapping data) {
+    client = c;
+
     name = data.name;
     permission_overwrites = data.permission_overwrites;
     parent_id = data.parent_id;
     position = data.position;
-
-    client = c;
+    guild = client.guilds[data.guild_id];
+    type = data.type;
+    id = data.id;;
   }
 }
