@@ -24,7 +24,6 @@ class GuildChannel {
     parent_id = data.parent_id;
     position = data.position;
 
-
     client = c;
   }
 }
