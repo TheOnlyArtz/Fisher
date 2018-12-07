@@ -6,5 +6,5 @@
 */
 class Channel {
   string id;
-  int typel
+  int type;
 }
