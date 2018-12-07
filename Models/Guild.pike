@@ -71,11 +71,13 @@ class Guild {
   bool unavailable;
   int member_count;
 
+  protected Client client;
   /**
   * The constructor
   * @param {mapping} data - The guild data
+  * @param {Client} client - The client
   */
-  void create(mapping data) {
+  void create(Client c, mapping data) {
     id = data.id;
     name = data.name;
     icon = data.icon;
@@ -108,5 +110,7 @@ class Guild {
     joined_at = data.joined_at;
     large = data.large;
     member_count = data.member_count;
+
+    client = c;
   }
 }
