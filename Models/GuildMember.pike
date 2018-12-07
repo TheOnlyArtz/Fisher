@@ -1,4 +1,3 @@
-#include "User.pike"
 /**
 *
 * @param {User} user - The user object
