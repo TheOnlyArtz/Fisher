@@ -1,11 +1,11 @@
 class ChannelVoice {
-  inhriet GuildChannel;
+  inherit GuildChannel;
 
   bool nsfw;
   int user_limit;
   int bitrate;
 
-  void create(mapping data) {
+  void create(Client c, mapping data) {
     client = c;
 
     name = data.name;
@@ -16,7 +16,7 @@ class ChannelVoice {
     position = data.position;
     guild = client.guilds[data.guild_id];
     nsfw = data.nsfw;
-    user_limit = data.user_limit
+    user_limit = data.user_limit;
     bitrate = data.bitrate;
   }
 }

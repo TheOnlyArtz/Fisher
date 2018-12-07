@@ -9,7 +9,7 @@
 * @param {string} id - The channels id
 */
 class ChannelCategory {
-  inhriet GuildChannel;
+  inherit GuildChannel;
 
   void create(Client c, mapping data) {
     client = c;
