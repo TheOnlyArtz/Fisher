@@ -1,6 +1,3 @@
-#include "WSHandler.pike"
-#include "../Utils/Constants.pike"
-
 /**
  * WebSocket manager - Managing all of the Websocket traffic.
  * @param {Client} client - The client.
