@@ -19,8 +19,12 @@ class WSHandler {
 
     if (opCode != 0) {
       switch(opCode) {
+        case 7:
+          gatewayDispatcher->handleReconnectionRequest();
+          break;
         case 9:
           gatewayDispatcher->handleInvalidSessionEvent();
+          break;
         case 10:
           gatewayDispatcher->handleHelloEvent(data);
           break;

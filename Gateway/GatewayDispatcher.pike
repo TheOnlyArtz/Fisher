@@ -27,4 +27,8 @@ class GatewayDispatcher {
   void handleInvalidSessionEvent() {
     wsHandler.wsManager->start(true, false);
   }
+
+  void handleReconnectionRequest() {
+    wsHandler.wsManager->start(true, true);
+  }
 }
