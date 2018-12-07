@@ -1,3 +1,4 @@
+#include "Utils/Constants.pike"
 #include "Gateway/EventDispatcher.pike"
 #include "Gateway/EventHandlers.pike"
 #include "Gateway/GatewayDispatcher.pike"
@@ -12,6 +13,5 @@
 #include "Models/Guild.pike"
 #include "Models/GuildMember.pike"
 #include "Models/User.pike"
-#include "Utils/Constants.pike"
 #include "Utils/Snowflake.pike"
 #include "Client.pike"
