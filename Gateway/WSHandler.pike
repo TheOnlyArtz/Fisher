@@ -20,7 +20,6 @@ class WSHandler {
     mapping data = a.d;
     wsManager.sequence = a.s;
 
-    write((string) opCode);
     if (opCode != 0) {
       switch(opCode) {
         case 9:
