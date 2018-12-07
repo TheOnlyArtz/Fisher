@@ -1,7 +1,3 @@
-#include "../GuildMember.pike"
-#include "../ChannelCategory.pike"
-#include "../ChannelVoice.pike"
-
 /**
 * Used to help with guild caching related traffic
 * - Members
