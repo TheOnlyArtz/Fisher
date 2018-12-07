@@ -20,7 +20,7 @@ class Constants {
                   "since": since,
                   "afk": afk
               ]),
-            "compress": false,
+            "compress": true,
             "large_threshold": 250,
             "shard": ({0, 1})
             ])
