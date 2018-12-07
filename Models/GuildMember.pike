@@ -16,12 +16,16 @@ class GuildMember {
   bool deafend;
   bool muted;
 
-  void create(mapping data) {
-    user = User(data.user);
+  protected Client client;
+
+  void create(Client c, mapping data) {
+    user = data.user;
     nickname = data.nick;
     roles = data.roles;
     joined_at = data.joined_at;
     deafend = data.deaf;
     muted = data.mute;
+
+    client = c;
   }
 }
