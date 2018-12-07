@@ -1,3 +1,5 @@
+#include "../Utils/Snowflake.pike"
+
 /**
 * @param {string} id - The ID of the user
 * @param {string} username - The username of the user
@@ -44,5 +46,11 @@ class User {
     premium_type = data.premium_type;
 
     client = c;
+  }
+
+  string whenCreated() {
+    mapping info = Snowflake()->extractData(id);
+
+    return info.whenCreated;
   }
 }

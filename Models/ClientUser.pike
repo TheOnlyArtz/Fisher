@@ -36,4 +36,10 @@ class ClientUser {
 
     client = c;
   }
+
+  string whenCreated() {
+    mapping info = Snowflake()->extractData(id);
+
+    return info.whenCreated;
+  }
 }
