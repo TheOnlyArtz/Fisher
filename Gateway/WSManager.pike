@@ -100,12 +100,22 @@ class WSManager {
    * Lets the WSHandler to handle the packets
    */
   void onmessage(Protocols.WebSocket.Frame frame) {
-    int anActualJSON = Standards.JSON.validate(frame.data);
-
+    int anActualJSON = Standards.JSON.validate(frame->data);
     if (anActualJSON) {
-      mapping json = Standards.JSON.decode(frame.data);
+      mapping json = Standards.JSON.decode(frame->data);
       wsHandler->handle(json); // TODO: Figure out why it crashes!
+    } else {
+      frame->data = handleCompression(frame);
+      onmessage(frame);
     }
+  }
+
+  /**
+  * Handles the compressed data from Discord
+  */
+  string handleCompression(Protocols.WebSocket.Frame frame) {
+    string data = Gz.inflate()->inflate(frame.data);
+    return data;
   }
 
   /**
