@@ -1,4 +1,3 @@
-#include "GuildChannel.pike"
 /**
 * @param {string} name - The channel's name
 * @param {array} permission_overwrites - The channels permission overwrites
