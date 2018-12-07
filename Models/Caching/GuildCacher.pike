@@ -1,4 +1,7 @@
 #include "../GuildMember.pike"
+#include "../ChannelCategory.pike"
+#include "../ChannelVoice.pike"
+
 /**
 * Used to help with guild caching related traffic
 * - Members
@@ -17,5 +20,16 @@ class GuildCacher {
     }
   }
 
-  // mapping 
+  void cacheChannels(Client client, Guild guild, array data) {
+    foreach(data, mixed channel) {
+      switch(channel.type) {
+        case 2:
+          guild.channels[channel.id] = ChannelVoice(client, channel);
+          break;
+        case 4:
+          guild.channels[channel.id] = ChannelCategory(client, channel);
+          break;
+      }
+    }
+  }
 }
