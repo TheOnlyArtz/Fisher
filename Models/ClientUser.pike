@@ -20,11 +20,12 @@ class ClientUser {
   bool mfa_enabled;
   string | Val.Null email;
 
+  protected Client client;
   /**
   * The constructor
   * @param {mapping} data - The user data
   */
-  void create(mapping data) {
+  void create(Client c, mapping data) {
     avatar = data.avatar;
     discriminator = data.discriminator;
     id = data.id;
@@ -32,5 +33,7 @@ class ClientUser {
     email = data.email;
     mfa_enabled = data.mfa_enabled;
     bot = data.bot;
+
+    client = c;
   }
 }
