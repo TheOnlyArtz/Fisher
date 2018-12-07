@@ -27,6 +27,6 @@ class GuildChannel {
     position = data.position;
     guild = client.guilds[data.guild_id];
     type = data.type;
-    id = data.id;;
+    id = data.id;
   }
 }
