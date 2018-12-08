@@ -28,4 +28,10 @@ class GuildCacher {
       }
     }
   }
+
+  void cacheRoles(Client client, Guild guild, array data) {
+    foreach(data, mixed role) {
+      guild.roles[role.id] = Role(client, role);
+    }
+  }
 }
