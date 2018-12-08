@@ -15,21 +15,17 @@ class User {
   string id;
   string username;
   string discriminator;
+  string locale;
   string|Val.Null avatar;
-
+  string email;
   bool bot;
   bool mfa_enabled;
-
-  string locale;
-
   bool verified;
-
-  string email;
-
   int flags;
   int premium_type;
 
   protected Client client;
+
   void create(Client c, mapping data) {
     id = data.id;
     username = data.username;
