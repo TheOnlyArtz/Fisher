@@ -15,7 +15,7 @@ class Role {
   bool hoist;
   bool managed;
   bool mentionable;
-  
+
   int color;
   int position;
   int permissions;
@@ -36,6 +36,6 @@ class Role {
     hoist = data.hoist;
     permissions = data.permissions;
     managed = data.managed;
-    mentionable = data.mentionable
+    mentionable = data.mentionable;
   }
 }
