@@ -13,6 +13,7 @@ class GuildCacher {
 
       member = GuildMember(client, member);
       guild.members[member.user.id] = member;
+      client.users[member.user.id] = member.user;
     }
   }
 
@@ -26,6 +27,7 @@ class GuildCacher {
           guild.channels[channel.id] = ChannelCategory(client, channel);
           break;
       }
+      client.channels[channel.id] = guild.channels[channel.id];
     }
   }
 

@@ -44,10 +44,10 @@ class EventDispatcher {
     Guild guild = Guild(client, data);
     bool alreadyInside = client.guilds[data.id];
 
-    client.guilds[guild.id] = guild;
     guildCacher->cacheMembers(client, guild, data.members);
     guildCacher->cacheChannels(client, guild, data.channels);
     guildCacher->cacheRoles(client, guild, data.roles);
+    client.guilds[guild.id] = guild;
 
     // if (!alreadyInside)
       client.handlers->guild_create(client, guild);
