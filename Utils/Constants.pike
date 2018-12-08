@@ -54,7 +54,7 @@ class Constants {
     "4011": "Shard is required to operate the client since there are too many guilds!"
   ]));
 
-  Gallon permissions_bytes = Gallon(([
+  Gallon permissions_bits = Gallon(([
       "CREATE_INSTANT_INVITE": 0x00000001,
       "KICK_MEMBERS": 0x00000002,
       "BAN_MEMBERS": 0x00000004,
@@ -84,5 +84,9 @@ class Constants {
       "MANAGE_ROLES": 0x10000000,
       "MANAGE_WEBHOOKS": 0x20000000,
       "MANAGE_EMOJIS":0x40000000
+  ]));
+
+  Gallon errorMsgs = Gallon(([
+    "UNKNOWN_PERM_NAME": "ERROR: An unknown permission name has been provided!\n"
   ]));
 }
