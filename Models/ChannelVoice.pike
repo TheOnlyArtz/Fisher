@@ -14,7 +14,7 @@ class ChannelVoice {
     permission_overwrites = data.permission_overwrites;
     parent_id = data.parent_id;
     position = data.position;
-    guild = client.guilds[data.guild_id];
+    guild = client.guilds->get(data.guild_id);
     nsfw = data.nsfw;
     user_limit = data.user_limit;
     bitrate = data.bitrate;

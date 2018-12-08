@@ -61,12 +61,12 @@ class Guild {
   int explicit_content_filter;
   int member_count;
 
-  mapping roles;
-  mapping emojis;
-  mapping voice_states;
-  mapping members;
-  mapping channels;
-  mapping presences;
+  Gallon roles;
+  Gallon emojis;
+  Gallon voice_states;
+  Gallon members;
+  Gallon channels;
+  Gallon presences;
 
   array(string) features;
 
@@ -93,12 +93,12 @@ class Guild {
     verification_level = data.verification_level;
     default_message_notifications = data.default_message_notifications;
     explicit_content_filter = data.explicit_content_filter;
-    roles = ([]);
-    emojis = ([]);
-    voice_states = ([]);
-    members = ([]);
-    channels = ([]);
-    presences = ([]);
+    roles = Gallon(([]));
+    emojis = Gallon(([]));
+    voice_states = Gallon(([]));
+    members = Gallon(([]));
+    channels = Gallon(([]));
+    presences = Gallon(([]));
 
     features = data.features;
 

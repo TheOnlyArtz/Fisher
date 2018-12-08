@@ -23,10 +23,6 @@ class EventDispatcher {
   void handleReadyEvent(mapping data) {
     client.user = ClientUser(client, data.user);
 
-    foreach(data.guilds, mapping guild) {
-      client.guilds[guild.id] = guild;
-    }
-
     wsHandler.wsManager.wsSessionID = data.session_id;
 
     // Emit the event
@@ -47,7 +43,7 @@ class EventDispatcher {
     guildCacher->cacheMembers(client, guild, data.members);
     guildCacher->cacheChannels(client, guild, data.channels);
     guildCacher->cacheRoles(client, guild, data.roles);
-    client.guilds[guild.id] = guild;
+    client.guilds->assign(guild.id, guild);
 
     // if (!alreadyInside)
       client.handlers->guild_create(client, guild);

@@ -12,8 +12,8 @@ class GuildCacher {
       member.user = User(client, member.user);
 
       member = GuildMember(client, member);
-      guild.members[member.user.id] = member;
-      client.users[member.user.id] = member.user;
+      guild.members->assign(member.user.id, member);
+      client.users->assign(member.user.id, member.user);
     }
   }
 
@@ -21,19 +21,19 @@ class GuildCacher {
     foreach(data, mixed channel) {
       switch(channel.type) {
         case 2:
-          guild.channels[channel.id] = ChannelVoice(client, channel);
+          guild.channels->assign(channel.id, ChannelVoice(client, channel));
           break;
         case 4:
-          guild.channels[channel.id] = ChannelCategory(client, channel);
+          guild.channels->assign(channel.id, ChannelCategory(client, channel));
           break;
       }
-      client.channels[channel.id] = guild.channels[channel.id];
+      client.channels->assign(channel.id, guild.channels[channel.id]);
     }
   }
 
   void cacheRoles(Client client, Guild guild, array data) {
     foreach(data, mixed role) {
-      guild.roles[role.id] = Role(client, role);
+      guild.roles->assign(role.id, Role(client, role));
     }
   }
 }

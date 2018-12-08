@@ -20,10 +20,10 @@ class Client {
   Protocols.WebSocket.Connection ws;
 
   // Caching
-  mapping users;
-  mapping presences;
-  mapping guilds;
-  mapping channels;
+  Gallon users;
+  Gallon presences;
+  Gallon guilds;
+  Gallon channels;
 
   // Others
   ClientUser user;
@@ -36,10 +36,10 @@ class Client {
     wsManager = WSManager(this);
     handlers = EventHandlers();
     // Caching
-    users = ([]);
-    presences = ([]);
-    guilds = ([]);
-    channels = ([]);
+    users = Gallon(([]));
+    presences = Gallon(([]));
+    guilds = Gallon(([]));
+    channels = Gallon(([]));
 
   }
 

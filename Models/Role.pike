@@ -38,4 +38,18 @@ class Role {
     managed = data.managed;
     mentionable = data.mentionable;
   }
+
+  /**
+  * A function to indicate if the Role has a specific permission
+  * @param {string|int} perm - The permission which can be either a name or a bitfield
+  * @example
+  * bool own = guild.roles["ID"]->ownPermission("SEND_MESSAGES");
+  * if (!own) return;
+  */
+  bool ownPermission(string|int perm) {
+    // if (stringp(perm))
+    //   Constants().permissions_bytes[perm]
+    //   ? perm = Constants().permissions_bytes[perm]
+    //   : throw( ({, backtrace()}) )
+  }
 }
