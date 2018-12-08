@@ -11,12 +11,14 @@
 class Role {
   string id;
   string name;
-  int color;
+
   bool hoist;
-  int position;
-  int permissions;
   bool managed;
   bool mentionable;
+  
+  int color;
+  int position;
+  int permissions;
 
   protected Client client;
 
