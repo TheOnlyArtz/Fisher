@@ -47,18 +47,6 @@ class Role {
   * if (!own) return;
   */
   bool ownPermission(string|int perm) {
-    if (stringp(perm))
-      perm = Constants().permissions_bits->get(perm);
-    if (!perm) throw( ({Constants().errorMsgs->get("UNKNOWN_PERM_NAME"), backtrace()}) );
-
-    // Return true if ADMINISTRATOR
-    if ((permissions & Constants().permissions_bits->get("ADMINISTRATOR")) == Constants().permissions_bits->get("ADMINISTRATOR")) {
-      return true;
-    }
-
-    if ((permissions & perm) == perm)
-      return true;
-
-    return false;
+    return Permission()->own(permissions, perm);
   }
 }
