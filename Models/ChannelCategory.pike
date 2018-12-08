@@ -16,7 +16,7 @@ class ChannelCategory {
     id = data.id;
     type = data.type;
     name = data.name;
-    permission_overwrites = data.permission;
+    permission_overwrites = data.permission_overwrites;
     parent_id = data.parent_id;
     guild = client.guilds.get(data.guild_id);
   }
