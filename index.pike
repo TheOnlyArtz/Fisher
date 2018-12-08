@@ -6,6 +6,7 @@
 #include "Gateway/WSManager.pike"
 #include "Models/Caching/GuildCacher.pike"
 #include "Models/GuildChannel.pike"
+#include "Models/Role.pike"
 #include "Models/Channel.pike"
 #include "Models/ChannelCategory.pike"
 #include "Models/ChannelVoice.pike"
