@@ -63,15 +63,13 @@ class Gallon {
   * array keysMatching = guild.roles.lookFor("name", "theNameYou'reLookingFor");
   * if (keysMatching[0]) write("There's a role with that name!");
   */
-  array lookFor(string property, mixed value) {
-    array result = ({});
+  mixed lookFor(string property, mixed value) {
     array gallonKeys = arrayOfKeys();
 
     foreach (gallonKeys, mixed key) {
-      if (!iterable[key] || !iterable[key][property]) continue;
-      if (!iterable[key][property] == value) result.push(key);
+      if (iterable[key][property] == value) return key;
     }
 
-    return result;
+    return Val.null;
   }
 }
