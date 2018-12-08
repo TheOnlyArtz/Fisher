@@ -23,7 +23,7 @@ class Permission {
     for (int i = 0; i < sizeof(permsToOverwrite); i++) {
       perm = permsToOverwrite[i];
       if(stringp(permsToOverwrite[i])) {
-        perm = permissions_bits->get(perm);
+        perm = permissions_bits->get(permsToOverwrite[i]);
         if (!perm) throw ( ({constants.errorMsgs->get("UNKNOWN_PERM_NAME"), backtrace()}) );
       }
       bits |= perm;
