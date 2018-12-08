@@ -35,23 +35,32 @@
 class Guild {
   string id;
   string name;
+  string owner_id;
+  string region;
+  string widget_channel_id;
+  string joined_at;
+
   string|Val.Null icon;
   string|Val.Null splash;
-  bool owner;
-  string owner_id;
-  int client_permissions;
-  string region;
   string|Val.Null afk_channel_id;
-  int afk_timeout;
-  bool embed_enabled;
   string|Val.Null embed_channel_id;
+  string|Val.Null application_id;
+  string|Val.Null system_channel_id;
+
+  bool embed_enabled;
+  bool owner;
+  bool widget_enabled;
+  bool large;
+  bool unavailable;
+
+  int client_permissions;
+  int afk_timeout;
   int verification_level;
   int default_message_notifications;
+  int mfa_level;
   int explicit_content_filter;
+  int member_count;
 
-  /*
-  * Change to mapping when done with GuildCacher
-  */
   mapping roles;
   mapping emojis;
   mapping voice_states;
@@ -61,17 +70,8 @@ class Guild {
 
   array(string) features;
 
-  int mfa_level;
-  string|Val.Null application_id;
-  bool widget_enabled;
-  string widget_channel_id;
-  string|Val.Null system_channel_id;
-  mixed joined_at; // CHECK WHAT FORMAT IT IS (SHOULD BE ISO8601)
-  bool large;
-  bool unavailable;
-  int member_count;
-
   protected Client client;
+
   /**
   * The constructor
   * @param {mapping} data - The guild data
