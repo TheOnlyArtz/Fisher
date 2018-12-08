@@ -43,13 +43,22 @@ class Role {
   * A function to indicate if the Role has a specific permission
   * @param {string|int} perm - The permission which can be either a name or a bitfield
   * @example
-  * bool own = guild.roles["ID"]->ownPermission("SEND_MESSAGES");
+  * bool own = guild.roles->get("ID")->ownPermission("SEND_MESSAGES");
   * if (!own) return;
   */
   bool ownPermission(string|int perm) {
-    // if (stringp(perm))
-    //   Constants().permissions_bytes[perm]
-    //   ? perm = Constants().permissions_bytes[perm]
-    //   : throw( ({, backtrace()}) )
+    if (stringp(perm))
+      perm = Constants().permissions_bits->get(perm);
+    if (!perm) throw( ({Constants().errorMsgs->get("UNKNOWN_PERM_NAME"), backtrace()}) );
+
+    // Return true if ADMINISTRATOR
+    if ((permissions & Constants().permissions_bits->get("ADMINISTRATOR")) == Constants().permissions_bits->get("ADMINISTRATOR")) {
+      return true;
+    }
+
+    if ((permissions & perm) == perm)
+      return true;
+
+    return false;
   }
 }
