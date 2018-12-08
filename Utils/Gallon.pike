@@ -18,6 +18,20 @@ class Gallon {
   }
 
   /**
+  * Get the value of a key if being contained in the Galllon
+  * @param {string} key - The key you are looking for
+  */
+  mixed get(string key) {
+    return iterable[key];
+  }
+
+  /**
+  * Assign a value to an either new or old key
+  */
+  void assign(string key, mixed value) {
+    iterable[key] = value;
+  }
+  /**
   * Returns an array of the values the Gallon contains
   */
   array arrayOfValues() {
