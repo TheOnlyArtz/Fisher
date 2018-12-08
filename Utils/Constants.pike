@@ -1,5 +1,5 @@
 class Constants {
-  mapping websocketPayloads = ([
+  Gallon websocketPayloads = Gallon(([
     "websocketURI": "wss://gateway.discord.gg/?v=6&encoding=json",
 
     "identificationPayload": lambda(string token, mapping game, Val.Null|int since, bool afk) {
@@ -38,9 +38,9 @@ class Constants {
       ]);
     }
 
-  ]);
+  ]));
 
-  mapping wsClosingCodes = ([
+  Gallon wsClosingCodes = Gallon(([
     // 4000 is not here because it requires a reconnect
     "4001": "You sent an unknown OP code!\n",
     "4002": "The payload you've sent is!\n",
@@ -52,9 +52,9 @@ class Constants {
     // 4009 is not here because it requires a reconnect
     "4010": "Invalid shard!",
     "4011": "Shard is required to operate the client since there are too many guilds!"
-  ]);
+  ]));
 
-  mapping permissions_bytes = ([
+  Gallon permissions_bytes = Gallon(([
       "CREATE_INSTANT_INVITE": 0x00000001,
       "KICK_MEMBERS": 0x00000002,
       "BAN_MEMBERS": 0x00000004,
@@ -84,5 +84,5 @@ class Constants {
       "MANAGE_ROLES": 0x10000000,
       "MANAGE_WEBHOOKS": 0x20000000,
       "MANAGE_EMOJIS":0x40000000
-  ]);
+  ]));
 }

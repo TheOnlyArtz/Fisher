@@ -23,8 +23,6 @@ class WSManager {
   protected bool resuming;
   protected bool reconnecting;
 
-  object constants = Constants();
-
   int sequence;
   WSHandler wsHandler;
 
@@ -84,9 +82,11 @@ class WSManager {
     mapping payload;
 
     if (!resuming) {
-      payload = constants.websocketPayloads->identificationPayload(client.token, ([]), Val.null, Val.false);
+      function identificationPayload = Constants().websocketPayloads->get("identificationPayload");
+      payload = identificationPayload(client.token, ([]), Val.null, Val.false);
     } else {
-      payload = constants.websocketPayloads->resumePayload(client.token, wsSessionID, sequence);
+      function resumePayload = Constants().websocketPayloads->get("resumePayload");
+      payload = resumePayload(client.token, wsSessionID, sequence);
     }
 
     string jsonPayload = Standards.JSON.encode(payload);
@@ -130,7 +130,7 @@ class WSManager {
     }
 
     string statusString = (string) status;
-    string errorMsg = "ERROR: " + constants.wsClosingCodes[statusString];
+    string errorMsg = "ERROR: " + Constants().wsClosingCodes->get(statusString);
 
     throw( ({errorMsg, backtrace()}) );
     return;
