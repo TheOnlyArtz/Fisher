@@ -17,6 +17,11 @@ class GuildMember {
 
   protected Client client;
 
+  /**
+  * The constructor
+  * @param {Client} c - The client
+  * @param {mapping} data - The data
+  */
   void create(Client c, mapping data) {
     user = data.user;
     nickname = data.nick;
