@@ -87,8 +87,7 @@ class Gallon {
     return Val.null;
   }
 
-  protected string _sprintf(int op)
-  {
+  protected string _sprintf(int op) {
       if(op == 'O')
           return sprintf("%O", iterable);
   }
