@@ -103,8 +103,11 @@ class WSManager {
      if (frame.opcode == Protocols.WebSocket.FRAME_BINARY) {
         frame.data = handleCompression(frame);
      }
-     mapping json = Standards.JSON.decode(frame.data);
-     wsHandler->handle(json);
+
+     if (has_prefix(frame.data, "{")) {
+       mapping json = Standards.JSON.decode(frame.data);
+       wsHandler->handle(json);
+     }
    }
 
   /**
