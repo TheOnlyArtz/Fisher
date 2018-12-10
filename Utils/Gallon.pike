@@ -81,7 +81,7 @@ class Gallon {
     array gallonKeys = arrayOfKeys();
 
     foreach (gallonKeys, mixed key) {
-      if (iterable[key][property] == value) return key;
+      if (iterable[key][property] == value) return iterable[key];
     }
 
     return Val.null;
