@@ -25,13 +25,14 @@ class Client {
   Gallon guilds;
   Gallon channels;
 
+  mapping options;
   // Others
   ClientUser user;
 
   /*
   * The constructor
   */
-  void create(string t) {
+  void create(string t, mapping|void options) {
     token = t;
     wsManager = WSManager(this);
     handlers = EventHandlers();
