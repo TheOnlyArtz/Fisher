@@ -20,6 +20,9 @@ class GuildCacher {
   void cacheChannels(Client client, Guild guild, array data) {
     foreach(data, mixed channel) {
       switch(channel.type) {
+        case 0:
+          guild.channels->assign(channel.id, GuildTextChannel(client, channel));
+          break;
         case 2:
           guild.channels->assign(channel.id, ChannelVoice(client, channel));
           break;
@@ -27,13 +30,19 @@ class GuildCacher {
           guild.channels->assign(channel.id, ChannelCategory(client, channel));
           break;
       }
-      client.channels->assign(channel.id, guild.channels[channel.id]);
+
     }
   }
 
   void cacheRoles(Client client, Guild guild, array data) {
     foreach(data, mixed role) {
       guild.roles->assign(role.id, Role(client, role));
+    }
+  }
+
+  void cacheEmojis(Client client, Guild guild, array data) {
+    foreach(data, mixed emoji) {
+      guild.emojis->assign(emoji.id, Emoji(client, guild, emoji));
     }
   }
 }
