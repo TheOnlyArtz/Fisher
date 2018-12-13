@@ -18,7 +18,6 @@ class APIManager {
       rateLimiter.queue[route] = (["queue": ({})]);
     }
     rateLimiter.queue[route]["queue"] = Array.push(rateLimiter.queue[route]["queue"], (["method":method, "endpoint":endpoint, "route":route, "data":data, "files":files]));
-    write("%O", rateLimiter.queue[route]);
     rateLimiter->operateQueue(route);
   }
 

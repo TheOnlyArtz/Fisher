@@ -38,7 +38,7 @@ class RateLimiter {
     array reqQueue = routeQueue["queue"];
     bool toLimit = false;
     if (routeQueue["RESET-RATELIMIT"]) {
-      return ([]);
+      return;
     }
     mapping initialParameter = reqQueue[0];
 
@@ -56,7 +56,6 @@ class RateLimiter {
     string remainingHeader = headers["x-ratelimit-remaining"];
     int resetHeader = (int) headers["x-ratelimit-reset"];
 
-    write("%O", response.status);
     if (resetHeader && remainingHeader == "0") {
       routeQueue["RESET-RATELIMIT"] = resetHeader - Calendar.ISO.dwim_time(headers.date)->unix_time();
       toLimit = true;
@@ -67,7 +66,7 @@ class RateLimiter {
         call_out(unlockQueue, routeQueue["RESET-RATELIMIT"], route);
         toLimit = false;
       }
-      return (["data": response.data, "limit": toLimit]);
+      return response.data;
     }
 
     // TODO 429. 502
@@ -81,7 +80,7 @@ class RateLimiter {
 
     for(int i = 0; i < sizeof(routeQueue["queue"]); i++) {
       keepLooping = operateQueue(route);
-      if (keepLooping["limit"]) break;
+      if (!keepLooping) break;
     }
   }
 }
