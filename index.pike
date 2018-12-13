@@ -15,6 +15,7 @@
 #include "Utils/Permission.pike"
 
 #include "Models/GuildTextChannel.pike"
+#include "Models/Caching/ClientCaching.pike"
 #include "Models/Attachment.pike"
 #include "Models/Message.pike"
 #include "Models/RegionVoice.pike"
