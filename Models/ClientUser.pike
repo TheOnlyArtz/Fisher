@@ -18,6 +18,7 @@ class ClientUser {
   bool verified;
   bool bot;
   bool mfa_enabled;
+  mapping presence;
   string | Val.Null email;
 
   protected Client client;
@@ -33,7 +34,7 @@ class ClientUser {
     email = data.email;
     mfa_enabled = data.mfa_enabled;
     bot = data.bot;
-
+    presence = ([]);
     client = c;
   }
 
@@ -41,5 +42,26 @@ class ClientUser {
     mapping info = Snowflake()->extractData(id);
 
     return info.whenCreated;
+  }
+
+  void newPresence(mapping options) {
+    if (!options["game"] && !options["status"] && !options["afk"] && !options["since"]) {
+      throw( ({Constants().errorMsgs->get("INVALID_PRESENCE_ARGS"), backtrace()}) );
+    }
+    // foreach(indices(options), string key) {
+    //   presence["d"][key] = options[key];
+    // }
+    mapping|string payload = ([
+      "op": 3,
+      "d": ([
+          "game": options["game"] ? options["game"] : ([]),
+          "since": options["since"] ? options["since"]: 0,
+          "afk": options["afk"] ? options["afk"] : Val.false,
+          "status": options["status"] ? options["status"] : "online"
+        ])
+      ]);
+
+    payload = Standards.JSON.encode(payload);
+    client.wsManager.ws->send_text(payload);
   }
 }
