@@ -5,10 +5,10 @@
  */
 class EventHandlers {
   function ready;
-  function guild_create;
+  function guildCreate;
 
   void create() {
     ready = lambda() {};
-    guild_create = lambda() {};
+    guildCreate = lambda() {};
   }
 }
