@@ -7,13 +7,14 @@ class EventDispatcher {
   WSHandler wsHandler;
   Client client;
 
-  GuildCacher guildCacher = GuildCacher();
+  protected GuildCacher guildCacher;
   /**
   * The constructor
   */
   void create(WSHandler w) {
     wsHandler = w;
     client = w.client;
+    guildCacher = GuildCacher(client);
   }
 
   /**
@@ -38,15 +39,15 @@ class EventDispatcher {
    */
   void handleGuildCreateEvent(mapping data) {
     Guild guild = Guild(client, data);
-    bool alreadyInside = client.guilds[data.id];
+    bool alreadyInside = client.guilds->get(data.id);
 
-    guildCacher->cacheMembers(client, guild, data.members);
-    guildCacher->cacheChannels(client, guild, data.channels);
-    guildCacher->cacheRoles(client, guild, data.roles);
-    guildCacher->cacheEmojis(client, guild, data.emojis);
+    guildCacher->cacheMembers(guild, data.members);
+    guildCacher->cacheChannels(guild, data.channels);
+    guildCacher->cacheRoles(guild, data.roles);
+    guildCacher->cacheEmojis(guild, data.emojis);
     client.guilds->assign(guild.id, guild);
-
+    client.cacher->cacheGuild(guild);
     // if (!alreadyInside)
-      client.handlers->guild_create(client, guild);
+      client.handlers->guildCreate(client, guild);
   }
 }

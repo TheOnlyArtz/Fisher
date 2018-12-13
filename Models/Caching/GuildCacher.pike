@@ -7,42 +7,52 @@
 * - Roles
 */
 class GuildCacher {
-  void cacheMembers(Client client, Guild guild, array data) {
+  Client client;
+
+  void create(Client c) {
+    client = c;
+  }
+
+  void cacheMembers(Guild guild, array data) {
     foreach(data, mixed member) {
       member.user = User(client, member.user);
 
       member = GuildMember(client, member);
       guild.members->assign(member.user.id, member);
-      client.users->assign(member.user.id, member.user);
+      client.cacher->cacheUser(member.user);
     }
   }
 
-  void cacheChannels(Client client, Guild guild, array data) {
+  void cacheChannels(Guild guild, array data) {
     foreach(data, mixed channel) {
       switch(channel.type) {
         case 0:
           guild.channels->assign(channel.id, GuildTextChannel(client, channel));
+          client.cacher->cacheChannel(channel, GuildTextChannel);
           break;
         case 2:
           guild.channels->assign(channel.id, ChannelVoice(client, channel));
+          client.cacher->cacheChannel(channel, ChannelVoice);
           break;
         case 4:
           guild.channels->assign(channel.id, ChannelCategory(client, channel));
+          client.cacher->cacheChannel(channel, ChannelCategory);
           break;
       }
 
     }
   }
 
-  void cacheRoles(Client client, Guild guild, array data) {
+  void cacheRoles(Guild guild, array data) {
     foreach(data, mixed role) {
       guild.roles->assign(role.id, Role(client, role));
     }
   }
 
-  void cacheEmojis(Client client, Guild guild, array data) {
+  void cacheEmojis(Guild guild, array data) {
     foreach(data, mixed emoji) {
       guild.emojis->assign(emoji.id, Emoji(client, guild, emoji));
+      client.cacher->cacheEmoji(guild, emoji);
     }
   }
 }
