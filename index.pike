@@ -14,6 +14,7 @@
 #include "Rest/RateLimiter.pike"
 #include "Utils/Permission.pike"
 #include "Utils/Misc.pike"
+#include "Utils/EventUtils.pike"
 
 #include "Models/GuildTextChannel.pike"
 #include "Models/Caching/ClientCaching.pike"
