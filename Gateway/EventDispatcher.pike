@@ -45,9 +45,47 @@ class EventDispatcher {
     guildCacher->cacheChannels(guild, data.channels);
     guildCacher->cacheRoles(guild, data.roles);
     guildCacher->cacheEmojis(guild, data.emojis);
-    client.guilds->assign(guild.id, guild);
     client.cacher->cacheGuild(guild);
-    // if (!alreadyInside)
+
+    if (!alreadyInside)
       client.handlers->guildCreate(client, guild);
+  }
+
+  void handleGuildUpdateEvent(mapping data) {
+    Guild oldGuild = client.guilds->get(data.id);
+    Guild newGuild = Guild(client, data);
+
+    guildCacher->cacheRoles(newGuild, data.roles);
+    guildCacher->cacheEmojis(newGuild, data.emojis);
+    client.cacher->cacheGuild(newGuild);
+
+    client.handlers->guildUpdate(client, newGuild, oldGuild);
+
+  }
+
+  void handleGuildDeleteEvent(mapping data) {
+
+  }
+
+  void handleGuildBanAddEvent(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    User user = client.users->get(data.user.id) ? client.users->get(data.user.id) : User(client, data.user);
+
+    if (client.users->get(data.user.id))
+      client.users->delete(data.user.id);
+
+    if (guild.members->get(data.user.id))
+      guild.members->delete(data.user.id);
+
+    if (guild)
+      client.handlers->guildBanAdd(client, guild, user);
+  }
+
+  void handleGuildBanRemoveEvent(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    User user = client.users->get(data.user.id) ? client.users->get(data.user.id) : User(client, data.user);
+
+    if (guild)
+      client.handlers->guildBanRemove(guild, user, client);
   }
 }
