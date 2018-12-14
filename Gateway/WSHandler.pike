@@ -35,11 +35,21 @@ class WSHandler {
 
     } else {
       switch(a.t) {
+        // case "MESSAGE_CREATE":
+        //   write("%O", data);
+        //   break;
         case "READY":
           eventDispatcher->handleReadyEvent(data);
           break;
         case "GUILD_CREATE":
           eventDispatcher->handleGuildCreateEvent(data);
+          break;
+        case "GUILD_UPDATE":
+          eventDispatcher->handleGuildUpdateEvent(data);
+          break;
+        case "GUILD_BAN_ADD":
+          eventDispatcher->handleGuildBanAddEvent(data);
+          break;
       }
     }
   }
