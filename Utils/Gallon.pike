@@ -69,6 +69,14 @@ class Gallon {
     return iterable[keys[-1]];
   }
 
+  /**
+  * This function will delete a key out of the Gallon
+  * @param {string} key - The key to delete
+  */
+  void delete(string key) {
+    m_delete(iterable, key);
+  }
+
   /*
   * This function will look for a specific value in a specific property
   * Out of all the elements the Gallon contains
