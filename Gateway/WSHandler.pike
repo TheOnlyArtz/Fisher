@@ -50,6 +50,8 @@ class WSHandler {
         case "GUILD_BAN_ADD":
           eventDispatcher->handleGuildBanAddEvent(data);
           break;
+        case "GUILD_BAN_REMOVE":
+          eventDispatcher->handleGuildBanRemoveEvent(data);
       }
     }
   }
