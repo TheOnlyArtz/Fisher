@@ -83,7 +83,7 @@ class EventDispatcher {
 
   void handleGuildBanRemoveEvent(mapping data) {
     Guild guild = client.guilds->get(data.guild_id);
-    User user = client.users->get(data.user.id) ? client.users->get(data.user.id) : User(client, data.user);
+    User user = User(client, data.user);
 
     if (guild)
       client.handlers->guildBanRemove(guild, user, client);
