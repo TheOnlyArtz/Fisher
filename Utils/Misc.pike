@@ -1,5 +1,5 @@
 class MiscUtils {
-  array equal(mapping a, mapping b) {
+  array mappingDiff(mapping a, mapping b) {
     array difference = ({});
     array indicesA = indices(a);
     array indicesB = indices(b);
