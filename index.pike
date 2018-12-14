@@ -13,6 +13,7 @@
 #include "Rest/APIManager.pike"
 #include "Rest/RateLimiter.pike"
 #include "Utils/Permission.pike"
+#include "Utils/Misc.pike"
 
 #include "Models/GuildTextChannel.pike"
 #include "Models/Caching/ClientCaching.pike"
