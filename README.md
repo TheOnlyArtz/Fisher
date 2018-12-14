@@ -9,7 +9,7 @@
 int main() {
   Client client = Client("TOKEN");
   client->login();
-  client.handlers->ready = handleReady;
+  client->emit("ready", handleReady);
 
   return -1;
 }
