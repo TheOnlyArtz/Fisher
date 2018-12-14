@@ -88,4 +88,25 @@ class EventDispatcher {
     if (guild)
       client.handlers->guildBanRemove(guild, user, client);
   }
+
+  void handleGuildEmojisUpdateEvent(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+
+    if (!guild || !guild.emojis) return;
+
+    foreach(data.emojis, mapping emoji) {
+      Emoji cached = guild.emojis->get(emoji.id);
+
+      if (cached) {
+        Emoji newEmoji = Emoji(client, guild, emoji);
+        array diffs = MiscUtils()->mappingDiff(cached, newEmoji);
+
+        if (sizeof(diffs) > 0) {
+          // Emit guildEmojisUpdate
+          client.handlers->guildEmojiUpdate(guild, newEmoji, cached, diffs, client);
+        }
+      }
+    }
+
+  }
 }
