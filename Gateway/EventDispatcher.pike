@@ -27,7 +27,7 @@ class EventDispatcher {
     wsHandler.wsManager.wsSessionID = data.session_id;
 
     // Emit the event
-    client.handlers->ready(client);
+    client->emit("ready", client);
 
     // Start heartbeating
     wsHandler.wsManager->heartbeat(wsHandler.wsManager.heartbeat_interval/1000);
@@ -48,7 +48,7 @@ class EventDispatcher {
     client.cacher->cacheGuild(guild);
 
     if (!alreadyInside)
-      client.handlers->guildCreate(client, guild);
+      client->emit("guildCreate", guild, client);
   }
 
   void handleGuildUpdateEvent(mapping data) {
@@ -59,7 +59,7 @@ class EventDispatcher {
     guildCacher->cacheEmojis(newGuild, data.emojis);
     client.cacher->cacheGuild(newGuild);
 
-    client.handlers->guildUpdate(client, newGuild, oldGuild);
+    client.emit("guildUpdate", newGuild, oldGuild, client);
 
   }
 
@@ -78,7 +78,7 @@ class EventDispatcher {
       guild.members->delete(data.user.id);
 
     if (guild)
-      client.handlers->guildBanAdd(client, guild, user);
+      client->emit("guildBanAdd", guild, user, client);
   }
 
   void handleGuildBanRemoveEvent(mapping data) {
@@ -86,7 +86,7 @@ class EventDispatcher {
     User user = User(client, data.user);
 
     if (guild)
-      client.handlers->guildBanRemove(guild, user, client);
+      client->emit("guildBanRemove", client, guild, user);
   }
 
   void handleGuildEmojisUpdateEvent(mapping data) {
@@ -94,6 +94,7 @@ class EventDispatcher {
 
     if (!guild || !guild.emojis) return;
 
+    Gallon deletedEmojis = guild.emojis;
     foreach(data.emojis, mapping emoji) {
       Emoji cached = guild.emojis->get(emoji.id);
 
@@ -103,7 +104,7 @@ class EventDispatcher {
 
         if (sizeof(diffs) > 0) {
           // Emit guildEmojisUpdate
-          client.handlers->guildEmojiUpdate(guild, newEmoji, cached, diffs, client);
+          client->emit("guildEmojiUpdate", guild, newEmoji, cached, diffs, client);
         }
       }
     }

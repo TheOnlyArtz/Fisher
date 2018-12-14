@@ -4,73 +4,80 @@
  * @property {function} guild_create - The GUILD_CREATE event handler
  */
 class EventHandlers {
-  function ready;
-  function guildCreate;
+  array ready;
 
-  function channelCreate;
-  function channelUpdate;
-  function channelDelete;
-  function channelPinsUpdate;
-  function guildUpdate;
-  function guildDelete;
-  function guildBanAdd;
-  function guildBanRemove;
-  function guildEmojisUpdate;
-  function guildIntegrationUpdate;
-  function guildMemberAdd;
-  function guildMemberRemove;
-  function guildMembersChunk;
-  function guildMemberUpdate;
-  function guildRoleCreate;
-  function guildRoleDelete;
-  function guildRoleUpdate;
-  function messageCreate;
-  function messageUpdate;
-  function messageDelete;
-  function messageDeleteBulk;
-  function messageReactionAdd;
-  function messageReactionDelete;
-  function messageReactionRemoveAll;
-  function presenceUpdate;
-  function typingStart;
-  function userUpdate;
-  function voiceStateUpdate;
-  function voiceServerUpdate;
-  function webhooksUpdate;
+  array channelCreate;
+  array channelUpdate;
+  array channelDelete;
+  array channelPinsUpdate;
+
+  array guildCreate;
+
+  array guildUpdate;
+  array guildDelete;
+  array guildBanAdd;
+  array guildBanRemove;
+  array guildEmojiUpdate;
+  array guildEmojiRemove;
+  array guildIntegrationUpdate;
+  array guildMemberAdd;
+  array guildMemberRemove;
+  array guildMembersChunk;
+  array guildMemberUpdate;
+  array guildRoleCreate;
+  array guildRoleDelete;
+  array guildRoleUpdate;
+
+  array messageCreate;
+  array messageUpdate;
+  array messageDelete;
+  array messageDeleteBulk;
+  array messageReactionAdd;
+  array messageReactionDelete;
+  array messageReactionRemoveAll;
+
+  array presenceUpdate;
+  array typingStart;
+  array userUpdate;
+
+  array voiceStateUpdate;
+  array voiceServerUpdate;
+  array webhooksUpdate;
 
   void create() {
-    ready = lambda() {};
-    guildCreate = lambda() {};
+    ready = ({});
+    guildCreate = ({});
 
-    channelCreate = lambda() {};
-    channelUpdate = lambda() {};
-    channelDelete = lambda() {};
-    channelPinsUpdate = lambda() {};
-    guildUpdate = lambda() {};
-    guildDelete = lambda() {};
-    guildBanAdd = lambda() {};
-    guildBanRemove = lambda() {};
-    guildEmojisUpdate = lambda() {};
-    guildIntegrationUpdate = lambda() {};
-    guildMemberAdd = lambda() {};
-    guildMemberRemove = lambda() {};
-    guildMemberUpdate = lambda() {};
-    guildMembersChunk = lambda() {};
-    guildRoleCreate = lambda() {};
-    guildRoleUpdate = lambda() {};
-    guildRoleDelete = lambda() {};
-    messageCreate = lambda() {};
-    messageUpdate = lambda() {};
-    messageDelete = lambda() {};
-    messageDeleteBulk = lambda() {};
-    messageReactionAdd = lambda() {};
-    messageReactionDelete = lambda() {};
-    messageReactionRemoveAll = lambda() {};
-    presenceUpdate = lambda() {};
-    typingStart = lambda() {};
-    userUpdate = lambda() {};
-    voiceStateUpdate = lambda() {};
-    voiceServerUpdate = lambda() {};
-    webhooksUpdate = lambda() {};
+    channelCreate = ({});
+    channelUpdate = ({});
+    channelDelete = ({});
+    channelPinsUpdate = ({});
+    guildUpdate = ({});
+    guildDelete = ({});
+    guildBanAdd = ({});
+    guildBanRemove = ({});
+    guildEmojiUpdate = ({});
+    guildEmojiRemove = ({});
+    guildIntegrationUpdate = ({});
+    guildMemberAdd = ({});
+    guildMemberRemove = ({});
+    guildMemberUpdate = ({});
+    guildMembersChunk = ({});
+    guildRoleCreate = ({});
+    guildRoleUpdate = ({});
+    guildRoleDelete = ({});
+    messageCreate = ({});
+    messageUpdate = ({});
+    messageDelete = ({});
+    messageDeleteBulk = ({});
+    messageReactionAdd = ({});
+    messageReactionDelete = ({});
+    messageReactionRemoveAll = ({});
+    presenceUpdate = ({});
+    typingStart = ({});
+    userUpdate = ({});
+    voiceStateUpdate = ({});
+    voiceServerUpdate = ({});
+    webhooksUpdate = ({});
   }
 }

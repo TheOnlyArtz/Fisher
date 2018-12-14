@@ -14,8 +14,8 @@
 */
 class Client {
   string token;
+  inherit EventUtils;
   WSManager wsManager;
-  EventHandlers handlers;
 
   Protocols.WebSocket.Connection ws;
 
@@ -46,6 +46,7 @@ class Client {
     emojis = Gallon(([]));
 
     cacher = ClientCaching(this);
+    eventsClient = this;
   }
 
   void login() {
