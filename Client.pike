@@ -24,10 +24,12 @@ class Client {
   Gallon presences;
   Gallon guilds;
   Gallon channels;
+  Gallon emojis;
 
   mapping options;
   // Others
   ClientUser user;
+  ClientCaching cacher;
 
   /*
   * The constructor
@@ -41,7 +43,9 @@ class Client {
     presences = Gallon(([]));
     guilds = Gallon(([]));
     channels = Gallon(([]));
+    emojis = Gallon(([]));
 
+    cacher = ClientCaching(this);
   }
 
   void login() {
