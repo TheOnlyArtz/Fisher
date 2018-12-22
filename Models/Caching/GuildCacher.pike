@@ -17,7 +17,7 @@ class GuildCacher {
     foreach(data, mixed member) {
       member.user = User(client, member.user);
 
-      member = GuildMember(client, member);
+      member = GuildMember(client, guild, member);
       guild.members->assign(member.user.id, member);
       client.cacher->cacheUser(member.user);
     }

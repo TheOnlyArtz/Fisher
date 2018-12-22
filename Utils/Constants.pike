@@ -1,4 +1,8 @@
 class Constants {
+
+  mapping clientOptions = ([
+    "maxMessageCaching": 300
+  ]);
   Gallon websocketPayloads = Gallon(([
     "websocketURI": "wss://gateway.discord.gg/?v=6&encoding=json",
 
@@ -87,6 +91,18 @@ class Constants {
   ]));
 
   Gallon errorMsgs = Gallon(([
-    "UNKNOWN_PERM_NAME": "ERROR: An unknown permission name has been provided!\n"
+    "UNKNOWN_PERM_NAME": "ERROR: An unknown permission name has been provided!\n",
+    "INVALID_PRESENCE_ARGS": "ERROR: Invalid arguments have been passed\n!"
+  ]));
+
+  Gallon API = Gallon(([
+    "VERSION": 6,
+    "URI": "https://discordapp.com/api/v",
+    "headers": lambda(Client c) {
+      return ([
+        "User-Agent": "DiscordBot (https://github.com/theonlyartz/Fisher, 0.0.1)",
+        "Authorization": "Bot " + c.token
+      ]);
+    }
   ]));
 }

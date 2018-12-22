@@ -15,6 +15,7 @@ class GuildMember {
   bool deafend;
   bool muted;
 
+  Guild guild;
   protected Client client;
 
   /**
@@ -22,7 +23,7 @@ class GuildMember {
   * @param {Client} c - The client
   * @param {mapping} data - The data
   */
-  void create(Client c, mapping data) {
+  void create(Client c, Guild g, mapping data) {
     user = data.user;
     nickname = data.nick;
     roles = data.roles;
@@ -30,6 +31,7 @@ class GuildMember {
     deafend = data.deaf;
     muted = data.mute;
 
+    guild = g;
     client = c;
   }
 }

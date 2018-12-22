@@ -12,6 +12,7 @@ class ClientCaching() {
   void cachePresences(array data) {
     foreach(data, mapping presence) {
       // client.presences->assign(emoji["id"], Emoji(client, guild, emoji));
+      // TODO
     }
   }
 
@@ -21,7 +22,7 @@ class ClientCaching() {
 
   void cacheChannel(mapping channel, object ChannelType) {
       Guild g = client.guilds->get(channel["guild_id"]);
-      client.channels->assign(channel["id"], ChannelType(client, g ? g : ([]), channel));
+      client.channels->assign(channel["id"], ChannelType(client, g || ([]), channel));
   }
 
   void cacheGuild(Guild guild) {

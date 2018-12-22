@@ -52,6 +52,13 @@ class WSHandler {
           break;
         case "GUILD_BAN_REMOVE":
           eventDispatcher->handleGuildBanRemoveEvent(data);
+          break;
+        case "GUILD_EMOJIS_UPDATE":
+          eventDispatcher->handleGuildEmojisUpdateEvent(data);
+          break;
+        case "GUILD_MEMBER_ADD":
+          eventDispatcher->handleGuildMemberAdd(data);
+          break;
       }
     }
   }

@@ -19,6 +19,7 @@ class EventHandlers {
   array guildBanRemove;
   array guildEmojiUpdate;
   array guildEmojiRemove;
+  array guildEmojiAdd;
   array guildIntegrationUpdate;
   array guildMemberAdd;
   array guildMemberRemove;
@@ -58,6 +59,7 @@ class EventHandlers {
     guildBanRemove = ({});
     guildEmojiUpdate = ({});
     guildEmojiRemove = ({});
+    guildEmojiAdd = ({});
     guildIntegrationUpdate = ({});
     guildMemberAdd = ({});
     guildMemberRemove = ({});

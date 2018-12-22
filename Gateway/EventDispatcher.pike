@@ -26,6 +26,7 @@ class EventDispatcher {
 
     wsHandler.wsManager.wsSessionID = data.session_id;
 
+    foreach(data.guilds, mapping g) client.guilds->assign(g.id, ([]));
     // Emit the event
     client->emit("ready", client);
 
@@ -89,25 +90,73 @@ class EventDispatcher {
       client->emit("guildBanRemove", client, guild, user);
   }
 
+  /**
+  * Emoji's event handlers
+  * - START -
+  */
   void handleGuildEmojisUpdateEvent(mapping data) {
     Guild guild = client.guilds->get(data.guild_id);
-
     if (!guild || !guild.emojis) return;
 
-    Gallon deletedEmojis = guild.emojis;
+    Gallon deletedEmojis = Gallon(copy_value(guild.emojis.iterable));
+    array diffs;
+    Emoji cached;
+    Emoji newEmoji;
+
     foreach(data.emojis, mapping emoji) {
-      Emoji cached = guild.emojis->get(emoji.id);
+      cached = guild.emojis->get(emoji.id);
+      newEmoji = Emoji(client, guild, emoji);
 
       if (cached) {
-        Emoji newEmoji = Emoji(client, guild, emoji);
-        array diffs = MiscUtils()->mappingDiff(cached, newEmoji);
-
-        if (sizeof(diffs) > 0) {
+        diffs =  MiscUtils()->mappingDiff(cached, newEmoji);
+        deletedEmojis->delete(emoji.id);
+        if (sizeof(diffs) > 1) {
           // Emit guildEmojisUpdate
-          client->emit("guildEmojiUpdate", guild, newEmoji, cached, diffs, client);
+          handleEmojiUpdateEvent(newEmoji, cached, diffs, client);
         }
+      } else {
+        // Emoji is added
+        handleEmojiAddEvent(guild, newEmoji);
       }
     }
 
+    foreach(deletedEmojis->arrayOfValues(), Emoji emoji) {
+      handleEmojiRemoveEvent(emoji);
+    }
+  }
+
+  void handleEmojiUpdateEvent(Emoji newEmoji, Emoji cached, array diffs, Client client) {
+    client.emojis->assign(newEmoji.id, newEmoji);
+    cached.guild.emojis->assign(newEmoji.id, newEmoji);
+    client->emit("guildEmojiUpdate", newEmoji, cached, diffs, client);
+  }
+
+  void handleEmojiAddEvent(Guild guild, Emoji newEmoji) {
+    client.emojis->assign(newEmoji.id, newEmoji);
+    guild.emojis->assign(newEmoji.id, newEmoji);
+    client->emit("guildEmojiAdd", newEmoji, client);
+  }
+
+  void handleEmojiRemoveEvent(Emoji emoji) {
+    emoji.guild.emojis->delete(emoji.id);
+    client.emojis->delete(emoji.id);
+
+    client->emit("guildEmojiRemove", emoji);
+  }
+
+  /**
+  * Emoji's event handlers
+  * - END -
+  */
+
+  // TODO: Guild integrations update
+  void handleGuildMemberAdd(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    if (!guild) return;
+
+    GuildMember member = GuildMember(client, guild, data);
+    guild.members->assign(member.id, member);
+
+    client->emit("guildMemberAdd", member);
   }
 }
