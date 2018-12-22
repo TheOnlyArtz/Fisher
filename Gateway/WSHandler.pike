@@ -39,28 +39,28 @@ class WSHandler {
         //   write("%O", data);
         //   break;
         case "READY":
-          eventDispatcher->handleReadyEvent(data);
+          eventDispatcher->ready(data);
           break;
         case "GUILD_CREATE":
-          eventDispatcher->handleGuildCreateEvent(data);
+          eventDispatcher->guildCreate(data);
           break;
         case "GUILD_UPDATE":
-          eventDispatcher->handleGuildUpdateEvent(data);
+          eventDispatcher->guildUpdate(data);
           break;
         case "GUILD_BAN_ADD":
-          eventDispatcher->handleGuildBanAddEvent(data);
+          eventDispatcher->guildBanAdd(data);
           break;
         case "GUILD_BAN_REMOVE":
-          eventDispatcher->handleGuildBanRemoveEvent(data);
+          eventDispatcher->guildBanRemove(data);
           break;
         case "GUILD_EMOJIS_UPDATE":
-          eventDispatcher->handleGuildEmojisUpdateEvent(data);
+          eventDispatcher->guildEmojisUpdate(data);
           break;
         case "GUILD_MEMBER_ADD":
-          eventDispatcher->handleGuildMemberAdd(data);
+          eventDispatcher->guildMemberAdd(data);
           break;
         case "GUILD_MEMBER_REMOVE":
-          eventDispatcher->handleGuildMemberRemoveEvent(data);
+          eventDispatcher->guildMemberRemove(data);
       }
     }
   }
