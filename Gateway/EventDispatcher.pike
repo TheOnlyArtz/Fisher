@@ -155,8 +155,25 @@ class EventDispatcher {
     if (!guild) return;
 
     GuildMember member = GuildMember(client, guild, data);
+    
+    // Caching
     guild.members->assign(member.id, member);
+    client.users->assign(member.id, member.user);
 
     client->emit("guildMemberAdd", member);
+  }
+
+  void handleGuildMemberRemove(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    if (!guild) return;
+
+    User user = client.user->get(data.user.id);
+    if (!user) user = User(client, data);
+
+    // Remove from caching
+    guild.members->delete(user.id);
+    client.users->delete(user.id);
+
+    client->emit("guildMemberRemove", guild, user);
   }
 }

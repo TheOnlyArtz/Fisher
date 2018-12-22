@@ -59,6 +59,8 @@ class WSHandler {
         case "GUILD_MEMBER_ADD":
           eventDispatcher->handleGuildMemberAdd(data);
           break;
+        case "GUILD_MEMBER_REMOVE":
+          eventDispatcher->handleGuildMemberRemoveEvent(data);
       }
     }
   }
