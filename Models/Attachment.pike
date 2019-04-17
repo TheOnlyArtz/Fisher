@@ -3,7 +3,7 @@ class Attachment {
   string filename;
   int size;
   string url;
-  string proxy_url;
+  string proxyUrl;
   int|Val.Null height;
   int|Val.Null width;
 
@@ -11,12 +11,12 @@ class Attachment {
 
   void create(Client c, mapping data) {
     client = c;
-    
+
     id = data.id;
     filename = data.filename;
     size = data.size;
     url = data.url;
-    proxy_url = data.proxy_url;
+    proxyUrl = data.proxy_url || data.proxyUrl;
     height = data.height;
     width = data.width;
   }
