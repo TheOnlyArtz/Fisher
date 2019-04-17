@@ -2,7 +2,7 @@ class GuildTextChannel {
   inherit GuildChannel;
 
   string topic;
-  string last_message_id;
+  string lastMessageId;
 
   protected Client client;
 
@@ -18,6 +18,6 @@ class GuildTextChannel {
     id = data.id;
 
     topic = data.topic;
-    last_message_id = data.last_message_id;
+    lastMessageId = data.last_message_id;
   }
 }
