@@ -61,6 +61,10 @@ class WSHandler {
           break;
         case "GUILD_MEMBER_REMOVE":
           eventDispatcher->guildMemberRemove(data);
+          break;
+        case "GUILD_MEMBER_UPDATE":
+          eventDispatcher->guildMemberUpdate(data);
+          break;
       }
     }
   }
