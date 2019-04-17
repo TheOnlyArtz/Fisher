@@ -6,9 +6,9 @@ class Message {
   GuildMember member;
   string content;
   string timestamp;
-  string|Val.Null edited_timestamp;
+  string|Val.Null editedTimestamp;
   bool tts;
-  bool mention_everyone;
+  bool mentionEveryone;
 
   Gallon mentions; // EVERYONE, USERS, ROLES
   Gallon attachments;
@@ -17,7 +17,7 @@ class Message {
 
   string|Val.Null nonce;
   bool pinned;
-  string webhook_id;
+  string webhookId;
   int type;
   // TODO message activity and message application
 
@@ -35,9 +35,9 @@ class Message {
     member = guild.members->get(author.id);
     content = data.content;
     timestamp = data.timestamp;
-    edited_timestamp = data.edited_timestamp;
+    editedTimestamp = data.edited_timestamp;
     tts = data.tts;
-    mention_everyone = data.mention_everyone;
+    mentionEveryone = data.mention_everyone;
 
     mentions = Gallon(([]));
     attachments = Gallon(([]));
@@ -45,7 +45,7 @@ class Message {
     reactions = Gallon(([]));
     nonce = data.nonce;
     pinned = data.pinned;
-    webhook_id = data.webhook_id; // TODO: convert to Webhook
+    webhookId = data.webhook_id; // TODO: convert to Webhook
     type = data.type;
   }
 }
