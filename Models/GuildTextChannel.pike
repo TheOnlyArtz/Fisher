@@ -3,6 +3,7 @@ class GuildTextChannel {
 
   string topic;
   string lastMessageId;
+  Gallon messages;
 
   protected Client client;
   protected Guild guild;
@@ -20,5 +21,7 @@ class GuildTextChannel {
 
     topic = data.topic;
     lastMessageId = data.last_message_id;
+
+    messages = Gallon(([]));
   }
 }
