@@ -1,23 +1,24 @@
 class Message {
   string id;
   GuildTextChannel channel;// TO DO TEXTCHANNEL
-  Guild guild;
   User author;
-  GuildMember member;
   string content;
   string timestamp;
-  string|Val.Null editedTimestamp;
   bool tts;
   bool mentionEveryone;
 
   Gallon mentions; // EVERYONE, USERS, ROLES
   Gallon attachments;
   Gallon embeds;
-  Gallon reactions;
 
+  Gallon|Val.Null reactions;
+  GuildMember|Val.Null member;
+  Guild|Val.Null guild;
+  string|Val.Null editedTimestamp;
   string|Val.Null nonce;
+  string|Val.Null webhookId;
+
   bool pinned;
-  string webhookId;
   int type;
   // TODO message activity and message application
 
@@ -30,9 +31,9 @@ class Message {
   void create(Client client, mapping data) {
     id = data.id;
     channel = GuildTextChannel(client, data);
-    guild = client.guilds->get(data.guild_id);
+    guild = client.guilds->get(data.guild_id) || Val.Null;
     author = client.users->get(data.author.id);
-    member = guild.members->get(author.id);
+    member = guild.members->get(author.id) || Val.Null;
     content = data.content;
     timestamp = data.timestamp;
     editedTimestamp = data.edited_timestamp || data.editedTimestamp;
@@ -45,7 +46,7 @@ class Message {
     reactions = Gallon(([]));
     nonce = data.nonce;
     pinned = data.pinned;
-    webhookId = data.webhook_id || data.webhookId; // TODO: convert to Webhook
+    webhookId = data.webhook_id || data.webhookId || Val.Null; // TODO: convert to Webhook
     type = data.type;
   }
 }
