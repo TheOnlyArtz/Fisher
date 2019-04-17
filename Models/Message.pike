@@ -1,6 +1,6 @@
 class Message {
   string id;
-  GuildChannel channel;// TO DO TEXTCHANNEL
+  GuildTextChannel channel;// TO DO TEXTCHANNEL
   Guild guild;
   User author;
   GuildMember member;
@@ -19,6 +19,7 @@ class Message {
   bool pinned;
   string webhook_id;
   int type;
+  // TODO message activity and message application
 
   /**
   * TODO:
@@ -28,7 +29,7 @@ class Message {
 
   void create(Client client, mapping data) {
     id = data.id;
-    // channel = ; TODO!!!! TEXT CHANNEL CRITICAL
+    channel = GuildTextChannel(client, data);
     guild = client.guilds->get(data.guild_id);
     author = client.users->get(data.author.id);
     member = guild.members->get(author.id);
