@@ -235,4 +235,19 @@ class EventDispatcher {
     guild.roles->delete(data.role_id);
     client->emit("guildRoleDelete", guild, deletedRole, client);
   }
+
+  void messageCreate(mapping data) {
+    Message theMessage = Message(client, data);
+
+    // TODO: Have max_messages cache to every channel
+    if (!theMessage.channel) return;
+    theMessage.channel.messages->assign(theMessage.id, theMessage);
+    theMessage.channel.lastMessageId = theMessage.id;
+
+    client->emit("messageCreate", theMessage, client);
+  }
+
+  void messageUpdate(mapping data) {
+
+  }
 }
