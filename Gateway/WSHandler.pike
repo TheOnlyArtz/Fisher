@@ -35,9 +35,6 @@ class WSHandler {
 
     } else {
       switch(a.t) {
-        // case "MESSAGE_CREATE":
-        //   write("%O", data);
-        //   break;
         case "READY":
           eventDispatcher->ready(data);
           break;
