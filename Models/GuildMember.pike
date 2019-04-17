@@ -11,7 +11,7 @@ class GuildMember {
   User user;
   string|Val.Null nickname;
   Gallon roles;
-  string joined_at;
+  string joinedAt;
   bool deafend;
   bool muted;
 
@@ -27,7 +27,7 @@ class GuildMember {
     user = data.user;
     nickname = data.nick;
     roles = Gallon(([]));
-    joined_at = data.joined_at;
+    joinedAt = data.joined_at || data.joinedAt;
     deafend = data.deaf;
     muted = data.mute;
 

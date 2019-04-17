@@ -35,40 +35,40 @@
 class Guild {
   string id;
   string name;
-  string owner_id;
+  string ownerId;
   string region;
-  string widget_channel_id;
+  string widgetChannelId;
   string joined_at;
 
   string|Val.Null icon;
   string|Val.Null splash;
-  string|Val.Null afk_channel_id;
-  string|Val.Null embed_channel_id;
-  string|Val.Null application_id;
-  string|Val.Null system_channel_id;
+  string|Val.Null afkChannelId;
+  string|Val.Null embedChannelId;
+  string|Val.Null applicationId;
+  string|Val.Null systemChannelId;
   string|Val.Null banner;
   string|Val.Null description;
   string|Val.Null vanityUrlCode;
   int|Val.Null maxPresences;
 
-  bool embed_enabled;
+  bool embedEnabled;
   bool owner;
-  bool widget_enabled;
+  bool widgetEnabled;
   bool large;
   bool unavailable;
 
-  int client_permissions;
-  int afk_timeout;
-  int verification_level;
-  int default_message_notifications;
-  int mfa_level;
-  int explicit_content_filter;
-  int member_count;
-  int max_members;
+  int permissions;
+  int afkTimeout;
+  int verificationLevel;
+  int defaultMessageNotifications;
+  int mfaLevel;
+  int explicitContentFilter;
+  int memberCount;
+  int maxMembers;
 
   Gallon roles;
   Gallon emojis;
-  Gallon voice_states;
+  Gallon voiceStates;
   Gallon members;
   Gallon channels;
   Gallon presences;
@@ -88,16 +88,16 @@ class Guild {
     icon = data.icon;
     splash = data.splash;
     owner = data.owner;
-    owner_id = data.owner_id;
-    client_permissions = data.permissions;
+    ownerId = data.owner_id || data.ownerId;
+    permissions = data.permissions;
     region = data.region;
-    afk_channel_id = data.afk_channel_id;
-    afk_timeout = data.afk_timeout;
-    embed_enabled = data.embed_enabled;
-    embed_channel_id = data.embed_channel_id;
-    verification_level = data.verification_level;
-    default_message_notifications = data.default_message_notifications;
-    explicit_content_filter = data.explicit_content_filter;
+    afkChannelId = data.afk_channel_id || data.afkChannelId;
+    afkTimeout = data.afk_timeout || data.afkTimeout;
+    embedEnabled = data.embed_enabled || data.embedEnabled;
+    embedChannelId = data.embed_channel_id || data.embedChannelId;
+    verificationLevel = data.verification_level || data.verificationLevel;
+    defaultMessageNotifications = data.default_message_notifications || data.defaultMessageNotifications;
+    explicitContentFilter = data.explicit_content_filter || data.explicitContentFilter;
     roles = Gallon(([]));
     emojis = Gallon(([]));
     voice_states = Gallon(([]));
@@ -107,19 +107,19 @@ class Guild {
 
     features = data.features;
 
-    mfa_level = data.mfa_level;
-    application_id = data.application_id;
-    widget_enabled = data.widget_enabled;
-    widget_channel_id = data.widget_channel_id;
-    system_channel_id = data.system_channel_id;
-    joined_at = data.joined_at;
+    mfaLevel = data.mfa_level;
+    applicationId = data.application_id || data.applicationId;
+    widgetEnabled = data.widget_enabled || data.widgetEnabled;
+    widgetChannelId = data.widget_channel_id || data.widgetChannelId;
+    systemChannelId = data.system_channel_id || data.systemChannelId;
+    joinedAt = data.joined_at || data.joinedAt;
     large = data.large;
-    member_count = data.member_count;
+    memberCount = data.member_count || data.memberCount;
     banner = data.banner;
     description = data.description;
-    vanityUrlCode = data.vanity_url_code;
-    maxPresences = data.max_presences;
-    
+    vanityUrlCode = data.vanity_url_code || data.vanityUrlCode;
+    maxPresences = data.max_presences || data.maxPresences;
+
     client = c;
   }
 }

@@ -9,7 +9,7 @@
 */
 class GuildChannel {
   string name;
-  array permission_overwrites;
+  array permissionOverwrites;
   string|Val.Null parent_id;
   int position;
   Guild guild;
@@ -22,7 +22,7 @@ class GuildChannel {
     client = c;
 
     name = data.name;
-    permission_overwrites = data.permission_overwrites;
+    permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
     parent_id = data.parent_id;
     position = data.position;
     guild = client.guilds->get(data.guild_id);

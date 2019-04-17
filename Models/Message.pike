@@ -35,9 +35,9 @@ class Message {
     member = guild.members->get(author.id);
     content = data.content;
     timestamp = data.timestamp;
-    editedTimestamp = data.edited_timestamp;
+    editedTimestamp = data.edited_timestamp || data.editedTimestamp;
     tts = data.tts;
-    mentionEveryone = data.mention_everyone;
+    mentionEveryone = data.mention_everyone || data.mentionEveryone;
 
     mentions = Gallon(([]));
     attachments = Gallon(([]));
@@ -45,7 +45,7 @@ class Message {
     reactions = Gallon(([]));
     nonce = data.nonce;
     pinned = data.pinned;
-    webhookId = data.webhook_id; // TODO: convert to Webhook
+    webhookId = data.webhook_id || data.webhookId; // TODO: convert to Webhook
     type = data.type;
   }
 }

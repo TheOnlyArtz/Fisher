@@ -2,7 +2,7 @@ class ChannelVoice {
   inherit GuildChannel;
 
   bool nsfw;
-  int user_limit;
+  int userLimit;
   int bitrate;
 
   void create(Client c, mapping data) {
@@ -11,12 +11,12 @@ class ChannelVoice {
     name = data.name;
     type = data.type;
     id = data.id;
-    permission_overwrites = data.permission_overwrites;
-    parent_id = data.parent_id;
+    permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
+    parentId = data.parent_id || data.parentId;
     position = data.position;
     guild = client.guilds->get(data.guild_id);
     nsfw = data.nsfw;
-    user_limit = data.user_limit;
+    userLimit = data.user_limit || data.userLimit;
     bitrate = data.bitrate;
   }
 }

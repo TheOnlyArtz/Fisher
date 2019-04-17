@@ -22,7 +22,7 @@ class User {
   bool mfa_enabled;
   bool verified;
   int flags;
-  int premium_type;
+  int premiumType;
 
   protected Client client;
 
@@ -37,7 +37,7 @@ class User {
     verified = data.verified;
     email = data.email;
     flags = data.flags;
-    premium_type = data.premium_type;
+    premiumType = data.premium_type || data.premiumType;
 
     client = c;
   }

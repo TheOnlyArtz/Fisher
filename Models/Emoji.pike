@@ -13,7 +13,7 @@ class Emoji {
   Guild guild;
   User|Val.Null user;
 
-  bool require_colons;
+  bool requireColons;
   bool managed;
   bool animated;
 
@@ -27,7 +27,7 @@ class Emoji {
     name = data.name;
     roles = Gallon(([]));
     user = user ? User(client, data) : Val.null;
-    require_colons = data.require_colons;
+    requireColons = data.require_colons || data.requireColons;
     managed = data.managed;
     animated = data.animated;
 

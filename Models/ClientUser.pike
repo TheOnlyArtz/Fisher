@@ -17,7 +17,7 @@ class ClientUser {
   string username;
   bool verified;
   bool bot;
-  bool mfa_enabled;
+  bool mfaEnabled;
   mapping presence;
   string | Val.Null email;
 
@@ -32,7 +32,7 @@ class ClientUser {
     id = data.id;
     username = data.username;
     email = data.email;
-    mfa_enabled = data.mfa_enabled;
+    mfaEnabled = data.mfa_enabled || data.mfaEnabled;
     bot = data.bot;
     presence = ([]);
     client = c;
