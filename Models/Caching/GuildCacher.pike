@@ -34,7 +34,7 @@ class GuildCacher {
     foreach(data, mixed channel) {
       switch(channel.type) {
         case 0:
-          guild.channels->assign(channel.id, GuildTextChannel(client, channel));
+          guild.channels->assign(channel.id, GuildTextChannel(client, guild, channel));
           client.cacher->cacheChannel(channel, GuildTextChannel);
           break;
         case 2:
