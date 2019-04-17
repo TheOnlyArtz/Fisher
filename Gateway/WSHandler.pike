@@ -71,6 +71,9 @@ class WSHandler {
         case "GUILD_ROLE_UPDATE":
           eventDispatcher->guildRoleUpdate(data);
           break;
+        case "GUILD_ROLE_DELETE":
+          eventDispatcher->guildRoleDelete(data);
+          break;
       }
     }
   }

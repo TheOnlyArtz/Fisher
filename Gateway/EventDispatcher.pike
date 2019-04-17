@@ -225,4 +225,14 @@ class EventDispatcher {
     if (sizeof(diffs) != 0)
       client->emit("guildRoleUpdate", guild, newRole, cached, diffs, client);
   }
+
+  void guildRoleDelete(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    if (!guild) return;
+
+    Role deletedRole = guild.roles->get(data.role_id);
+    if (!deletedRole) return;
+    guild.roles->delete(data.role_id);
+    client->emit("guildRoleDelete", guild, deletedRole, client);
+  }
 }
