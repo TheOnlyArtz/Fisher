@@ -67,7 +67,7 @@ class EventHandlers {
     guildMembersChunk = ({});
     guildRoleCreate = ({}); // ✅
     guildRoleUpdate = ({});// ✅
-    guildRoleDelete = ({});
+    guildRoleDelete = ({});// ✅
     messageCreate = ({});
     messageUpdate = ({});
     messageDelete = ({});
