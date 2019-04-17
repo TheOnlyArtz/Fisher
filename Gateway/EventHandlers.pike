@@ -46,26 +46,26 @@ class EventHandlers {
   array webhooksUpdate;
 
   void create() {
-    ready = ({});
-    guildCreate = ({});
+    ready = ({}); // ✅
+    guildCreate = ({}); // ✅
 
-    channelCreate = ({});
-    channelUpdate = ({});
-    channelDelete = ({});
-    channelPinsUpdate = ({});
-    guildUpdate = ({});
+    channelCreate = ({}); // ✅
+    channelUpdate = ({}); // ✅
+    channelDelete = ({}); // ✅
+    channelPinsUpdate = ({}); // ✅
+    guildUpdate = ({}); // ✅
     guildDelete = ({});
-    guildBanAdd = ({});
-    guildBanRemove = ({});
-    guildEmojiUpdate = ({});
-    guildEmojiRemove = ({});
-    guildEmojiAdd = ({});
+    guildBanAdd = ({}); // ✅
+    guildBanRemove = ({}); // ✅
+    guildEmojiUpdate = ({}); // ✅
+    guildEmojiRemove = ({}); // ✅
+    guildEmojiAdd = ({}); // ✅
     guildIntegrationUpdate = ({});
-    guildMemberAdd = ({});
-    guildMemberRemove = ({});
-    guildMemberUpdate = ({});
+    guildMemberAdd = ({}); // ✅
+    guildMemberRemove = ({}); // ✅
+    guildMemberUpdate = ({}); // ✅
     guildMembersChunk = ({});
-    guildRoleCreate = ({});
+    guildRoleCreate = ({}); // ✅
     guildRoleUpdate = ({});
     guildRoleDelete = ({});
     messageCreate = ({});
