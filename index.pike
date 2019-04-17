@@ -20,6 +20,8 @@
 #include "Models/GuildTextChannel.pike"
 #include "Models/Caching/ClientCaching.pike"
 #include "Models/Attachment.pike"
+#include "Models/Reaction.pike"
+#include "Models/ReactionEmoji.pike"
 #include "Models/Message.pike"
 #include "Models/RegionVoice.pike"
 #include "Models/Role.pike"
