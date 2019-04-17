@@ -1,3 +1,4 @@
+// TODO: Maybe commit it to the PikeLang stdlib
 class MiscUtils {
   mapping clonedData;
 
