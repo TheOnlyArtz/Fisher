@@ -58,6 +58,7 @@ class Gallon {
   */
   mixed first() {
     array keys = arrayOfKeys();
+    if (!sizeof(keys)) return ([]);
     return iterable[keys[0]];
   }
 
@@ -66,6 +67,7 @@ class Gallon {
   */
   mixed last() {
     array keys = arrayOfKeys();
+    if (!sizeof(keys)) return ([]);
     return iterable[keys[-1]];
   }
 
