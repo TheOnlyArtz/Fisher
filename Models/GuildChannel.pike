@@ -10,7 +10,7 @@
 class GuildChannel {
   string name;
   array permissionOverwrites;
-  string|Val.Null parent_id;
+  string|Val.Null parentId;
   int position;
   Guild guild;
   int type;
@@ -23,7 +23,7 @@ class GuildChannel {
 
     name = data.name;
     permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
-    parent_id = data.parent_id;
+    parentId = data.parent_id || data.parentId;
     position = data.position;
     guild = client.guilds->get(data.guild_id);
     type = data.type;

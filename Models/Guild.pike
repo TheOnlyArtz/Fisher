@@ -38,7 +38,7 @@ class Guild {
   string ownerId;
   string region;
   string widgetChannelId;
-  string joined_at;
+  string joinedAt;
 
   string|Val.Null icon;
   string|Val.Null splash;
@@ -100,7 +100,7 @@ class Guild {
     explicitContentFilter = data.explicit_content_filter || data.explicitContentFilter;
     roles = Gallon(([]));
     emojis = Gallon(([]));
-    voice_states = Gallon(([]));
+    voiceStates = Gallon(([]));
     members = Gallon(([]));
     channels = Gallon(([]));
     presences = Gallon(([]));

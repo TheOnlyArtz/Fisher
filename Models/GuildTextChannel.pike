@@ -10,8 +10,8 @@ class GuildTextChannel {
     client = c;
 
     name = data.name;
-    permission_overwrites = data.permission_overwrites;
-    parent_id = data.parent_id;
+    permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
+    parentId = data.parent_id || data.parentId;
     position = data.position;
     guild = client.guilds->get(data.guild_id);
     type = data.type;
