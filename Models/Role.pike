@@ -21,15 +21,15 @@ class Role {
   int permissions;
 
   protected Client client;
-
+  protected Guild guild;
   /**
   * The constructor
   * @param {Client} c - The client
   * @param {mapping} data
   */
-  void create(Client c, mapping data) {
+  void create(Client c, Guild g, mapping data) {
     client = c;
-
+    guild = g;
     id = data.id;
     name = data.name;
     color = data.color;
