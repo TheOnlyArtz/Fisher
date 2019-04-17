@@ -65,7 +65,7 @@ class EventDispatcher {
   }
 
   void guildDelete(mapping data) {
-
+    // TODO:
   }
 
   void guildBanAdd(mapping data) {
@@ -188,5 +188,34 @@ class EventDispatcher {
     guild.members->assign(data.user.id, newMember);
 
     client->emit("guildMemberUpdate", guild, newMember, cached);
+  }
+
+  // TODO:
+  void guildMemberChunk(mapping data) {
+
+  }
+
+  void guildRoleCreate(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    if (!guild) return;
+
+    guild.roles->assign(data.role.id, Role(client, guild, data.role));
+    Role role = guild.roles->get(data.role.id);
+
+    client->emit("guildRoleCreate", guild, role, client);
+  }
+
+  void guildRoleUpdate(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    if (!guild) return;
+
+    Role cached = guild.roles->get(data.role.id);
+    if (!cached) return;
+
+    Role newRole = MiscUtils()->cloneObject(Role, data.role, client, guild);
+    guild.roles->assign(data.role.id, newRole);
+
+    client->emit("guildRoleUpdate", guild, newRole, cached, client);
+
   }
 }
