@@ -46,6 +46,10 @@ class Guild {
   string|Val.Null embed_channel_id;
   string|Val.Null application_id;
   string|Val.Null system_channel_id;
+  string|Val.Null banner;
+  string|Val.Null description;
+  string|Val.Null vanityUrlCode;
+  int|Val.Null maxPresences;
 
   bool embed_enabled;
   bool owner;
@@ -60,6 +64,7 @@ class Guild {
   int mfa_level;
   int explicit_content_filter;
   int member_count;
+  int max_members;
 
   Gallon roles;
   Gallon emojis;
@@ -110,7 +115,11 @@ class Guild {
     joined_at = data.joined_at;
     large = data.large;
     member_count = data.member_count;
-
+    banner = data.banner;
+    description = data.description;
+    vanityUrlCode = data.vanity_url_code;
+    maxPresences = data.max_presences;
+    
     client = c;
   }
 }
