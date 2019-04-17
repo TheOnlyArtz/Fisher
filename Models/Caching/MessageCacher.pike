@@ -7,15 +7,21 @@
 * - Users
 */
 class MessageCacher {
-  void cacheMember(Client client, Message message, mapping data) {
-
+  void cacheReactions(Client client, Message message, mapping data) {
+    // TODO: Create a reaction model
   }
 
-  void cacheGuild(Client, client, Message message, mapping data) {
-
+  void cacheMentions(Client client, Message message, array data) {
+    for (int i = 0; i < sizeof(data); i++) {
+      GuildMember user = message.guild ? GuildMember(client, message.guild, data[i]) : User(client, data[i]);
+      message.mentions->assign(data[i].id, user);
+    }
   }
 
-  void cacheAuthor(Client, client, Message message, mapping data) {
-
+  void cacheAttachments(Client client, Message message, array data) {
+    for (int i = 0; i < sizeof(data); i++)
+      message.attachments->assign(data[i].id, Attachment(client, data[i]));
   }
+
+  // TODO: Embeds, not critical
 }
