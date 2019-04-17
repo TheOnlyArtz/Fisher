@@ -7,13 +7,18 @@
 * - Users
 */
 class MessageCacher {
-  void cacheReactions(Client client, Message message, mapping data) {
-    // TODO: Create a reaction model
+  void cacheReactions(Client client, Message message, array data) {
+    Reaction reaction;
+    for (int i = 0; i < sizeof(data); i++) {
+      reaction = Reaction(client, data[i]);
+      message.reactions->assign(data[i].id, reaction);
+    }
   }
 
   void cacheMentions(Client client, Message message, array data) {
+    mixed user;
     for (int i = 0; i < sizeof(data); i++) {
-      GuildMember user = message.guild ? GuildMember(client, message.guild, data[i]) : User(client, data[i]);
+      user = message.guild ? GuildMember(client, message.guild, data[i]) : User(client, data[i]);
       message.mentions->assign(data[i].id, user);
     }
   }
