@@ -5,9 +5,10 @@ class GuildTextChannel {
   string lastMessageId;
 
   protected Client client;
-
-  void create(Client c, mapping data) {
+  protected Guild guild;
+  void create(Client c, Guild g, mapping data) {
     client = c;
+    guild = g;
 
     name = data.name;
     permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
