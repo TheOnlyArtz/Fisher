@@ -10,7 +10,7 @@
 class GuildMember {
   User user;
   string|Val.Null nickname;
-  array roles;
+  Gallon roles;
   string joined_at;
   bool deafend;
   bool muted;
@@ -26,7 +26,7 @@ class GuildMember {
   void create(Client c, Guild g, mapping data) {
     user = data.user;
     nickname = data.nick;
-    roles = data.roles;
+    roles = Gallon(([]));
     joined_at = data.joined_at;
     deafend = data.deaf;
     muted = data.mute;
