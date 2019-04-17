@@ -6,16 +6,16 @@
 *
 */
 class Emoji {
-  string|Val.Null id;
   string name;
 
   Gallon roles;
   Guild guild;
-  User|Val.Null user;
 
-  bool requireColons;
-  bool managed;
-  bool animated;
+  bool|Val.Null requireColons;
+  string|Val.Null id;
+  User|Val.Null user;
+  bool|Val.Null managed;
+  bool|Val.Null animated;
 
   protected Client client;
 
