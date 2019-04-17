@@ -65,6 +65,12 @@ class WSHandler {
         case "GUILD_MEMBER_UPDATE":
           eventDispatcher->guildMemberUpdate(data);
           break;
+        case "GUILD_ROLE_CREATE":
+          eventDispatcher->guildRoleCreate(data);
+          break;
+        case "GUILD_ROLE_UPDATE":
+          eventDispatcher->guildRoleUpdate(data);
+          break;
       }
     }
   }
