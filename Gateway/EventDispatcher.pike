@@ -42,9 +42,9 @@ class EventDispatcher {
     Guild guild = Guild(client, data);
     bool alreadyInside = client.guilds->get(data.id);
 
+    guildCacher->cacheRoles(guild, data.roles);
     guildCacher->cacheMembers(guild, data.members);
     guildCacher->cacheChannels(guild, data.channels);
-    guildCacher->cacheRoles(guild, data.roles);
     guildCacher->cacheEmojis(guild, data.emojis);
     client.cacher->cacheGuild(guild);
 
@@ -155,7 +155,7 @@ class EventDispatcher {
     if (!guild) return;
 
     GuildMember member = GuildMember(client, guild, data);
-    
+
     // Caching
     guild.members->assign(member.id, member);
     client.users->assign(member.id, member.user);
@@ -177,4 +177,16 @@ class EventDispatcher {
     client->emit("guildMemberRemove", guild, user);
   }
 
+  void guildMemberUpdate(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    if (!guild) return;
+
+    GuildMember cached = guild.members->get(data.user.id);
+    if (!cached) return;
+
+    GuildMember newMember = MiscUtils()->cloneObject(GuildMember, data, client, guild);
+    guild.members->assign(data.user.id, newMember);
+
+    client->emit("guildMemberUpdate", guild, newMember, cached);
+  }
 }
