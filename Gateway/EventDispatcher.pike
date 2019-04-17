@@ -60,7 +60,9 @@ class EventDispatcher {
     guildCacher->cacheEmojis(newGuild, data.emojis);
     client.cacher->cacheGuild(newGuild);
 
-    client.emit("guildUpdate", newGuild, oldGuild, client);
+    array diffs = MiscUtils()->mappingDiff(oldGuild, newGuild);
+
+    client.emit("guildUpdate", newGuild, oldGuild, diffs, client);
 
   }
 
@@ -187,7 +189,9 @@ class EventDispatcher {
     GuildMember newMember = MiscUtils()->cloneObject(GuildMember, data, client, guild);
     guild.members->assign(data.user.id, newMember);
 
-    client->emit("guildMemberUpdate", guild, newMember, cached);
+    array diffs = MiscUtils()->mappingDiff(cached, newMember);
+
+    client->emit("guildMemberUpdate", guild, newMember, cached, diffs, client);
   }
 
   // TODO:
@@ -206,6 +210,7 @@ class EventDispatcher {
   }
 
   void guildRoleUpdate(mapping data) {
+
     Guild guild = client.guilds->get(data.guild_id);
     if (!guild) return;
 
@@ -215,7 +220,9 @@ class EventDispatcher {
     Role newRole = MiscUtils()->cloneObject(Role, data.role, client, guild);
     guild.roles->assign(data.role.id, newRole);
 
-    client->emit("guildRoleUpdate", guild, newRole, cached, client);
+    array diffs = MiscUtils()->mappingDiff(cached, newRole);
 
+    if (sizeof(diffs) != 0)
+      client->emit("guildRoleUpdate", guild, newRole, cached, diffs, client);
   }
 }
