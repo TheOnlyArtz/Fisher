@@ -71,6 +71,9 @@ class WSHandler {
         case "GUILD_ROLE_DELETE":
           eventDispatcher->guildRoleDelete(data);
           break;
+        case "MESSAGE_CREATE":
+          eventDispatcher->messageCreate(data);
+          break;
       }
     }
   }
