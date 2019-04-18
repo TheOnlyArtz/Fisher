@@ -55,7 +55,7 @@ class EventDispatcher {
   void guildUpdate(mapping data) {
     Guild oldGuild = client.guilds->get(data.id);
     if (!oldGuild) return;
-    
+
     Guild newGuild = Guild(client, data);
 
     guildCacher->cacheRoles(newGuild, data.roles);
@@ -65,7 +65,6 @@ class EventDispatcher {
     array diffs = MiscUtils()->mappingDiff(oldGuild, newGuild);
 
     client.emit("guildUpdate", newGuild, oldGuild, diffs, client);
-
   }
 
   void guildDelete(mapping data) {
