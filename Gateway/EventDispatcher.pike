@@ -343,7 +343,7 @@ class EventDispatcher {
     guild.members->assign(data.user.id, newMember);
     newMember.presence = Presence(data);
 
-    array diffs = MiscUtils()->mappingDiff(newMember, cached);
+    array diffs = MiscUtils()->mappingDiff(newMember.game, cached.game);
     if (sizeof(diffs) != 0)
       client->emit("presenceUpdate", newMember, cached, diffs);
   }
