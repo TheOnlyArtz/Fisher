@@ -331,6 +331,11 @@ class EventDispatcher {
     client->emit("messageReactionRemoveAll", cachedMessage, client);
   }
 
+  /*
+    NOTE: Presence update fires up in order to initialize
+    newly cached member's presence, that's why for the first  "run"
+    for each member, the difference count will be so high
+  */
   void presenceUpdate(mapping data) {
     Guild guild = client.guilds->get(data.guild_id);
     if (!guild) return;
@@ -343,7 +348,7 @@ class EventDispatcher {
     guild.members->assign(data.user.id, newMember);
     newMember.presence = Presence(data);
 
-    array diffs = MiscUtils()->mappingDiff(newMember.game, cached.game);
+    array diffs = MiscUtils()->mappingDiff(newMember.presence.game, cached.presence.game);
     if (sizeof(diffs) != 0)
       client->emit("presenceUpdate", newMember, cached, diffs);
   }
