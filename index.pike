@@ -10,7 +10,11 @@
 #include "Models/Caching/GuildCacher.pike"
 #include "Models/Caching/MessageCacher.pike"
 #include "Models/GuildChannel.pike"
-
+#include "Models/ActivityAssets.pike"
+#include "Models/ActivityTimestamps.pike"
+#include "Models/ActivityParty.pike"
+#include "Models/ActivitySecrets.pike"
+#include "Models/Activity.pike"
 #include "Rest/APIManager.pike"
 #include "Rest/RateLimiter.pike"
 #include "Utils/Permission.pike"
