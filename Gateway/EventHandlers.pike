@@ -34,7 +34,7 @@ class EventHandlers {
   array messageDelete;
   array messageDeleteBulk;
   array messageReactionAdd;
-  array messageReactionDelete;
+  array messageReactionRemove;
   array messageReactionRemoveAll;
 
   array presenceUpdate;
@@ -72,9 +72,9 @@ class EventHandlers {
     messageUpdate = ({});// ✅
     messageDelete = ({});// ✅
     messageDeleteBulk = ({});
-    messageReactionAdd = ({});
-    messageReactionDelete = ({});
-    messageReactionRemoveAll = ({});
+    messageReactionAdd = ({});// ✅
+    messageReactionRemove = ({});// ✅
+    messageReactionRemoveAll = ({});// ✅
     presenceUpdate = ({});
     typingStart = ({});
     userUpdate = ({});
