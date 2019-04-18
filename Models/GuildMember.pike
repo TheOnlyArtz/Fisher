@@ -14,7 +14,7 @@ class GuildMember {
   string joinedAt;
   bool deafend;
   bool muted;
-
+  Presence presence;
   Guild guild;
   protected Client client;
 
