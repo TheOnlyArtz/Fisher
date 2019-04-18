@@ -10,7 +10,7 @@ class MessageCacher {
   void cacheReactions(Client client, Message message, array data) {
     Reaction reaction;
     for (int i = 0; i < sizeof(data); i++) {
-      reaction = Reaction(client, data[i]);
+      reaction = Reaction(client, message, data[i]);
       message.reactions->assign(data[i].id, reaction);
     }
   }

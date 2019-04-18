@@ -2,14 +2,20 @@ class Reaction {
   int count;
   bool me;
   ReactionEmoji emoji;
-
+  User|string user;
+  Message message;
   protected Client client;
 
   // emote is basically emoji... just so conflicts won't happen.
-  void create(Client c, mapping data) {
+  void create(Client c, Message msg, mapping data) {
     client = c;
-    count = data.count;
+    count = data.count || 1;
     me = data.me;
-    emoji = ReactionEmoji(c, this, data);
+    message = msg;
+    emoji = ReactionEmoji(c, this, data.emoji);
+    user = c.users->get(data.user_id);
+
+    if (!user)
+      user = data.user_id;
   }
 }
