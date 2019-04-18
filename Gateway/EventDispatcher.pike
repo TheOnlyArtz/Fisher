@@ -344,7 +344,6 @@ class EventDispatcher {
     newMember.presence = Presence(data);
 
     array diffs = MiscUtils()->mappingDiff(newMember, cached);
-    write("%O", diffs);
     if (sizeof(diffs) != 0)
       client->emit("presenceUpdate", newMember, cached, diffs);
   }
