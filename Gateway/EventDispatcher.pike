@@ -347,4 +347,14 @@ class EventDispatcher {
     if (sizeof(diffs) != 0)
       client->emit("presenceUpdate", newMember, cached, diffs);
   }
+
+  void typingStart(mapping data) {
+    mixed channel = client.channels.get->(data.channel_id);
+    if (!channel) return;
+
+    User user = client.users->get(data.user_id);
+    if (!user) return;
+
+    client->emit("typingStart", user, channel, client);
+  }
 }
