@@ -320,7 +320,7 @@ class EventDispatcher {
   }
 
   void messageReactionRemoveAll(mapping data) {
-    mixed cachedChannel = client.channel->get(data.channel_id);
+    mixed cachedChannel = client.channels->get(data.channel_id);
     if (!cachedChannel) return;
 
     Message cachedMessage = cachedChannel.messages->get(data.message_id);
