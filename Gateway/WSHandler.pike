@@ -74,6 +74,9 @@ class WSHandler {
         case "MESSAGE_CREATE":
           eventDispatcher->messageCreate(data);
           break;
+        case "MESSAGE_UPDATE":
+          eventDispatcher->messageUpdate(data);
+          break;
       }
     }
   }
