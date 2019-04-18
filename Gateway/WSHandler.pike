@@ -89,6 +89,9 @@ class WSHandler {
         case "PRESENCE_UPDATE":
           eventDispatcher->presenceUpdate(data);
           break;
+        case "TYPING_START":
+          eventDispatcher->typingStart(data);
+          break;
       }
     }
   }
