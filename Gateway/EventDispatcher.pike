@@ -350,7 +350,7 @@ class EventDispatcher {
 
     array diffs = MiscUtils()->mappingDiff(newMember.presence.game, cached.presence.game);
     if (sizeof(diffs) != 0)
-      client->emit("presenceUpdate", newMember, cached, diffs);
+      client->emit("presenceUpdate", newMember, cached, diffs, client);
   }
 
   void typingStart(mapping data) {
