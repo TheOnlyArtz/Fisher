@@ -284,6 +284,7 @@ class EventDispatcher {
 
   }
 
+  // TODO: figure out the count
   void messageReactionAdd(mapping data) {
     mixed cachedChannel = client.channels->get(data.channel_id);
     if (!cachedChannel) return;
@@ -291,9 +292,42 @@ class EventDispatcher {
     Message cachedMessage = cachedChannel.messages->get(data.message_id);
     if (!cachedMessage) return;
 
-    Reaction theReaction = Reaction(client, cachedMessage, data);
+    Reaction theReaction = cachedMessage.reactions->get(data.emoji.id);
+    if (!theReaction) theReaction = Reaction(client, cachedMessage, data);
+
     cachedMessage.reactions->assign(theReaction.emoji.id, theReaction);
+    theReaction.count++;
 
     client->emit("messageReactionAdd", theReaction, client);
+  }
+
+  void messageReactionRemove(mapping data) {
+    mixed cachedChannel = client.channels->get(data.channel_id);
+    if (!cachedChannel) return;
+
+    Message cachedMessage = cachedChannel.messages->get(data.message_id);
+    if (!cachedMessage) return;
+
+    Reaction cachedReaction = cachedMessage.reactions->get(data.emoji.id);
+    if (!cachedReaction) return;
+
+    cachedReaction.count--;
+    if (!cachedReaction.count)
+      cachedMessage.reactions->delete(data.emoji.id);
+
+    // Return message since cachedReaction can be deleted when it's count == 0
+    client->emit("messageReactionRemove", cachedReaction, cachedMessage, client);
+  }
+
+  void messageReactionRemoveAll(mapping data) {
+    mixed cachedChannel = client.channel->get(data.channel_id);
+    if (!cachedChannel) return;
+
+    Message cachedMessage = cachedChannel.messages->get(data.message_id);
+    if (!cachedMessage) return;
+
+    cachedMessage.reactions->reset();
+
+    client->emit("messageReactionRemoveAll", cachedMessage, client);
   }
 }
