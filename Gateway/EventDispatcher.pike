@@ -362,4 +362,17 @@ class EventDispatcher {
 
     client->emit("typingStart", user, channel, client);
   }
+
+  void userUpdate(mapping data) {
+    User cached = client.user;
+    if (!cached) return; // Shouldn't happen lol
+
+    User newUser = User(client, data);
+    MiscUtils()->fixNullables(newUser, cached);
+
+    array diffs = MiscUtils()->mappingDiff(newUser, cached);
+    write("%O\n", diffs);
+    if (sizeof(diffs) != 0)
+      client->emit("userUpdate", newUser, cached, diffs, client);
+  }
 }

@@ -92,6 +92,9 @@ class WSHandler {
         case "TYPING_START":
           eventDispatcher->typingStart(data);
           break;
+        case "USER_UPDATE":
+          eventDispatcher->userUpdate(data);
+          break;
       }
     }
   }
