@@ -54,6 +54,8 @@ class EventDispatcher {
 
   void guildUpdate(mapping data) {
     Guild oldGuild = client.guilds->get(data.id);
+    if (!oldGuild) return;
+    
     Guild newGuild = Guild(client, data);
 
     guildCacher->cacheRoles(newGuild, data.roles);
@@ -67,7 +69,13 @@ class EventDispatcher {
   }
 
   void guildDelete(mapping data) {
-    // TODO:
+    Guild guild = client.guilds->get(data.guild_id);
+    if (!guild) return;
+
+    client.guilds->delete(data.guild_id);
+
+    client->emit("guildDelete", guild, client);
+    // Delete the guild's users from cache
   }
 
   void guildBanAdd(mapping data) {

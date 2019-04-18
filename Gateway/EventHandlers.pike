@@ -76,10 +76,10 @@ class EventHandlers {
     messageReactionRemove = ({});// ✅
     messageReactionRemoveAll = ({});// ✅
     presenceUpdate = ({});// ✅
-    typingStart = ({});
-    userUpdate = ({});
-    voiceStateUpdate = ({});
-    voiceServerUpdate = ({});
-    webhooksUpdate = ({});
+    typingStart = ({});// ✅
+    userUpdate = ({});// ✅
+    voiceStateUpdate = ({}); // ON HOLD
+    voiceServerUpdate = ({}); // ON HOLD
+    webhooksUpdate = ({}); // ON HOLD
   }
 }
