@@ -75,7 +75,7 @@ class EventHandlers {
     messageReactionAdd = ({});// ✅
     messageReactionRemove = ({});// ✅
     messageReactionRemoveAll = ({});// ✅
-    presenceUpdate = ({});
+    presenceUpdate = ({});// ✅
     typingStart = ({});
     userUpdate = ({});
     voiceStateUpdate = ({});
