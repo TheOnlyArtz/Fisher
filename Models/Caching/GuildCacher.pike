@@ -18,7 +18,7 @@ class GuildCacher {
       array roles = member.roles;
 
       member = GuildMember(client, guild, member);
-
+      member.presence = Presence((["activities": ({})]));
       guild.members->assign(member.user.id, member);
       client.cacher->cacheUser(member.user);
     }
