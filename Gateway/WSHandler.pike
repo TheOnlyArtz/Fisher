@@ -86,6 +86,9 @@ class WSHandler {
         case "MESSAGE_REACTION_REMOVE_ALL":
           eventDispatcher->messageReactionRemoveAll(data);
           break;
+        case "PRESENCE_UPDATE":
+          eventDispatcher->presenceUpdate(data);
+          break;
       }
     }
   }
