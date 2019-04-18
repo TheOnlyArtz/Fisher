@@ -266,4 +266,25 @@ class EventDispatcher {
     if (sizeof(diffs) != 0)
       client->emit("messageUpdate", newMessage, cached, diffs, client);
   }
+
+  void messageDelete(mapping data) {
+    mixed channel = client.channels->get(data.channel_id);
+    if (!channel) return;
+
+    Message theMessage = channel.messages->get(data.id);
+    if (!theMessage) return;
+
+    channel.messages->delete(data.id);
+
+    client->emit("messageDelete", theMessage, client);
+  }
+
+  // TODO after REST implementation
+  void messageDeleteBulk(mapping data) {
+
+  }
+
+  void messageReactionAdd(mapping data) {
+
+  }
 }
