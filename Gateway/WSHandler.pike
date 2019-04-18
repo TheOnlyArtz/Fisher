@@ -80,6 +80,9 @@ class WSHandler {
         case "MESSAGE_REACTION_ADD":
           eventDispatcher->messageReactionAdd(data);
           break;
+        case "MESSAGE_REACTION_REMOVE":
+          eventDispatcher->messageReactionRemove(data);
+          break;
       }
     }
   }
