@@ -16,14 +16,8 @@ class GuildCacher {
   void cacheMembers(Guild guild, array data) {
     foreach(data, mixed member) {
       array roles = member.roles;
-      member.user = User(client, member.user);
 
       member = GuildMember(client, guild, member);
-
-        // Cach roles
-      foreach(roles, string key) {
-        member.roles->assign(key, guild.roles->get(key));
-      }
 
       guild.members->assign(member.user.id, member);
       client.cacher->cacheUser(member.user);

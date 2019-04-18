@@ -24,7 +24,7 @@ class GuildMember {
   * @param {mapping} data - The data
   */
   void create(Client c, Guild g, mapping data) {
-    user = data.user;
+    user = User(client, data.user);
     nickname = data.nick;
     roles = Gallon(([]));
     joinedAt = data.joined_at || data.joinedAt;
@@ -33,5 +33,9 @@ class GuildMember {
 
     guild = g;
     client = c;
+
+    foreach(data.roles, string key) {
+      roles->assign(key, guild.roles->get(key));
+    }
   }
 }
