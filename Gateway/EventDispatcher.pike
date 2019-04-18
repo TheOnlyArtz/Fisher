@@ -349,7 +349,7 @@ class EventDispatcher {
   }
 
   void typingStart(mapping data) {
-    mixed channel = client.channels.get->(data.channel_id);
+    mixed channel = client.channels->get(data.channel_id);
     if (!channel) return;
 
     User user = client.users->get(data.user_id);
