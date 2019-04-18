@@ -186,11 +186,12 @@ class EventDispatcher {
     GuildMember cached = guild.members->get(data.user.id);
     if (!cached) return;
 
-    GuildMember newMember = MiscUtils()->cloneObject(GuildMember, data, client, guild);
+    GuildMember newMember = GuildMember(client, guild, data);
+    MiscUtils()->fixNullables(newMember, cached);
+
     guild.members->assign(data.user.id, newMember);
 
     array diffs = MiscUtils()->mappingDiff(cached, newMember);
-
     client->emit("guildMemberUpdate", guild, newMember, cached, diffs, client);
   }
 
@@ -217,7 +218,9 @@ class EventDispatcher {
     Role cached = guild.roles->get(data.role.id);
     if (!cached) return;
 
-    Role newRole = MiscUtils()->cloneObject(Role, data.role, client, guild);
+    Role newRole = Role(client, guild, data.role);
+    MiscUtils()->fixNullables(newRole, cached);
+
     guild.roles->assign(data.role.id, newRole);
 
     array diffs = MiscUtils()->mappingDiff(cached, newRole);
@@ -248,6 +251,19 @@ class EventDispatcher {
   }
 
   void messageUpdate(mapping data) {
+    mixed channel = client.channels->get(data.channel_id);
+    if (!channel) return;
 
+    Message cached = channel.messages->get(data.id);
+    if (!cached) return;
+
+    Message newMessage = Message(client, data);
+    MiscUtils()->fixNullables(newMessage, cached);
+    channel.messages->assign(data.id, newMessage);
+
+    array diffs = MiscUtils()->mappingDiff(cached, newMessage);
+
+    if (sizeof(diffs) != 0)
+      client->emit("messageUpdate", newMessage, cached, diffs, client);
   }
 }

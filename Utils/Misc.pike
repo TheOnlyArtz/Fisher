@@ -12,7 +12,7 @@ class MiscUtils {
       mixed valueB = b[key];
 
       if (functionp(valueA) || functionp(valueB)) continue;
-      if (valueA != valueB) {
+      if (!equal(valueA, valueB)) {
         difference = Array.push(difference, key);
       }
     }
@@ -22,7 +22,7 @@ class MiscUtils {
       mixed valueB = b[key];
 
       if (functionp(valueA) || functionp(valueB)) continue;
-      if (valueA != valueB) {
+      if (!equal(valueA, valueB)) {
         difference = Array.push(difference, key);
       }
     }
@@ -33,14 +33,27 @@ class MiscUtils {
 
   mixed cloneObject(mixed Instance, mixed data, mixed ... args) {
     mixed instance = Instance(@args, data);
-    clonedData = ([]);
     array instanceIndices = indices(instance);
     foreach(instanceIndices, string key) {
       if (data[key] && !functionp(data[key])) {
-        instance[key] = data[key];
+        if (!(function_name(object_program(instance[key])) == "Gallon"))
+          instance[key] = data[key];
+          // write("%O\n", key);
       }
     }
 
     return instance;
+  }
+
+  void fixNullables(mixed instance, mixed data) {
+    bool first;
+    bool second;
+    foreach(indices(instance), string key) {
+      first = (data[key] || basetype(data[key]) == "object");
+      second = (instance[key] == 0 || instance[key] == Val.null);
+      if (first && second) {
+        instance[key] = data[key];
+      }
+    }
   }
 }
