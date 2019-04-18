@@ -79,6 +79,15 @@ class Gallon {
     m_delete(iterable, key);
   }
 
+  /**
+  * This function erase the Gallon completely
+  */
+  void reset() {
+    foreach(indices(iterable), string key) {
+      m_delete(iterable, key);
+    }
+  }
+
   /*
   * This function will look for a specific value in a specific property
   * Out of all the elements the Gallon contains
