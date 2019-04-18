@@ -285,6 +285,15 @@ class EventDispatcher {
   }
 
   void messageReactionAdd(mapping data) {
+    mixed cachedChannel = client.channels->get(data.channel_id);
+    if (!cachedChannel) return;
 
+    Message cachedMessage = cachedChannel.messages->get(data.message_id);
+    if (!cachedMessage) return;
+
+    Reaction theReaction = Reaction(client, cachedMessage, data);
+    cachedMessage.reactions->assign(theReaction.emoji.id, theReaction);
+
+    client->emit("messageReactionAdd", theReaction, client);
   }
 }
