@@ -68,9 +68,9 @@ class EventHandlers {
     guildRoleCreate = ({}); // ✅
     guildRoleUpdate = ({});// ✅
     guildRoleDelete = ({});// ✅
-    messageCreate = ({});
-    messageUpdate = ({});
-    messageDelete = ({});
+    messageCreate = ({});// ✅
+    messageUpdate = ({});// ✅
+    messageDelete = ({});// ✅
     messageDeleteBulk = ({});
     messageReactionAdd = ({});
     messageReactionDelete = ({});
