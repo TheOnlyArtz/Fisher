@@ -330,4 +330,22 @@ class EventDispatcher {
 
     client->emit("messageReactionRemoveAll", cachedMessage, client);
   }
+
+  void presenceUpdate(mapping data) {
+    Guild guild = client.guilds->get(data.guild_id);
+    if (!guild) return;
+
+    GuildMember cached = guild.members->get(data.user.id);
+    if (!cached) return;
+
+    GuildMember newMember = GuildMember(client, guild, data);
+    MiscUtils()->fixNullables(newMember, cached);
+    guild.members->assign(data.user.id, newMember);
+    newMember.presence = Presence(data);
+
+    array diffs = MiscUtils()->mappingDiff(newMember, cached);
+    write("%O", diffs);
+    if (sizeof(diffs) != 0)
+      client->emit("presenceUpdate", newMember, cached, diffs);
+  }
 }
