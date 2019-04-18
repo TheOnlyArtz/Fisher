@@ -9,7 +9,7 @@ class Reaction {
   // emote is basically emoji... just so conflicts won't happen.
   void create(Client c, Message msg, mapping data) {
     client = c;
-    count = data.count || 1;
+    count = data.count || 0;
     me = data.me;
     message = msg;
     emoji = ReactionEmoji(c, this, data.emoji);
