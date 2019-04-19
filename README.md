@@ -12,6 +12,8 @@ int main() {
   client->handle("ready", handleReady);
 
   return -1;
+  // This is very important, always return -1
+  // otherwise the backend will shut close and the program won't work
 }
 
 void handleReady(Client client) {
