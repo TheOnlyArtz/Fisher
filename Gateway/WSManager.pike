@@ -106,7 +106,7 @@ class WSManager {
 
      if (has_prefix(frame.data, "{")) {
        mapping json = Standards.JSON.decode(frame.data);
-       wsHandler->handle(json);
+       Thread.Thread(wsHandler->handle, json);
      }
    }
 
