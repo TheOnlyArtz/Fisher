@@ -37,7 +37,7 @@ void <eventName>(mapping data);
 Events which fall under the "update" section will automatically be sent with
 an array of what has been updated!
 
-Events which fall under the "delete/add" section will be cached automatically.
+Events which fall under the "delete/add/update" section will be cached automatically.
 
 Events which require cached data to be returned will not dispatch if the data is not cached.
 
