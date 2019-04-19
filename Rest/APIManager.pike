@@ -33,7 +33,6 @@ class APIManager {
       if (globalKey) destruct(globalKey);
 
       response = Protocols.HTTP[lower_case(method) + "_url"](uri, data, default_headers);
-      write("%O\n", response.headers);
 
       if ((int) response.status == 429 || (int) response.headers["x-ratelimit-remaining"] == 0) {
         // We got rate limited
@@ -57,7 +56,6 @@ class APIManager {
        requestDone = true;
      }
     }
-    write("%O", response);
   }
 
   mixed mutexWait(Thread.Mutex mut) {
