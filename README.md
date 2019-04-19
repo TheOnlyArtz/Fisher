@@ -89,36 +89,34 @@ void handleGuildBanRemove(Guild guild, User user, Client client);
 ### guildEmojiUpdate
 - when emitted:
 ```pike
-// TODO: return guild
+// Emoji.guild is a thing so don't worry about it
 void handleGuildEmojiUpdate(Emoji newEmoji, Emoji cached, Array diffs, Client client);
 ```
 
 ### guildEmojiAdd
 - when emitted:
 ```pike
-// TODO: return guild
+// Emoji.guild is a thing so don't worry about it
 void handleGuildEmojiAdd(Emoji newEmoji, Client client);
 ```
 
 ### guildEmojiRemove
 - when emitted:
 ```pike
-// TODO: Return guild and client
-void handleGuildEmojiRemove(Emoji emoji);
+// Emoji.guild is a thing so don't worry about it
+void handleGuildEmojiRemove(Emoji emoji, Client client);
 ```
 
 ### guildMemberAdd
 - when emitted:
 ```pike
-// TODO: Return the guild and client
-void handleGuildMemberAdd(GuildMember member);
+void handleGuildMemberAdd(GuildMember member, Client client);
 ```
 
 ### guildMemberRemove
 - when emitted:
 ```pike
-// TODO: Return the client
-void handleGuildMemberRemove(Guild guild, User user);
+void handleGuildMemberRemove(Guild guild, User user, Client client);
 ```
 
 ### guildMemberUpdate

@@ -150,7 +150,7 @@ class EventDispatcher {
     emoji.guild.emojis->delete(emoji.id);
     client.emojis->delete(emoji.id);
 
-    client->emit("guildEmojiRemove", emoji);
+    client->emit("guildEmojiRemove", emoji, client);
   }
 
   /**
@@ -169,7 +169,7 @@ class EventDispatcher {
     guild.members->assign(member.id, member);
     client.users->assign(member.id, member.user);
 
-    client->emit("guildMemberAdd", member);
+    client->emit("guildMemberAdd", member, client);
   }
 
   void guildMemberRemove(mapping data) {
@@ -183,7 +183,7 @@ class EventDispatcher {
     guild.members->delete(user.id);
     client.users->delete(user.id);
 
-    client->emit("guildMemberRemove", guild, user);
+    client->emit("guildMemberRemove", guild, user, client);
   }
 
   void guildMemberUpdate(mapping data) {
