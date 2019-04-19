@@ -17,16 +17,19 @@ class APIManager {
     default_headers = ([]);
   }
 
-  mixed apiRequest(string method, string endpoint, mapping data, string route, mapping|Val.Null files) {
+  // majorParam -> ID
+  mixed apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping data) {
     int retry_after;
     bool requestDone = false;
+    string rateLimitKey = majorParameter ? routeKey + majorParameter : routeKey;
+
     Protocols.HTTP.Query response;
 
     resetHeaders();
     Standards.URI uri = Standards.URI(Constants().API->get("URI") + Constants().API->get("VERSION") + endpoint);
 
     while (!requestDone) {
-      Thread.Mutex mutex = mutexes[route] ? mutexes[route] : Thread.Mutex();
+      Thread.Mutex mutex = mutexes[rateLimitKey] ? mutexes[rateLimitKey] : Thread.Mutex();
       mutexWait(mutex);
       // reset the headers
       Thread.MutexKey globalKey = globalMutex->trylock();
@@ -56,6 +59,8 @@ class APIManager {
        requestDone = true;
      }
     }
+
+    return response;
   }
 
   mixed mutexWait(Thread.Mutex mut) {
