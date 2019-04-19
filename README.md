@@ -22,3 +22,181 @@ void handleReady(Client client) {
   write("Using Fisher v0.0.1");
 }
 ```
+
+### Available Events
+These are the available events and their declarations
+For more info please check out [EventDispatcher.pike](https://github.com/TheOnlyArtz/Fisher/blob/master/Gateway/EventDispatcher.pike)
+
+All of the events declarations on the backend will look like
+```pike
+void <eventName>(mapping data);
+```
+
+Events which fall under the "update" section will automatically be sent with
+an array of what has been updated!
+
+Events which fall under the "delete/add" section will be cached automatically.
+
+Events which require cached data to be returned will not dispatch if the data is not cached.
+
+**Events will be sent with additional client parameter to give access to the client's object and it will be the last parameter in the function, therefore, optional!**
+
+### ready
+This event will dispatch when the client's connection to the socket has been made and identified.
+- when emitted:
+```pike
+void handleReady(Client client);
+```
+
+### guildCreate
+This event will dispatch whenever the client will join a new guild, but!, in the backend the GUILD_CREATE will be treated on client startup in order to cache the relevant data.
+it will be dispatched globally when the client will join a new guild only.
+
+- when emitted:
+```pike
+void handleGuildCreate(Guild guild, Client client);
+```
+
+### guildUpdate
+Introducing the diffs parameter which stands for **difference**
+between the new version of the object and the older version of the object.
+
+- when emitted:
+```pike
+void handleGuildUpdate(Guild newGuild, Guild oldGuild, Array diffs, Client client);
+```
+
+### guildDelete
+- when emitted:
+```pike
+void handleGuildDelete(Guild guild, Client client);
+```
+
+### guildBanAdd
+- when emitted:
+```pike
+void handleGuildBanAdd(Guild guild, User user, Client client);
+```
+
+### guildBanRemove
+- when emitted:
+```pike
+void handleGuildBanRemove(Guild guild, User user, Client client);
+```
+
+### guildEmojiUpdate
+- when emitted:
+```pike
+// TODO: return guild
+void handleGuildEmojiUpdate(Emoji newEmoji, Emoji cached, Array diffs, Client client);
+```
+
+### guildEmojiAdd
+- when emitted:
+```pike
+// TODO: return guild
+void handleGuildEmojiAdd(Emoji newEmoji, Client client);
+```
+
+### guildEmojiRemove
+- when emitted:
+```pike
+// TODO: Return guild and client
+void handleGuildEmojiRemove(Emoji emoji);
+```
+
+### guildMemberAdd
+- when emitted:
+```pike
+// TODO: Return the guild and client
+void handleGuildMemberAdd(GuildMember member);
+```
+
+### guildMemberRemove
+- when emitted:
+```pike
+// TODO: Return the client
+void handleGuildMemberRemove(Guild guild, User user);
+```
+
+### guildMemberUpdate
+- when emitted:
+```pike
+void handleGuildMemberUpdate(Guild guild, GuildMember member, GuildMember cached, Array diffs, Client client);
+```
+
+### guildRoleCreate
+- when emitted:
+```pike
+void handleRoleCreate(Guild guild, Role role, Client client);
+```
+
+### guildRoleUpdate
+- when emitted:
+```pike
+void handleRoleDelete(Guild guild, Role newRole, Role cached, array diffs, Client client);
+```
+
+### guildRoleDelete
+- when emitted:
+```pike
+void handleRoleDelete(Guild guild, Role deletedRole, Client client);
+```
+
+### messageCreate
+- when emitted:
+```pike
+void handleMessageCreate(Message theMessage, Client client);
+```
+
+### messageUpdate
+- when emitted:
+```pike
+void handleMessageUpdate(Message newMessage, Message cached, array diffs, Client client);
+```
+
+### messageDelete
+- when emitted:
+```pike
+void handleMessageDelete(Message theMessage, Client client);
+```
+
+### messageReactionAdd
+- when emitted:
+```pike
+// Reaction.message is a thing so don't worry about it.
+void handleMessageReactionAdd(Reaction theReaction, Client client);
+```
+
+### messageReactionRemove
+- when emitted:
+```pike
+// Should not return the message
+void handleMessageReactionRemove(Reaction cachedReaction, Message cachedMessage, Client client);
+```
+
+### messageReactionRemoveAll
+- when emitted:
+```pike
+void handleMessageReactionRemoveAll(Message cachedMessage, Client client);
+```
+
+### presenceUpdate
+- when emitted:
+```pike
+void handlePresenceUpdate(Member newMember, Member cached, array diffs, Client client);
+```
+
+### typingStart
+- when emitted:
+```pike
+void handleTypingStart(User user, mixed channel, Client client);
+```
+
+### userUpdate
+Can be a little bit tricky, this is only the client's (bot) update event.
+- when emitted:
+```pike
+// TODO: It actually should return ClientUser.
+void handleUserUpdate(User newUser, User cached, array diffs, Client client);
+```
