@@ -59,6 +59,24 @@ class EventDispatcher {
     if (sizeof(diffs) != 0)
       client->emit("channelUpdate", newChannel, cached, diffs, client);
   }
+
+  void channelDelete(mapping data) {
+    mixed cached = client.channels->get(data.id);
+    if (!cached) return;
+
+    if (cached.guild) cached.guild.channels->delete(data.id);
+    client.channels->delete(data.id);
+
+    client->emit("channelDelete", cached, client);
+  }
+
+  void channelPinsUpdate(mapping data) {
+    mixed channel = client.channels->get(data.id);
+    if (!channel) return;
+
+    client->emit("channelPinsUpdate", channel, client);
+  }
+
   /**
    * handles the GUILD_CREATE event
    * @param {mapping} data
