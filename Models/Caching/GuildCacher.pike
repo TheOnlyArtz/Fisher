@@ -32,11 +32,11 @@ class GuildCacher {
           client.cacher->cacheChannel(channel, GuildTextChannel);
           break;
         case 2:
-          guild.channels->assign(channel.id, ChannelVoice(client, channel));
+          guild.channels->assign(channel.id, ChannelVoice(client, guild, channel));
           client.cacher->cacheChannel(channel, ChannelVoice);
           break;
         case 4:
-          guild.channels->assign(channel.id, ChannelCategory(client, channel));
+          guild.channels->assign(channel.id, ChannelCategory(client, guild, channel));
           client.cacher->cacheChannel(channel, ChannelCategory);
           break;
       }
