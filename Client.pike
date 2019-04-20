@@ -16,7 +16,7 @@ class Client {
   string token;
   inherit EventUtils;
   WSManager wsManager;
-  APIManager apiManager;
+  APIManager api;
   Protocols.WebSocket.Connection ws;
 
   // Caching
@@ -37,7 +37,7 @@ class Client {
   void create(string t, mapping|void options) {
     token = t;
     wsManager = WSManager(this);
-    apiManager = APIManager(this);
+    api = APIManager(this);
     handlers = EventHandlers();
     // Caching
     users = Gallon(([]));
