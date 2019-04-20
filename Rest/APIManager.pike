@@ -7,18 +7,17 @@ class APIManager {
   protected Thread.Mutex globalMutex;
   protected mapping mutexes;
   protected Client client;
-  protected RateLimiter rateLimiter;
   protected mapping default_headers;
+
   void create(Client c) {
     mutexes = ([]);
     globalMutex = Thread.Mutex();
     client = c;
-    rateLimiter = RateLimiter(c, globalMutex);
     default_headers = ([]);
   }
 
   // majorParam -> ID
-  Protocols.HTTP.Query|void apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping data) {
+  mapping|void apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping data) {
     int retry_after;
     bool requestDone = false;
     string rateLimitKey = majorParameter ? routeKey + majorParameter : routeKey;
