@@ -80,6 +80,6 @@ class APIManager {
     mixed resp = apiRequest("channels/id", id, "GET", "/channels/"+id, getHeaders(), ([]));
     if (resp.code) return resp;
 
-    return getChannelAccordingToType(resp.type, resp);
+    return getChannelAccordingToType(resp.type, resp, client);
   }
 }
