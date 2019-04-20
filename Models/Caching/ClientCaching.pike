@@ -28,4 +28,8 @@ class ClientCaching() {
   void cacheGuild(Guild guild) {
       client.guilds->assign(guild["id"], guild);
   }
+
+  void cacheNonGuildChannels(array channels) {
+    // TODO
+  }
 }
