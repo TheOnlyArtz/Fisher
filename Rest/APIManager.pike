@@ -33,7 +33,7 @@ class APIManager {
       Thread.MutexKey globalKey = globalMutex->trylock();
       if (globalKey) destruct(globalKey);
 
-      response = Protocols.HTTP[lower_case(method) + "_url"](uri, data, default_headers);
+      response = Protocols.HTTP.do_method(method, uri, data, headers);
 
       if ((int) response.status == 429 || (int) response.headers["x-ratelimit-remaining"] == 0) {
         // We got rate limited
@@ -59,7 +59,7 @@ class APIManager {
     }
 
     mapping parsedData = Standards.JSON.decode(response->data());
-    if (parsedData.code) {
+    if (has_value(indices(parsedData), "code")) {
       return throw(({"ERROR: " + parsedData.message}));
     }
     return parsedData;
@@ -76,10 +76,17 @@ class APIManager {
 
   /* CHANNEL */
 
-  mapping getChannel(string id) {
+  mixed getChannel(string id) {
     mixed resp = apiRequest("channels/id", id, "GET", "/channels/"+id, getHeaders(), ([]));
     if (resp.code) return resp;
 
+    return getChannelAccordingToType(resp.type, resp, client);
+  }
+
+  mixed modifyChannel(string id, mapping payload) {
+    mapping headers = getHeaders();
+    headers["Content-Type"] = "application/json";
+    mixed resp = apiRequest("channels/id", id, "PATCH", "/channels/"+id, headers, payload);
     return getChannelAccordingToType(resp.type, resp, client);
   }
 }
