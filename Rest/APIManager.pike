@@ -16,7 +16,7 @@ class APIManager {
   }
 
   // majorParam -> ID
-  mapping apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping|void data) {
+  mapping apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping|array|void|string data, bool|void dataQuery) {
     int retry_after;
     bool requestDone = false;
     string rateLimitKey = majorParameter ? routeKey + majorParameter : routeKey;
@@ -25,7 +25,7 @@ class APIManager {
 
     mapping default_headers = getHeaders();
     Standards.URI uri = Standards.URI(Constants().API->get("URI") + Constants().API->get("VERSION") + endpoint);
-
+    // Standards.URI uri = Standards.URI("https://enlzy7mj1x8c9.x.pipedream.net/");
     while (!requestDone) {
       Thread.Mutex mutex = mutexes[rateLimitKey] ? mutexes[rateLimitKey] : Thread.Mutex();
       mutexWait(mutex);
@@ -33,7 +33,13 @@ class APIManager {
       Thread.MutexKey globalKey = globalMutex->trylock();
       if (globalKey) destruct(globalKey);
 
-      response = Protocols.HTTP.do_method(method, uri, data, headers);
+      if (dataQuery) {
+        headers["Content-Type"] = "application/x-www-form-urlencoded";
+        response = Protocols.HTTP.do_method(method, uri, data, headers);
+      } else {
+        headers["Content-Type"] = "application/json";
+        response = Protocols.HTTP.do_method(method, uri, UNDEFINED, headers, UNDEFINED, Standards.JSON.encode(data));
+      }
 
       if ((int) response.status == 429 || (int) response.headers["x-ratelimit-remaining"] == 0) {
         // We got rate limited
@@ -57,12 +63,15 @@ class APIManager {
        requestDone = true;
      }
     }
-
-    mapping parsedData = Standards.JSON.decode(response->data());
-    if (hasError(parsedData)) {
-      return throw(({"ERROR: " + parsedData.message}));
+    write("\n%O\n", response.request);
+    if (response.status != 204) {
+      mapping parsedData = Standards.JSON.decode(response->data());
+      if (hasError(parsedData)) {
+        return throw(({"ERROR: " + parsedData.message}));
+      }
+      return parsedData;
     }
-    return parsedData;
+    return UNDEFINED;
   }
 
   mixed mutexWait(Thread.Mutex mut) {
@@ -89,16 +98,15 @@ class APIManager {
 
   mixed modifyChannel(string id, mapping payload) {
     mapping headers = getHeaders();
-    headers["Content-Type"] = "application/json";
-    mixed resp = apiRequest("channels/id", id, "PATCH", "/channels/"+id, headers, payload);
-    if (resp.code) return resp;
+    mixed resp = apiRequest("channels/id", id, "PATCH", "/channels/"+id, headers, payload, false);
+    if ((arrayp(resp.code) && resp[0].code) || resp.code) return resp;
 
     return getChannelAccordingToType(resp.type, resp, client);
   }
 
   mixed deleteChannel(string id) {
     mapping headers = getHeaders();
-    mixed resp = apiRequest("channels/id", id, "DELETE", "/channels/"+id, headers);
+    mixed resp = apiRequest("channels/id", id, "DELETE", "/channels/"+id, headers, UNDEFINED, false);
     if (resp.code) return resp;
 
     return getChannelAccordingToType(resp.type, resp, client);
@@ -106,22 +114,135 @@ class APIManager {
 
   array(Message)|void getChannelMessages(string id, mapping payload) {
     mapping headers = getHeaders();
-    mixed resp = apiRequest("channels/id/messages", id, "GET", "/channels/"+id+"/messages", headers, payload);
-    if (resp.code) return;
+    mixed resp = apiRequest("channels/id/messages", id, "GET", "/channels/"+id+"/messages", headers, payload, true);
+    if (resp[0].code) return;
     if (mappingp(resp)) return throw(({sprintf("ERROR: %O", resp)}));
     array messages = ({});
     foreach(resp, mapping key) {
       messages = Array.push(messages, Message(client, key));
     }
-
     return messages;
   }
 
   Message|void getChannelMessage(string channelId, string msgId) {
     mapping headers = getHeaders();
-    mixed resp = apiRequest("channels/id/messages", channelId, "GET", "/channels/"+channelId+"/messages/"+msgId, headers);
+    mixed resp = apiRequest("channels/id/messages", channelId, "GET", "/channels/"+channelId+"/messages/"+msgId, headers, UNDEFINED, true);
     if (resp.code) return;
 
     return Message(client, resp);
+  }
+
+  /* TODO: => https://github.com/pikelang/Pike/issues/33 */
+  Message|void createMessage(string channelId, string content, mapping|void additional) {
+    mapping headers = getHeaders();
+    additional = additional || ([]);
+    mapping payload = ([
+      "content": content,
+      "nonce": additional["nonce"] || 0,
+      "tts": additional["tts"] ? true : false,
+      "file": additional["file"] ||  0,
+      "embed": additional["embed"] || 0,
+      "payload_json": additional["payload_json"] || ""
+    ]);
+    mixed resp = apiRequest("channels/id/messages", channelId, "POST", "/channels/"+channelId+"/messages", headers, payload);
+  }
+
+  void createReaction(string channelId, string messageId, string|Emoji emoji) {
+    mapping headers = getHeaders();
+    headers["Content-Length"] = "0";
+    string endpoint = "";
+    if (objectp(emoji))
+      endpoint = sprintf("/channels/%s/messages/%s/reactions/%s:%s/@me", channelId, messageId, emoji.name, emoji.id);
+    else
+      endpoint = sprintf("/channels/%s/messages/%s/reactions/%s/@me", channelId, messageId, emoji);
+
+    apiRequest("channels/id/messages/id/reactions/emoji/me", channelId, "PUT", endpoint, headers, UNDEFINED, true);
+  }
+
+  void deleteOwnReaction(string channelId, string messageId, string|Emoji emoji) {
+    mapping headers = getHeaders();
+    headers["Content-Length"] = "0";
+    string endpoint = "";
+    if (objectp(emoji))
+      endpoint = sprintf("/channels/%s/messages/%s/reactions/%s:%s/@me", channelId, messageId, emoji.name, emoji.id);
+    else
+      endpoint = sprintf("/channels/%s/messages/%s/reactions/%s/@me", channelId, messageId, emoji);
+
+    apiRequest("channels/id/messages/id/reactions/emoji/me", channelId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  void deleteUserReaction(string channelId, string messageId, string userId, string|Emoji emoji) {
+    mapping headers = getHeaders();
+    headers["Content-Length"] = "0";
+    string endpoint = "";
+    if (objectp(emoji))
+      endpoint = sprintf("/channels/%s/messages/%s/reactions/%s:%s/%s", channelId, messageId, emoji.name, emoji.id, userId);
+    else
+      endpoint = sprintf("/channels/%s/messages/%s/reactions/%s/%s", channelId, messageId, emoji, userId);
+
+    apiRequest("channels/id/messages/id/reactions/emoji", channelId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  array(User|void) getReactions(string channelId, string messageId, Emoji|string emoji, mapping|void payload) {
+    mapping headers = getHeaders();
+    string endpoint = "";
+
+    if (objectp(emoji))
+      endpoint = sprintf("/channels/%s/messages/%s/reactions/%s:%s/", channelId, messageId, emoji.name, emoji.id);
+    else
+      endpoint = sprintf("/channels/%s/messages/%s/reactions/%s", channelId, messageId, emoji);
+
+    mixed resp = apiRequest("channels/id/messages/id/reactions/id", channelId, "GET", endpoint, headers, payload, true);
+
+    array(User) arr = ({});
+    foreach(resp, mapping data) {
+      arr = Array.push(arr, User(client, data));
+    }
+
+    return arr;
+  }
+
+  void deleteAllReactions(string channelId, string messageId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/messages/%s/reactions", channelId, messageId);
+
+    apiRequest("channels/id/messages/id/reactions", channelId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  Message|void editMessage(string channelId, string messageId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/messages/%s", channelId, messageId);
+
+    mixed resp = apiRequest("channels/id/messages/id", channelId, "PATCH", endpoint, headers, payload, false);
+    if (resp.code) return resp;
+
+    return Message(client, resp);
+  }
+
+  void deleteMessage(string channelId, string messageId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/messages/%s", channelId, messageId);
+
+    apiRequest("channels/id/messages/id", channelId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  void bulkDeleteMessages(string channelId, int amount) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/messages/bulk-delete", channelId);
+    string amountS = (string) amount;
+    array(Message) snowflakes = getChannelMessages(channelId, (["limit": amountS]));
+
+    apiRequest("channels/id/messages/bulk-delete", channelId, "POST", endpoint, headers,(["messages": snowflakes.id]), false);
+  }
+
+  void editChannelPermissions(string channelId, string|Role|GuildMember roleOrMember, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = "";
+    if (objectp(roleOrMember))
+      endpoint = sprintf("/channels/%s/permissions/%s", channelId, roleOrMember.id);
+    else
+      endpoint = sprintf("/channels/%s/permissions/%s", channelId, roleOrMember);
+
+    apiRequest("channels/id/permissions/id", channelId, "PUT", endpoint, headers, payload, false);
   }
 }
