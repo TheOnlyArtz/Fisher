@@ -5,7 +5,7 @@ class ChannelVoice {
   int userLimit;
   int bitrate;
 
-  void create(Client c, mapping data) {
+  void create(Client c, Guild g, mapping data) {
     client = c;
 
     name = data.name;
@@ -14,7 +14,7 @@ class ChannelVoice {
     permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
     parentId = data.parent_id || data.parentId;
     position = data.position;
-    guild = client.guilds->get(data.guild_id);
+    guild = g;
     nsfw = data.nsfw;
     userLimit = data.user_limit || data.userLimit;
     bitrate = data.bitrate;
