@@ -26,21 +26,9 @@ class GuildCacher {
 
   void cacheChannels(Guild guild, array data) {
     foreach(data, mixed channel) {
-      switch(channel.type) {
-        case 0:
-          guild.channels->assign(channel.id, GuildTextChannel(client, channel));
-          client.cacher->cacheChannel(channel, GuildTextChannel);
-          break;
-        case 2:
-          guild.channels->assign(channel.id, ChannelVoice(client, channel));
-          client.cacher->cacheChannel(channel, ChannelVoice);
-          break;
-        case 4:
-          guild.channels->assign(channel.id, ChannelCategory(client, channel));
-          client.cacher->cacheChannel(channel, ChannelCategory);
-          break;
-      }
-
+      mixed channelO = RestUtils()->getChannelAccordingToType(channel.type, channel, client);
+      guild.channels->assign(channel.id, channelO);
+      client.channels->assign(channel.id, channelO);
     }
   }
 
