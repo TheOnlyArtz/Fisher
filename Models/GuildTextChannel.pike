@@ -6,15 +6,14 @@ class GuildTextChannel {
   Gallon messages;
 
   protected Client client;
-  protected Guild guild;
-  void create(Client c, mapping data) {
+  void create(Client c, mapping data, void|Guild g) {
     client = c;
+    guild = g;
 
     name = data.name;
     permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
     parentId = data.parent_id || data.parentId;
     position = data.position;
-    guild = client.guilds->get(data.guild_id);
     type = data.type;
     id = data.id;
 

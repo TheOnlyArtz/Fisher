@@ -26,7 +26,7 @@ class GuildCacher {
 
   void cacheChannels(Guild guild, array data) {
     foreach(data, mixed channel) {
-      mixed channelO = RestUtils()->getChannelAccordingToType(channel.type, channel, client);
+      mixed channelO = RestUtils()->getChannelAccordingToType(channel.type, channel, client, guild);
       guild.channels->assign(channel.id, channelO);
       client.channels->assign(channel.id, channelO);
     }

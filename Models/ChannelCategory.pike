@@ -10,7 +10,7 @@
 class ChannelCategory {
   inherit GuildChannel;
 
-  void create(Client c, mapping data) {
+  void create(Client c, mapping data, void|Guild g) {
     client = c;
 
     id = data.id;
@@ -18,6 +18,6 @@ class ChannelCategory {
     name = data.name;
     permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
     parentId = data.parent_id || data.parentId;
-    guild = client.guilds->get(data.guild_id);
+    guild = g;
   }
 }
