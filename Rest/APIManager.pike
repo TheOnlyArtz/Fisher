@@ -18,7 +18,7 @@ class APIManager {
   }
 
   // majorParam -> ID
-  mixed apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping data) {
+  Protocols.HTTP.Query|void apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping data) {
     int retry_after;
     bool requestDone = false;
     string rateLimitKey = majorParameter ? routeKey + majorParameter : routeKey;
@@ -60,6 +60,10 @@ class APIManager {
      }
     }
 
+    mapping parsedData = Standards.JSON.decode(response->data());
+    if (parsedData.code) {
+      return throw(({"ERROR: " + parsedData.message}));
+    }
     return response;
   }
 
