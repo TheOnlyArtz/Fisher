@@ -17,7 +17,6 @@
 #include "Models/Activity.pike"
 #include "Models/Presence.pike"
 #include "Rest/APIManager.pike"
-#include "Rest/RateLimiter.pike"
 #include "Utils/Permission.pike"
 #include "Utils/Misc.pike"
 #include "Utils/EventUtils.pike"
