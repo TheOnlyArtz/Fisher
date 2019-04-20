@@ -16,6 +16,7 @@
 #include "Models/ActivitySecrets.pike"
 #include "Models/Activity.pike"
 #include "Models/Presence.pike"
+#include "Rest/Channel.pike"
 #include "Rest/APIManager.pike"
 #include "Utils/Permission.pike"
 #include "Utils/Misc.pike"

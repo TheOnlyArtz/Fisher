@@ -1,4 +1,5 @@
 class APIManager {
+  inherit RestChannel;
   /*
     <Rate limit properties here>
   */
