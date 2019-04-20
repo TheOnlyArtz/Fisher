@@ -16,7 +16,7 @@ class APIManager {
   }
 
   // majorParam -> ID
-  mapping|void apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping data) {
+  mapping|void apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping|void data) {
     int retry_after;
     bool requestDone = false;
     string rateLimitKey = majorParameter ? routeKey + majorParameter : routeKey;
@@ -88,5 +88,10 @@ class APIManager {
     headers["Content-Type"] = "application/json";
     mixed resp = apiRequest("channels/id", id, "PATCH", "/channels/"+id, headers, payload);
     return getChannelAccordingToType(resp.type, resp, client);
+  }
+
+  mixed deleteChannel(string id) {
+    mapping headers = getHeaders();
+    mixed resp = apiRequest("channels/id", id, "DELETE", "/channels/"+id, headers);
   }
 }
