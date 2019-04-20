@@ -5,7 +5,7 @@ class ChannelVoice {
   int userLimit;
   int bitrate;
 
-  void create(Client c, Guild g, mapping data) {
+  void create(Client c, mapping data, void|Guild g) {
     client = c;
 
     name = data.name;

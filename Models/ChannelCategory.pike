@@ -10,7 +10,7 @@
 class ChannelCategory {
   inherit GuildChannel;
 
-  void create(Client c, Guild g, mapping data) {
+  void create(Client c, mapping data, void|Guild g) {
     client = c;
 
     id = data.id;

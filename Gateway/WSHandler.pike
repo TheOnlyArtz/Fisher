@@ -41,6 +41,18 @@ class WSHandler {
         case "GUILD_CREATE":
           eventDispatcher->guildCreate(data);
           break;
+        case "CHANNEL_CREATE":
+          eventDispatcher->channelCreate(data);
+          break;
+        case "CHANNEL_UPDATE":
+          eventDispatcher->channelUpdate(data);
+          break;
+        case "CHANNEL_DELETE":
+          eventDispatcher->channelDelete(data);
+          break;
+        case "CHANNEL_PINS_UPDATE":
+          eventDispatcher->channelPinsUpdate(data);
+          break;
         case "GUILD_UPDATE":
           eventDispatcher->guildUpdate(data);
           break;

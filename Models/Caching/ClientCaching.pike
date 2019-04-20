@@ -20,9 +20,9 @@ class ClientCaching() {
     client.users->assign(user["id"], User(client, user));
   }
 
-  void cacheChannel(mapping channel, object ChannelType) {
+  void cacheDMs(mixed channel, object ChannelType) {
       Guild g = client.guilds->get(channel["guild_id"]);
-      client.channels->assign(channel["id"], ChannelType(client, g || ([]), channel));
+      client.channels->assign(channel["id"], ChannelType(client, channel));
   }
 
   void cacheGuild(Guild guild) {

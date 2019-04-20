@@ -47,6 +47,6 @@ class Role {
   * if (!own) return;
   */
   bool ownPermission(string|int perm) {
-    return Permission()->own(permissions, perm);
+    return PermissionUtils()->own(permissions, perm);
   }
 }

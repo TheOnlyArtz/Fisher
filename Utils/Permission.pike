@@ -1,4 +1,4 @@
-class Permission {
+class PermissionUtils {
 
   object constants = Constants();
   Gallon permissions_bits = constants.permissions_bits;
