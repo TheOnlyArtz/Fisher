@@ -64,7 +64,7 @@ class APIManager {
     if (parsedData.code) {
       return throw(({"ERROR: " + parsedData.message}));
     }
-    return response;
+    return parsedData;
   }
 
   mixed mutexWait(Thread.Mutex mut) {
