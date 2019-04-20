@@ -96,12 +96,13 @@ class Constants {
   ]));
 
   Gallon API = Gallon(([
-    "VERSION": 6,
+    "VERSION": 7,
     "URI": "https://discordapp.com/api/v",
     "headers": lambda(Client c) {
       return ([
         "User-Agent": "DiscordBot (https://github.com/theonlyartz/Fisher, 0.0.1)",
-        "Authorization": "Bot " + c.token
+        "Authorization": "Bot " + c.token,
+        "Content-Type": "application/json"
       ]);
     }
   ]));
