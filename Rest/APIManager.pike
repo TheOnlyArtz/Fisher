@@ -7,13 +7,11 @@ class APIManager {
   protected Thread.Mutex globalMutex;
   protected mapping mutexes;
   protected Client client;
-  protected mapping default_headers;
 
   void create(Client c) {
     mutexes = ([]);
     globalMutex = Thread.Mutex();
     client = c;
-    default_headers = ([]);
   }
 
   // majorParam -> ID
@@ -24,7 +22,7 @@ class APIManager {
 
     Protocols.HTTP.Query response;
 
-    resetHeaders();
+    mapping default_headers = getHeaders();
     Standards.URI uri = Standards.URI(Constants().API->get("URI") + Constants().API->get("VERSION") + endpoint);
 
     while (!requestDone) {
@@ -70,7 +68,16 @@ class APIManager {
     Thread.MutexKey key = mut->lock();
     destruct(key);
   }
-  void resetHeaders() {
-    default_headers = Constants().API->get("headers")(client);
+
+  mapping getHeaders() {
+    return Constants().API->get("headers")(client);
+  }
+
+  /* CHANNEL */
+
+  mapping getChannel(string id) {
+    mixed resp = apiRequest("channels/id", id, "GET", "/channels/"+id, getHeaders(), ([]));
+    if (resp.code) return resp;
+    
   }
 }
