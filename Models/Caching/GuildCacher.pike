@@ -28,15 +28,15 @@ class GuildCacher {
     foreach(data, mixed channel) {
       switch(channel.type) {
         case 0:
-          guild.channels->assign(channel.id, GuildTextChannel(client, guild, channel));
+          guild.channels->assign(channel.id, GuildTextChannel(client, channel));
           client.cacher->cacheChannel(channel, GuildTextChannel);
           break;
         case 2:
-          guild.channels->assign(channel.id, ChannelVoice(client, guild, channel));
+          guild.channels->assign(channel.id, ChannelVoice(client, channel));
           client.cacher->cacheChannel(channel, ChannelVoice);
           break;
         case 4:
-          guild.channels->assign(channel.id, ChannelCategory(client, guild, channel));
+          guild.channels->assign(channel.id, ChannelCategory(client, channel));
           client.cacher->cacheChannel(channel, ChannelCategory);
           break;
       }
