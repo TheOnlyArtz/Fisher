@@ -16,7 +16,7 @@ class APIManager {
   }
 
   // majorParam -> ID
-  mapping|void apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping|void data) {
+  mapping apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping|void data) {
     int retry_after;
     bool requestDone = false;
     string rateLimitKey = majorParameter ? routeKey + majorParameter : routeKey;
@@ -59,7 +59,7 @@ class APIManager {
     }
 
     mapping parsedData = Standards.JSON.decode(response->data());
-    if (has_value(indices(parsedData), "code")) {
+    if (hasError(parsedData)) {
       return throw(({"ERROR: " + parsedData.message}));
     }
     return parsedData;
@@ -74,10 +74,14 @@ class APIManager {
     return Constants().API->get("headers")(client);
   }
 
+  bool hasError(mixed|void response) {
+    return has_value(indices(response), "code");
+  }
+
   /* CHANNEL */
 
   mixed getChannel(string id) {
-    mixed resp = apiRequest("channels/id", id, "GET", "/channels/"+id, getHeaders(), ([]));
+    mixed resp = apiRequest("channels/id", id, "GET", "/channels/"+id, getHeaders());
     if (resp.code) return resp;
 
     return getChannelAccordingToType(resp.type, resp, client);
@@ -87,11 +91,37 @@ class APIManager {
     mapping headers = getHeaders();
     headers["Content-Type"] = "application/json";
     mixed resp = apiRequest("channels/id", id, "PATCH", "/channels/"+id, headers, payload);
+    if (resp.code) return resp;
+
     return getChannelAccordingToType(resp.type, resp, client);
   }
 
   mixed deleteChannel(string id) {
     mapping headers = getHeaders();
     mixed resp = apiRequest("channels/id", id, "DELETE", "/channels/"+id, headers);
+    if (resp.code) return resp;
+
+    return getChannelAccordingToType(resp.type, resp, client);
+  }
+
+  array(Message)|void getChannelMessages(string id, mapping payload) {
+    mapping headers = getHeaders();
+    mixed resp = apiRequest("channels/id/messages", id, "GET", "/channels/"+id+"/messages", headers, payload);
+    if (resp.code) return;
+    if (mappingp(resp)) return throw(({sprintf("ERROR: %O", resp)}));
+    array messages = ({});
+    foreach(resp, mapping key) {
+      messages = Array.push(messages, Message(client, key));
+    }
+
+    return messages;
+  }
+
+  Message|void getChannelMessage(string channelId, string msgId) {
+    mapping headers = getHeaders();
+    mixed resp = apiRequest("channels/id/messages", channelId, "GET", "/channels/"+channelId+"/messages/"+msgId, headers);
+    if (resp.code) return;
+
+    return Message(client, resp);
   }
 }
