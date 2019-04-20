@@ -33,15 +33,16 @@ class Permission {
   }
 
   int remove(int permissions, array permsToOverwrite) {
-    int bits = 0;
+    int bits = permissions;
     int perm = 0;
     for (int i = 0; i < sizeof(permsToOverwrite); i++) {
+      perm = permsToOverwrite[i];
       if (stringp(permsToOverwrite[i])) {
         perm = permissions_bits->get(permsToOverwrite[i]);
         if (!perm) throw ( ({constants.errorMsgs->get("UNKNOWN_PERM_NAME"), backtrace()}) );
       }
-      bits &= perm;
+      bits &= ~(perm);
     }
-    return permissions & bits;
+    return bits;
   }
 }
