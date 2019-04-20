@@ -34,6 +34,31 @@ class EventDispatcher {
     wsHandler.wsManager->heartbeat(wsHandler.wsManager.heartbeat_interval/1000);
   }
 
+  void channelCreate(mapping data) {
+    mixed channelO = RestUtils()->getChannelAccordingToType(data.type, data, client);
+    if (data.type == 0 || data.type == 2 || data.type == 4) {
+      Guild guild = client.guilds->get(data.guild_id);
+      if (guild) guild.channels->assign(data.id, channelO);
+    }
+     client.channels->assign(data.id, channelO);
+     client->emit("channelCreate", channelO, client);
+  }
+
+  void channelUpdate(mapping data) {
+    mixed cached = client.channels->get(data.id);
+    if (!cached) return;
+
+    mixed newChannel = RestUtils()->getChannelAccordingToType(cached.type, data, client);
+    MiscUtils()->fixNullables(newChannel, cached);
+    client.channels->assign(cached.id, newChannel);
+    if (cached.guild) cached.guild.channels->assign(cached.id, newChannel);
+
+    array diffs = MiscUtils()->mappingDiff(cached, newChannel);
+
+    write("%O\n", diffs);
+    if (sizeof(diffs) != 0)
+      client->emit("channelUpdate", newChannel, cached, diffs, client);
+  }
   /**
    * handles the GUILD_CREATE event
    * @param {mapping} data
