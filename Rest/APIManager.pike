@@ -1,4 +1,5 @@
 class APIManager {
+  inherit RestUtils;
   /*
     <Rate limit properties here>
   */
@@ -78,6 +79,7 @@ class APIManager {
   mapping getChannel(string id) {
     mixed resp = apiRequest("channels/id", id, "GET", "/channels/"+id, getHeaders(), ([]));
     if (resp.code) return resp;
-    
+
+    return getChannelAccordingToType(resp.type, resp);
   }
 }
