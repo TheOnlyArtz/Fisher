@@ -8,6 +8,7 @@
 #include "Gateway/WSManager.pike"
 
 #include "Models/Caching/GuildCacher.pike"
+#include "Models/Permission.pike"
 #include "Models/Caching/MessageCacher.pike"
 #include "Models/GuildChannel.pike"
 #include "Models/ActivityAssets.pike"
