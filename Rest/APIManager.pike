@@ -63,7 +63,7 @@ class APIManager {
        requestDone = true;
      }
     }
-    write("\n%O\n", response.request);
+
     if (response.status != 204) {
       mapping parsedData = Standards.JSON.decode(response->data());
       if (hasError(parsedData)) {
