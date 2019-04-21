@@ -45,4 +45,5 @@ class PermissionUtils {
     }
     return bits;
   }
+
 }
