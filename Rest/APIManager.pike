@@ -47,7 +47,6 @@ class APIManager {
 
       }
 
-      write("%s\n", response.request);
       if ((int) response.status == 429 || (int) response.headers["x-ratelimit-remaining"] == 0) {
         // We got rate limited
         if (response.headers["retry-after"]) {
@@ -412,6 +411,14 @@ class APIManager {
     return Guild(client, data);
   }
 
+  Guild getGuild(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s", guildId);
+
+    mapping data = apiRequest("guilds/id", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+    return Guild(client, data);
+  }
+
   Guild modifyGuild(string guildId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s", guildId);
@@ -449,14 +456,77 @@ class APIManager {
     string endpoint = sprintf("/guilds/%s/channels", guildId);
     Guild guild = client.guilds->get(guildId);
 
+    // TODO: Auto fetch using get guild
     if (!payload["name"])
     throw("All parameters are optional excluding [name]");
     else {
       mapping data = apiRequest("/guilds/id/channels", guildId, "POST", endpoint, headers, payload, false);
       return RestUtils()->getChannelAccordingToType(data.type, data, client, guild);
     }
-
   }
+
+  ChannelVoice|ChannelCategory|GuildTextChannel modifyGuildChannelPosition(string guildId, array payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/channels", guildId);
+
+    apiRequest("/guilds/id/channels", guildId, "PATCH", endpoint, headers, payload, false);
+  }
+
+  GuildMember getGuildMember(string guildId, string userId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/members/%s", guildId, userId);
+    Guild guild = client.guilds->get(guildId);
+
+    // TODO: Auto fetch using get guild
+    mapping data = apiRequest("/guilds/id/members/id", guildId, "GET", endpoint, headers, UNDEFINED, true);
+
+    return GuildMember(client, guild, data);
+  }
+
+  array(GuildMember) getGuildMembers(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/members/", guildId);
+    Guild guild = client.guilds->get(guildId);
+
+    // TODO: Auto fetch using get guild
+    array data = apiRequest("/guilds/id/members", guildId, "GET", endpoint, headers, UNDEFINED, true);
+    array(GuildMember) members = ({});
+
+    foreach(data, mapping member) {
+      members = Array.push(data, GuildMember(client, guild, member));
+    }
+
+    return members;
+  }
+
+  void modifyGuildMember(string guildId, string userId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/members/%s", guildId, userId);
+
+    apiRequest("/guilds/id/members/id", guildId, "PATCH", endpoint, headers, payload, false);
+  }
+
+  void modifyCurrentUserNick(string guildId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/members/@me/nick", guildId);
+
+    apiRequest("/guilds/id/members/@me/nick", guildId, "PATCH", endpoint, headers, payload, false);
+  }
+
+  void addGuildMemberRole(string guildId, string userId, string roleId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/members/%s/roles/%s", guildId, userId, roleId);
+
+    apiRequest("/guilds/id/members/id/roles/id", guildId, "PUT", endpoint, headers, UNDEFINED, false);
+  }
+
+  void deleteGuildMemberRole(string guildId, string userId, string roleId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/members/%s/roles/%s", guildId, userId, roleId);
+
+    apiRequest("/guilds/id/members/id/roles/id", guildId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
   Invite getInvite(string inviteCode) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/invites/%s", inviteCode);
@@ -472,6 +542,4 @@ class APIManager {
 
     apiRequest("invites/code", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
   }
-
-
 }
