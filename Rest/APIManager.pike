@@ -661,7 +661,16 @@ class APIManager {
 
     return invites;
   }
-  
+
+  array(mapping) getGuildIntegrations(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/integrations", guildId);
+
+    array data = apiRequest("/guilds/id/integrations", guildId, "GET", endpoint, headers, UNDEFINED, true);
+
+    return data; // TODO integration model
+  }
+
   Invite getInvite(string inviteCode) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/invites/%s", inviteCode);
