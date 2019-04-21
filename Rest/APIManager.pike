@@ -234,10 +234,23 @@ class APIManager {
 
     apiRequest("channels/id/messages/bulk-delete", channelId, "POST", endpoint, headers,(["messages": snowflakes.id]), false);
   }
-
+  /* TODO!!! completely broken for now */
   void editChannelPermissions(string channelId, string|Role|GuildMember roleOrMember, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = "";
+    mixed channel = client.channels->get(channelId);
+    // if (!channel)
+      //TODO auto fetch with getChannel
+    Permission existingOverwrites = Permission(client, ([]), UNDEFINED);
+    existingOverwrites = channel.permissionOverwrites->get(objectp(roleOrMember) ? roleOrMember.id : roleOrMember);
+    write("%O", channel.permissionOverwrites);
+    payload = ([
+      "allow": payload.allow || existingOverwrites.allow,
+      "deny": payload.deny || existingOverwrites.deny,
+      "type": existingOverwrites.type,
+      "id": existingOverwrites.id
+    ]);
+
     if (objectp(roleOrMember))
       endpoint = sprintf("/channels/%s/permissions/%s", channelId, roleOrMember.id);
     else
