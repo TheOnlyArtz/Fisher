@@ -37,6 +37,7 @@
 #include "Models/ChannelVoice.pike"
 #include "Models/ClientUser.pike"
 #include "Models/Guild.pike"
+#include "Models/Invite.pike"
 #include "Models/GuildMember.pike"
 #include "Models/User.pike"
 #include "Rest/APIManager.pike"
