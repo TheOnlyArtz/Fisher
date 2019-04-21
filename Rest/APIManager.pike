@@ -728,6 +728,14 @@ class APIManager {
     return Invite(client, data);
   }
 
+  mixed getGuildWidgetImage(string guildId, string|void style) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/widget.png", guildId);
+
+    mixed data = apiRequest("/guilds/id/widget.png", guildId, "GET", endpoint, headers, (["style": style||Val.null]), true);
+    return data;
+  }
+
   Invite getInvite(string inviteCode) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/invites/%s", inviteCode);
