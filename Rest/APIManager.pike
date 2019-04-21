@@ -36,7 +36,6 @@ class APIManager {
       if (dataQuery) {
         if (!headers["Content-Type"])
           headers["Content-Type"] = "application/x-www-form-urlencoded";
-          write("==>> %O\n", data);
         response = Protocols.HTTP.do_method(method, uri, data, headers);
       } else {
         if (!headers["Content-Type"])
@@ -669,6 +668,64 @@ class APIManager {
     array data = apiRequest("/guilds/id/integrations", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
     return data; // TODO integration model
+  }
+
+  mapping createGuildIntegration(string guildId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/integrations", guildId);
+
+    mapping data = apiRequest("/guilds/id/integrations", guildId, "POST", endpoint, headers, payload, false);
+
+    return data;
+  }
+
+  mapping modifyGuildIntegration(string guildId, string integrationId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/integrations/%s", guildId, integrationId);
+
+    mapping data = apiRequest("/guilds/id/integrations/id", guildId, "POST", endpoint, headers, payload, false);
+
+    return data;
+  }
+
+  void deleteGuildIntegration(string guildId, string integrationId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/integrations/%s", guildId, integrationId);
+
+    apiRequest("/guilds/id/integrations/id", guildId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  void syncGuildIntegration(string guildId, string integrationId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/integrations/%s/sync", guildId, integrationId);
+
+    apiRequest("/guilds/id/integrations/id/sync", guildId, "POST", endpoint, headers, ([]), false);
+  }
+
+  mapping getGuildEmbed(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/embed", guildId);
+
+    mapping data = apiRequest("/guilds/id/embed", guildId, "GET", endpoint, headers, UNDEFINED, true);
+    return data;
+  }
+
+  mapping modifyGuildEmbed(string guildId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/embed", guildId);
+
+    mapping data = apiRequest("/guilds/id/embed", guildId, "PATCH", endpoint, headers, payload, false);
+
+    return data;
+  }
+
+  Invite getGuildVanityURL(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/vanity-url", guildId);
+
+    mapping data = apiRequest("/guilds/id/vanity-url", guildId, "GET", endpoint, headers, UNDEFINED, true);
+
+    return Invite(client, data);
   }
 
   Invite getInvite(string inviteCode) {
