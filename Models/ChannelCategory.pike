@@ -16,8 +16,12 @@ class ChannelCategory {
     id = data.id;
     type = data.type;
     name = data.name;
-    permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
     parentId = data.parent_id || data.parentId;
     guild = g;
+
+    permissionOverwrites = Gallon(([]));
+    foreach(data.permission_overwrites, mapping data) {
+      permissionOverwrites->assign(data.id, Permission(client, data, guild||UNDEFINED));
+    }
   }
 }

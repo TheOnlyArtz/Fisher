@@ -9,7 +9,7 @@
 */
 class GuildChannel {
   string name;
-  array permissionOverwrites;
+  Gallon permissionOverwrites;
   string|Val.Null parentId;
   int position;
   Guild guild;

@@ -11,7 +11,6 @@ class GuildTextChannel {
     guild = g;
 
     name = data.name;
-    permissionOverwrites = data.permission_overwrites || data.permissionOverwrites;
     parentId = data.parent_id || data.parentId;
     position = data.position;
     type = data.type;
@@ -21,5 +20,11 @@ class GuildTextChannel {
     lastMessageId = data.last_message_id;
 
     messages = Gallon(([]));
+
+    permissionOverwrites = Gallon(([]));
+    foreach(data.permission_overwrites, mapping data) {
+      permissionOverwrites->assign(data.id, Permission(client, data, guild||UNDEFINED));
+    }
+
   }
 }

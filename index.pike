@@ -8,6 +8,7 @@
 #include "Gateway/WSManager.pike"
 
 #include "Models/Caching/GuildCacher.pike"
+#include "Models/Permission.pike"
 #include "Models/Caching/MessageCacher.pike"
 #include "Models/GuildChannel.pike"
 #include "Models/ActivityAssets.pike"
@@ -36,6 +37,7 @@
 #include "Models/ChannelVoice.pike"
 #include "Models/ClientUser.pike"
 #include "Models/Guild.pike"
+#include "Models/Invite.pike"
 #include "Models/GuildMember.pike"
 #include "Models/User.pike"
 #include "Rest/APIManager.pike"
