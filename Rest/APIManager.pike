@@ -258,4 +258,20 @@ class APIManager {
 
     apiRequest("channels/id/permissions/id", channelId, "PUT", endpoint, headers, payload, false);
   }
+
+  array(Invite) getChannelInvites(string channelId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/invites", channelId);
+
+    mixed data = apiRequest("channels/id/ivnites", channelId, "GET", endpoint, headers, UNDEFINED, true);
+    array(Invite) invites = ({});
+
+    foreach(data, mapping inviteData) {
+      invites = Array.push(invites, Invite(client, inviteData));
+    }
+
+    return invites;
+  }
+
+  
 }
