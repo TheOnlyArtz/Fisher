@@ -289,4 +289,32 @@ class APIManager {
 
     apiRequest("channels/id/typing", channelId, "POST", endpoint, headers, UNDEFINED, false);
   }
+
+  array(Message) getPinnedMessages(string channelId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/pins", channelId);
+
+    array|void data = apiRequest("channels/id/typing", channelId, "GET", endpoint, headers, UNDEFINED, true);
+    array(Message) messages = ({});
+
+    foreach(data, mapping msg) {
+      messages = Array.push(messages, Message(client, msg));
+    }
+
+    return messages;
+  }
+
+  void addPinnedChannelMessage(string channelId, string messageId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/pins/%s", channelId, messageId);
+
+    apiRequest("channels/id/pins/id", channelId, "PUT", endpoint, headers, UNDEFINED, false);
+  }
+
+  void deletePinnedChannelMessage(string channelId, string messageId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/pins/%s", channelId, messageId);
+
+    apiRequest("channels/id/pins/id", channelId, "DELETE", endpoint, headers, UNDEFINED, false);
+  }
 }
