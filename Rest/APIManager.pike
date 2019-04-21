@@ -740,7 +740,7 @@ class APIManager {
     mapping headers = getHeaders();
     string endpoint = sprintf("/invites/%s", inviteCode);
 
-    mixed data = apiRequest("invites/code", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+    mixed data = apiRequest("/invites/code", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
 
     return Invite(client, data);
   }
@@ -749,6 +749,36 @@ class APIManager {
     mapping headers = getHeaders();
     string endpoint = sprintf("/invites/%s", inviteCode);
 
-    apiRequest("invites/code", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
+    apiRequest("/invites/code", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  User getUser(string userId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/users/%s", userId);
+
+    mapping data = apiRequest("/users/id", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+
+    return User(client, data);
+  }
+
+  array(User) getCurrentUserGuilds() {
+    mapping headers = getHeaders();
+    string endpoint = "/users/@me/guilds";
+
+    array data = apiRequest("/users/@me/guilds", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+    array(User) users = ({});
+
+    foreach(data, mapping user) {
+      users = Array.push(users, User(client, user));
+    }
+
+    return users;
+  }
+
+  void leaveGuild(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/users/@me/guilds/%s", guildId);
+
+    apiRequest("/users/@me/guilds/id", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
   }
 }
