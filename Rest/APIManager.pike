@@ -25,7 +25,7 @@ class APIManager {
 
     mapping default_headers = getHeaders();
     Standards.URI uri = Standards.URI(Constants().API->get("URI") + Constants().API->get("VERSION") + endpoint);
-    // Standards.URI uri = Standards.URI("https://enlzy7mj1x8c9.x.pipedream.net/");
+    // Standards.URI uri = Standards.URI("https://en7blnpx6rcj2.x.pipedream.net");
     while (!requestDone) {
       Thread.Mutex mutex = mutexes[rateLimitKey] ? mutexes[rateLimitKey] : Thread.Mutex();
       mutexWait(mutex);
@@ -34,13 +34,20 @@ class APIManager {
       if (globalKey) destruct(globalKey);
 
       if (dataQuery) {
-        headers["Content-Type"] = "application/x-www-form-urlencoded";
+        if (!headers["Content-Type"])
+          headers["Content-Type"] = "application/x-www-form-urlencoded";
         response = Protocols.HTTP.do_method(method, uri, data, headers);
       } else {
-        headers["Content-Type"] = "application/json";
-        response = Protocols.HTTP.do_method(method, uri, UNDEFINED, headers, UNDEFINED, Standards.JSON.encode(data));
+        if (!headers["Content-Type"])
+          headers["Content-Type"] = "application/json";
+        else if (headers["Content-Type"] == "multipart/form-data; boundary=main")
+          response = Protocols.HTTP.do_method(method, uri, UNDEFINED, headers, UNDEFINED, data);
+        else
+          response = Protocols.HTTP.do_method(method, uri, UNDEFINED, headers, UNDEFINED, Standards.JSON.encode(data));
+
       }
 
+      write("%s\n", response.request);
       if ((int) response.status == 429 || (int) response.headers["x-ratelimit-remaining"] == 0) {
         // We got rate limited
         if (response.headers["retry-after"]) {
@@ -135,16 +142,28 @@ class APIManager {
   /* TODO: => https://github.com/pikelang/Pike/issues/33 */
   Message|void createMessage(string channelId, string content, mapping|void additional) {
     mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/messages", channelId);
+
     additional = additional || ([]);
     mapping payload = ([
       "content": content,
-      "nonce": additional["nonce"] || 0,
+      "nonce": additional["nonce"] || Val.null,
       "tts": additional["tts"] ? true : false,
-      "file": additional["file"] ||  0,
-      "embed": additional["embed"] || 0,
+      "file": additional["file"] ||  Val.null,
+      "embed": additional["embed"] || Val.null,
       "payload_json": additional["payload_json"] || ""
     ]);
-    mixed resp = apiRequest("channels/id/messages", channelId, "POST", "/channels/"+channelId+"/messages", headers, payload);
+    mixed requestStr;
+    if (payload.file) {
+      headers["Content-Type"] = "multipart/form-data; boundary=main";
+      // headers["Content-Disposition"] = "";
+      requestStr = "\r\n--main\r\nContent-Disposition: form-data; name=\"file\";\r\n\r\n" + payload.file + "\r\n--main--";
+
+      write("%b\n", String.width(requestStr)>8);
+
+      // payload = (["payload_json": (["file": payload.file])])
+    }
+    mixed resp = apiRequest("channels/id/messages", channelId, "POST", endpoint, headers, requestStr, false);
   }
 
   void createReaction(string channelId, string messageId, string|Emoji emoji) {
@@ -317,4 +336,142 @@ class APIManager {
 
     apiRequest("channels/id/pins/id", channelId, "DELETE", endpoint, headers, UNDEFINED, false);
   }
+
+  // RENAMED: List Guild Emojis -> Get Guild Emojis
+  array(Emoji) getGuildEmojis(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/emojis", guildId);
+    Guild guild = client.guilds->get(guildId);
+
+    // TODO: If guild is not cached, auto fetch it
+    array data = apiRequest("guilds/id/emojis", guildId, "GET", endpoint, headers, UNDEFINED, true);
+    array(Emoji) emojis = ({});
+
+    foreach(data, mapping emoji) {
+      emojis = Array.push(emojis, Emoji(client, guild, emoji));
+    }
+  }
+
+  Emoji getGuildEmoji(string guildId, string emojiId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/emojis/%s", guildId, emojiId);
+    Guild guild = client.guilds->get(guildId);
+
+    // TODO: If guild is not cached, auto fetch it
+    mapping data = apiRequest("guilds/id/emojis/id", guildId, "GET", endpoint ,headers, UNDEFINED, true);
+
+    return Emoji(client, guild, data);
+  }
+
+  // Note: Fisher won't note the user if the request failed due to file size
+  // TODO: support for GIFs and JPEGs
+  Emoji createGuildEmoji(string guildId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/emojis", guildId);
+    Guild guild = client.guilds->get(guildId);
+
+    // TODO: If guild is not cached, auto fetch it
+    payload["image"] = "data:image/png;base64,"+payload["image"];
+    mapping data = apiRequest("guilds/id/emojis", guildId, "POST", endpoint ,headers, payload, false);
+
+    return Emoji(client, guild, data);
+  }
+
+  Emoji modifyGuildEmoji(string guildId, string emojiId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/emojis/%s", guildId, emojiId);
+    Guild guild = client.guilds->get(guildId);
+
+    // TODO: If guild is not cached, auto fetch it
+    mapping data = apiRequest("guillds/id/emojis/id", guildId, "PATCH", endpoint, headers, payload, false);
+
+    write("%O\n", Emoji(client, guild, data));
+    return Emoji(client, guild, data);
+  }
+
+  void deleteGuildEmoji(string guildId, string emojiId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/emojis/%s", guildId, emojiId);
+
+    apiRequest("guilds/id/emojis/id", guildId, "POST", endpoint, headers, UNDEFINED, true);
+  }
+
+  /** GUILD **/
+
+  //NOTE: Can be used by bots in less than 10 guilds
+  Guild createGuild(mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = "/guilds";
+
+    payload["verification_level"] = payload["verificationLevel"] || payload["verification_level"];
+    payload["default_messages_notifications"] = payload["defaultMessageNotifications"] || payload["default_messages_notifictions"];
+    payload["explicit_content_filter"] = payload["explicitContentFilter"] || payload["explicit_content_filter"];
+
+    mapping data = apiRequest("guilds", UNDEFINED, "POST", endpoint, headers, payload, false);
+
+    return Guild(client, data);
+  }
+
+  Guild modifyGuild(string guildId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s", guildId);
+
+    mapping data = apiRequest("guilds/id", guildId, "PATCH", endpoint, headers, payload, false);
+
+    return Guild(client, data);
+  }
+
+  void deleteGuild(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s", guildId);
+
+    apiRequest("guilds/id", guildId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  array(ChannelVoice|ChannelCategory|GuildTextChannel) getGuildChannels(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/channels", guildId);
+    Guild guild = client.guilds->get(guildId);
+
+    // TODO: If guild is not cached, auto fetch it
+    array|mixed data = apiRequest("/guilds/id/channels", guildId, "GET", endpoint, headers, UNDEFINED, true);
+
+    array(ChannelVoice|ChannelCategory|GuildTextChannel) channels = ({});
+    foreach(data, mapping data) {
+      channels = Array.push(channels, RestUtils()->getChannelAccordingToType(data.type, data, client, guild));
+    }
+
+    return channels;
+  }
+
+  ChannelVoice|ChannelCategory|GuildTextChannel createGuildChannel(string guildId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/channels", guildId);
+    Guild guild = client.guilds->get(guildId);
+
+    if (!payload["name"])
+    throw("All parameters are optional excluding [name]");
+    else {
+      mapping data = apiRequest("/guilds/id/channels", guildId, "POST", endpoint, headers, payload, false);
+      return RestUtils()->getChannelAccordingToType(data.type, data, client, guild);
+    }
+
+  }
+  Invite getInvite(string inviteCode) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/invites/%s", inviteCode);
+
+    mixed data = apiRequest("invites/code", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+
+    return Invite(client, data);
+  }
+
+  void deleteInvite(string inviteCode) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/invites/%s", inviteCode);
+
+    apiRequest("invites/code", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+
 }
