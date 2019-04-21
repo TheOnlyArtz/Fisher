@@ -661,31 +661,36 @@ class APIManager {
     return invites;
   }
 
-  array(mapping) getGuildIntegrations(string guildId) {
+  array(GuildIntegration) getGuildIntegrations(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/integrations", guildId);
 
     array data = apiRequest("/guilds/id/integrations", guildId, "GET", endpoint, headers, UNDEFINED, true);
+    array(GuildIntegration) integrations = ({});
 
-    return data; // TODO integration model
+    foreach(data, mapping integration) {
+      integrations = Array.push(integrations, GuildIntegration(client, integration));
+    }
+
+    return integrations; // TODO integration model
   }
 
-  mapping createGuildIntegration(string guildId, mapping payload) {
+  GuildIntegration createGuildIntegration(string guildId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/integrations", guildId);
 
     mapping data = apiRequest("/guilds/id/integrations", guildId, "POST", endpoint, headers, payload, false);
 
-    return data;
+    return GuildIntegration(client, data);
   }
 
-  mapping modifyGuildIntegration(string guildId, string integrationId, mapping payload) {
+  GuildIntegration modifyGuildIntegration(string guildId, string integrationId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/integrations/%s", guildId, integrationId);
 
     mapping data = apiRequest("/guilds/id/integrations/id", guildId, "POST", endpoint, headers, payload, false);
 
-    return data;
+    return GuildIntegration(client, data);
   }
 
   void deleteGuildIntegration(string guildId, string integrationId) {

@@ -22,6 +22,7 @@
 #include "Utils/Misc.pike"
 #include "Utils/EventUtils.pike"
 
+#include "Models/GuildIntegration.pike"
 #include "Models/GuildTextChannel.pike"
 #include "Models/Caching/ClientCaching.pike"
 #include "Models/Attachment.pike"
