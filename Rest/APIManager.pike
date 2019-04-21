@@ -648,6 +648,19 @@ class APIManager {
     return regions;
   }
 
+  array(Invite) getGuildInvites(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/invites", guildId);
+
+    array data = apiRequest("/guilds/id/invites", guildId, "GET", endpoint, headers, UNDEFINED, true);
+    array(Invite) invites = ({});
+
+    foreach(data, mapping invite) {
+      invites = Array.push(invites, Invite(client, invite));
+    }
+
+    return invites;
+  }
   
   Invite getInvite(string inviteCode) {
     mapping headers = getHeaders();
