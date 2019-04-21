@@ -16,7 +16,7 @@ class APIManager {
   }
 
   // majorParam -> ID
-  mapping apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping|array|void|string data, bool|void dataQuery) {
+  mapping|array apiRequest(string routeKey,string|Val.Null majorParameter, string method, string endpoint, mapping headers, mapping|array|void|string data, bool|void dataQuery) {
     int retry_after;
     bool requestDone = false;
     string rateLimitKey = majorParameter ? routeKey + majorParameter : routeKey;
@@ -84,7 +84,7 @@ class APIManager {
   }
 
   bool hasError(mixed|void response) {
-    return has_value(indices(response), "code");
+    return has_value(indices(response), "code") && intp(response.code);
   }
 
   /* CHANNEL */
@@ -263,7 +263,7 @@ class APIManager {
     mapping headers = getHeaders();
     string endpoint = sprintf("/channels/%s/invites", channelId);
 
-    mixed data = apiRequest("channels/id/ivnites", channelId, "GET", endpoint, headers, UNDEFINED, true);
+    array|void data = apiRequest("channels/id/invites", channelId, "GET", endpoint, headers, UNDEFINED, true);
     array(Invite) invites = ({});
 
     foreach(data, mapping inviteData) {
@@ -273,5 +273,20 @@ class APIManager {
     return invites;
   }
 
-  
+  Invite createChannelInvite(string channelId, mapping|void payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/invites", channelId);
+
+    payload = payload || ([]);
+    mapping|void data = apiRequest("channels/id/invites", channelId, "POST", endpoint, headers, payload, false);
+
+    return Invite(client, data);
+  }
+
+  void triggerTypingIndicator(string channelId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/typing", channelId);
+
+    apiRequest("channels/id/typing", channelId, "POST", endpoint, headers, UNDEFINED, false);
+  }
 }
