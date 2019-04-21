@@ -527,6 +527,69 @@ class APIManager {
     apiRequest("/guilds/id/members/id/roles/id", guildId, "DELETE", endpoint, headers, UNDEFINED, true);
   }
 
+  void removeGuildMember(string guildId, string userId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/members/%s", guildId, userId);
+
+    apiRequest("/guilds/id/members/id", guildId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  array(mapping) getGuildBans(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/bans", guildId);
+
+    array(mapping) data = apiRequest("/guilds/id/bans", guildId, "GET", endpoint, headers, UNDEFINED, true);
+
+    if (data) return data;
+  }
+
+  mapping getGuildBan(string guildId, string userId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/bans/%s", guildId, userId);
+
+    mapping data = apiRequest("/guilds/id/bans/id", guildId, "GET", endpoint, headers, UNDEFINED, true);
+
+    return data;
+  }
+
+  void createGuildBan(string guildId, string userId, mapping|void payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/bans/%s", guildId, userId);
+
+    apiRequest("/guilds/id/bans/id", guildId, "PUT", endpoint, headers, payload || ([]), false);
+  }
+
+  void removeGuildBan(string guildId, string userId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/bans/%s", guildId, userId);
+
+    apiRequest("/guilds/id/bans/id", guildId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  array(Role) getGuildRoles(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/roles", guildId);
+    Guild guild = client.guilds->get(guildId);
+
+    // TODO: Auto fetch using get guild
+    array data = apiRequest("/guilds/id/roles", guildId, "GET", endpoint, headers, UNDEFINED, true);
+
+    array(Role) roles = ({});
+    foreach(data, mapping role) {
+      roles = Array.push(roles, Role(client guild, role));
+    }
+  }
+
+  Role getGuildRole(string guildId, string roleId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/roles/%s", guildId, roleId);
+    Guild guild = client.guilds->get(guildId);
+
+    data = apiRequest("/guilds/id/roles/id", guildId, "GET", endpoint, headers, UNDEFINED, true);
+
+    return Role(client, guild, data);
+  }
+
   Invite getInvite(string inviteCode) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/invites/%s", inviteCode);
