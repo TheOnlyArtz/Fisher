@@ -158,11 +158,10 @@ class EventDispatcher {
     foreach(data.emojis, mapping emoji) {
       cached = guild.emojis->get(emoji.id);
       newEmoji = Emoji(client, guild, emoji);
-
       if (cached) {
         diffs =  MiscUtils()->mappingDiff(cached, newEmoji);
         deletedEmojis->delete(emoji.id);
-        if (sizeof(diffs) > 1) {
+        if (sizeof(diffs) != 0) {
           // Emit guildEmojisUpdate
           emojiUpdate(newEmoji, cached, diffs, client);
         }
@@ -178,6 +177,7 @@ class EventDispatcher {
   }
 
   void emojiUpdate(Emoji newEmoji, Emoji cached, array diffs, Client client) {
+    write("%O", newEmoji.name);
     client.emojis->assign(newEmoji.id, newEmoji);
     cached.guild.emojis->assign(newEmoji.id, newEmoji);
     client->emit("guildEmojiUpdate", newEmoji, cached, diffs, client);
@@ -219,7 +219,7 @@ class EventDispatcher {
     Guild guild = client.guilds->get(data.guild_id);
     if (!guild) return;
 
-    User user = client.user->get(data.user.id);
+    User user = client.users->get(data.user.id);
     if (!user) user = User(client, data);
 
     // Remove from caching
