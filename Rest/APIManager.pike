@@ -25,7 +25,7 @@ class APIManager {
 
     mapping default_headers = getHeaders();
     Standards.URI uri = Standards.URI(Constants().API->get("URI") + Constants().API->get("VERSION") + endpoint);
-    // Standards.URI uri = Standards.URI("https://en7blnpx6rcj2.x.pipedream.net");
+    // Standards.URI uri = Standards.URI("https://enobgn68i4wbs.x.pipedream.net");
     while (!requestDone) {
       Thread.Mutex mutex = mutexes[rateLimitKey] ? mutexes[rateLimitKey] : Thread.Mutex();
       mutexWait(mutex);
@@ -36,6 +36,7 @@ class APIManager {
       if (dataQuery) {
         if (!headers["Content-Type"])
           headers["Content-Type"] = "application/x-www-form-urlencoded";
+          write("==>> %O\n", data);
         response = Protocols.HTTP.do_method(method, uri, data, headers);
       } else {
         if (!headers["Content-Type"])
@@ -576,7 +577,7 @@ class APIManager {
 
     array(Role) roles = ({});
     foreach(data, mapping role) {
-      roles = Array.push(roles, Role(client guild, role));
+      roles = Array.push(roles, Role(client, guild, role));
     }
   }
 
@@ -585,11 +586,69 @@ class APIManager {
     string endpoint = sprintf("/guilds/%s/roles/%s", guildId, roleId);
     Guild guild = client.guilds->get(guildId);
 
-    data = apiRequest("/guilds/id/roles/id", guildId, "GET", endpoint, headers, UNDEFINED, true);
+    mapping data = apiRequest("/guilds/id/roles/id", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
     return Role(client, guild, data);
   }
 
+  void modifyGuildRolePositions(string guildId, array payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/roles", guildId);
+
+    apiRequest("/guilds/id/roles/id", guildId, "PATCH", endpoint, headers, payload, false);
+  }
+
+  Role modifyGuildRole(string guildId, string userId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/roles/%s", guildId, userId);
+    Guild guild = client.guilds->get(guildId);
+
+    mapping data = apiRequest("/guilds/id/roles/id", guildId, "PATCH", endpoint, headers, payload, false);
+
+    return Role(client, guild, data);
+  }
+
+  void deleteGuildRole(string guildId, string userId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/roles/%s", guildId, userId);
+
+    apiRequest("/guilds/id/roles/id", guildId, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  int getGuildPruneCount(string guildId, int|string days) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/prune", guildId);
+    days = (string) days;
+    mapping data = apiRequest("/guilds/id/prune", guildId, "GET", endpoint, headers, (["days": days]), true);
+
+    return data["pruned"];
+  }
+
+  int beginGuildPrune(string guildId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/prune", guildId);
+
+    mapping data = apiRequest("/guilds/id/prune", guildId, "POST", endpoint, headers, payload, false);
+
+    if (data["pruned"]) data["pruned"];
+  }
+
+  array(RegionVoice) getGuildVoiceRegions(string guildId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/regions", guildId);
+    Guild guild = client.guilds->get(guildId);
+
+    array data = apiRequest("/guilds/id/region", guildId, "GET", endpoint, headers, UNDEFINED, true);
+    array(RegionVoice) regions = ({});
+
+    foreach(data, mapping region) {
+      regions = Array.push(regions, RegionVoice(client, guild, region));
+    }
+
+    return regions;
+  }
+
+  
   Invite getInvite(string inviteCode) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/invites/%s", inviteCode);
