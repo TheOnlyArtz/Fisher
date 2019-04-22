@@ -252,21 +252,17 @@ class APIManager {
 
     apiRequest("channels/id/messages/bulk-delete", channelId, "POST", endpoint, headers,(["messages": snowflakes.id]), false);
   }
-  /* TODO!!! completely broken for now */
+
+  // Fill up nullables calculate them (array/deny) for specific channel.
   void editChannelPermissions(string channelId, string|Role|GuildMember roleOrMember, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = "";
-    mixed channel = client.channels->get(channelId);
-    // if (!channel)
-      //TODO auto fetch with getChannel
-    Permission existingOverwrites = Permission(client, ([]), UNDEFINED);
-    existingOverwrites = channel.permissionOverwrites->get(objectp(roleOrMember) ? roleOrMember.id : roleOrMember);
-    write("%O", channel.permissionOverwrites);
+    mixed channel = restUtils->fetchCacheChannel(channelId, client);
+
     payload = ([
-      "allow": payload.allow || existingOverwrites.allow,
-      "deny": payload.deny || existingOverwrites.deny,
-      "type": existingOverwrites.type,
-      "id": existingOverwrites.id
+      "allow": payload.allow,
+      "deny": payload.deny,
+      "type": payload.type,
     ]);
 
     if (objectp(roleOrMember))
@@ -275,6 +271,13 @@ class APIManager {
       endpoint = sprintf("/channels/%s/permissions/%s", channelId, roleOrMember);
 
     apiRequest("channels/id/permissions/id", channelId, "PUT", endpoint, headers, payload, false);
+  }
+
+  void deleteChannelPermission(string channelId, string overwriteId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/permissions/%s", channelId, overwriteId);
+
+    apiRequest("channels/id/permissions/id", channelId, "DELETE", endpoint, headers, UNDEFINED, true);
   }
 
   array(Invite) getChannelInvites(string channelId) {
