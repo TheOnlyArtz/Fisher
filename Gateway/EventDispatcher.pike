@@ -8,6 +8,7 @@ class EventDispatcher {
   Client client;
 
   protected GuildCacher guildCacher;
+  protected RestUtils restUtils;
   /**
   * The constructor
   */
@@ -15,6 +16,7 @@ class EventDispatcher {
     wsHandler = w;
     client = w.client;
     guildCacher = GuildCacher(client);
+    restUtils = RestUtils();
   }
 
   /**
@@ -35,9 +37,9 @@ class EventDispatcher {
   }
 
   void channelCreate(mapping data) {
-    mixed channelO = RestUtils()->getChannelAccordingToType(data.type, data, client);
+    mixed channelO = restUtils->getChannelAccordingToType(data.type, data, client);
     if (data.type == 0 || data.type == 2 || data.type == 4) {
-      Guild guild = RestUtils()->fetchCacheGuild(data.guild_id, client);
+      Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
       guild.channels->assign(data.id, channelO);
     }
      client.channels->assign(data.id, channelO);
@@ -48,7 +50,7 @@ class EventDispatcher {
     mixed cached = client.channels->get(data.id);
     if (!cached) return;
 
-    mixed newChannel = RestUtils()->getChannelAccordingToType(cached.type, data, client);
+    mixed newChannel = restUtils->getChannelAccordingToType(cached.type, data, client);
     MiscUtils()->fixNullables(newChannel, cached);
     client.channels->assign(cached.id, newChannel);
     if (cached.guild) cached.guild.channels->assign(cached.id, newChannel);
@@ -71,7 +73,7 @@ class EventDispatcher {
   }
 
   void channelPinsUpdate(mapping data) {
-    mixed channel = client.channels->get(data.id);
+    mixed channel = restUtils->fetchCacheChannel(data.id, client);
     if (!channel) return;
 
     client->emit("channelPinsUpdate", channel, client);
@@ -304,7 +306,7 @@ class EventDispatcher {
   }
 
   void messageUpdate(mapping data) {
-    mixed channel = client.channels->get(data.channel_id);
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!channel) return;
 
     Message cached = channel.messages->get(data.id);
@@ -320,7 +322,7 @@ class EventDispatcher {
   }
 
   void messageDelete(mapping data) {
-    mixed channel = client.channels->get(data.channel_id);
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!channel) return;
 
     Message theMessage = channel.messages->get(data.id);
@@ -406,7 +408,7 @@ class EventDispatcher {
   }
 
   void typingStart(mapping data) {
-    mixed channel = client.channels->get(data.channel_id);
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!channel) return;
 
     User user = client.users->get(data.user_id);

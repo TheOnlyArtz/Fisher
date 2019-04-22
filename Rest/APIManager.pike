@@ -8,11 +8,13 @@ class APIManager {
   protected Thread.Mutex globalMutex;
   protected mapping mutexes;
   protected Client client;
+  protected RestUtils restUtils;
 
   void create(Client c) {
     mutexes = ([]);
     globalMutex = Thread.Mutex();
     client = c;
+    restUtils = RestUtils();
   }
 
   // majorParam -> ID
@@ -157,7 +159,7 @@ class APIManager {
 
     if (payload.file) {
       headers["Content-Type"] = "multipart/form-data; boundary=main";
-      payload = RestUtils()->constructAttachmentUpload(payload.file.content, payload.file.name || "unknown", !!content, content);
+      payload = restUtils->constructAttachmentUpload(payload.file.content, payload.file.name || "unknown", !!content, content);
 
       // payload = (["payload_json": (["file": payload.file])])
     }
@@ -339,7 +341,7 @@ class APIManager {
   array(Emoji) getGuildEmojis(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/emojis", guildId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     array data = apiRequest("guilds/id/emojis", guildId, "GET", endpoint, headers, UNDEFINED, true);
     array(Emoji) emojis = ({});
@@ -352,7 +354,7 @@ class APIManager {
   Emoji getGuildEmoji(string guildId, string emojiId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/emojis/%s", guildId, emojiId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     mapping data = apiRequest("guilds/id/emojis/id", guildId, "GET", endpoint ,headers, UNDEFINED, true);
 
@@ -364,7 +366,7 @@ class APIManager {
   Emoji createGuildEmoji(string guildId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/emojis", guildId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     payload["image"] = "data:image/png;base64,"+payload["image"];
     mapping data = apiRequest("guilds/id/emojis", guildId, "POST", endpoint ,headers, payload, false);
@@ -375,7 +377,7 @@ class APIManager {
   Emoji modifyGuildEmoji(string guildId, string emojiId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/emojis/%s", guildId, emojiId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     mapping data = apiRequest("guillds/id/emojis/id", guildId, "PATCH", endpoint, headers, payload, false);
 
@@ -433,13 +435,13 @@ class APIManager {
   array(ChannelVoice|ChannelCategory|GuildTextChannel) getGuildChannels(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/channels", guildId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     array|mixed data = apiRequest("/guilds/id/channels", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
     array(ChannelVoice|ChannelCategory|GuildTextChannel) channels = ({});
     foreach(data, mapping data) {
-      channels = Array.push(channels, RestUtils()->getChannelAccordingToType(data.type, data, client, guild));
+      channels = Array.push(channels, restUtils->getChannelAccordingToType(data.type, data, client, guild));
     }
 
     return channels;
@@ -448,13 +450,13 @@ class APIManager {
   ChannelVoice|ChannelCategory|GuildTextChannel createGuildChannel(string guildId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/channels", guildId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     if (!payload["name"])
     throw("All parameters are optional excluding [name]");
     else {
       mapping data = apiRequest("/guilds/id/channels", guildId, "POST", endpoint, headers, payload, false);
-      return RestUtils()->getChannelAccordingToType(data.type, data, client, guild);
+      return restUtils->getChannelAccordingToType(data.type, data, client, guild);
     }
   }
 
@@ -468,7 +470,7 @@ class APIManager {
   GuildMember getGuildMember(string guildId, string userId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/members/%s", guildId, userId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     mapping data = apiRequest("/guilds/id/members/id", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
@@ -478,7 +480,7 @@ class APIManager {
   array(GuildMember) getGuildMembers(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/members/", guildId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     array data = apiRequest("/guilds/id/members", guildId, "GET", endpoint, headers, UNDEFINED, true);
     array(GuildMember) members = ({});
@@ -560,7 +562,7 @@ class APIManager {
   array(Role) getGuildRoles(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/roles", guildId);
-    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     array data = apiRequest("/guilds/id/roles", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
@@ -573,7 +575,7 @@ class APIManager {
   Role getGuildRole(string guildId, string roleId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/roles/%s", guildId, roleId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     mapping data = apiRequest("/guilds/id/roles/id", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
@@ -590,7 +592,7 @@ class APIManager {
   Role modifyGuildRole(string guildId, string userId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/roles/%s", guildId, userId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     mapping data = apiRequest("/guilds/id/roles/id", guildId, "PATCH", endpoint, headers, payload, false);
 
@@ -625,7 +627,7 @@ class APIManager {
   array(RegionVoice) getGuildVoiceRegions(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/regions", guildId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     array data = apiRequest("/guilds/id/region", guildId, "GET", endpoint, headers, UNDEFINED, true);
     array(RegionVoice) regions = ({});
