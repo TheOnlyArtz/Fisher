@@ -1,4 +1,4 @@
-class ClientCaching() {
+class ClientCacher {
   protected Client client;
 
   void create(Client c) {

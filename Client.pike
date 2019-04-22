@@ -29,7 +29,7 @@ class Client {
   mapping options;
   // Others
   ClientUser user;
-  ClientCaching cacher;
+  ClientCacher cacher;
 
   /*
   * The constructor
@@ -46,7 +46,7 @@ class Client {
     channels = Gallon(([]));
     emojis = Gallon(([]));
 
-    cacher = ClientCaching(this);
+    cacher = ClientCacher(this);
     eventsClient = this;
   }
 
