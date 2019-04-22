@@ -202,7 +202,13 @@ class EventDispatcher {
   * - END -
   */
 
-  // TODO: Guild integrations update
+  void guildIntegrationsUpdate(mapping data) {
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
+    if (!guild) return;
+
+    client->emit("guildIntegrationsUpdate", client, guild);
+  }
+
   void guildMemberAdd(mapping data) {
     Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
