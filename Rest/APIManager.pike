@@ -780,4 +780,115 @@ class APIManager {
 
     apiRequest("/users/@me/guilds/id", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
   }
+
+  Webhook createWebhook(string channelId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/webhooks", channelId);
+
+    mapping data = apiRequest("/channels/id/webhooks", UNDEFINED, "POST", endpoint, headers, payload, false);
+
+    return Webhook(client, data);
+  }
+
+  array(Webhook) getChannelWebhooks(string channelId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/webhooks", channelId);
+
+    array data = apiRequest("/channels/id/webhooks", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+    array(Webhook) webhooks = ({});
+
+    foreach(data, mapping webhook) {
+      webhooks = Array.push(webhooks, Webhook(client, webhook));
+    }
+
+    return webhooks;
+  }
+
+
+  array(Webhook) getGuildWebhooks(string channelId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/webhooks", channelId);
+
+    array data = apiRequest("/guilds/id/webhooks", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+    array(Webhook) webhooks = ({});
+
+    foreach(data, mapping webhook) {
+      webhooks = Array.push(webhooks, Webhook(client, webhook));
+    }
+
+    return webhooks;
+  }
+
+  Webhook getWebhook(string webhookId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s", webhookId);
+
+    mapping data = apiRequest("/webhooks/id", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+
+    return Webhook(client, data);
+  }
+
+  Webhook getWebhookWithToken(string webhookId, string token) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s/%s", webhookId, token);
+
+    mapping data = apiRequest("/webhooks/id/token", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+
+    return Webhook(client, data);
+  }
+
+  Webhook modifyWebhook(string webhookId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s", webhookId);
+
+    mapping data = apiRequest("/webhooks/id", UNDEFINED, "PATCH", endpoint, headers, payload, false);
+
+    return Webhook(client, data);
+  }
+
+  Webhook modifyWebhookWithToken(string webhookId, string token, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s/%s", webhookId, token);
+
+    mapping data = apiRequest("/webhooks/id/token", UNDEFINED, "PATCH", endpoint, headers, payload, false);
+
+    return Webhook(client, data);
+  }
+
+  void deleteWebhook(string webhookId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s", webhookId);
+
+    mapping data = apiRequest("/webhooks/id", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  void deleteWebhookWithToken(string webhookId, string webhookToken) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s/%s", webhookId, webhookToken);
+
+    mapping data = apiRequest("/webhooks/id/token", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  void executeWebhook(string webhookId, string webhookToken, string content, mapping additional) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s/%s", webhookId, webhookToken);
+
+    additional = additional || ([]);
+    mapping|string payload = ([
+      "content": content,
+      "nonce": additional["nonce"] || Val.null,
+      "tts": additional["tts"] ? true : false,
+      "file": additional["file"] ||  Val.null,
+      "embeds": additional["embeds"] || Val.null,
+      "payload_json": additional["payload_json"] || ""
+    ]);
+
+    // TODO add support for querystring and JSON form params all together
+    if (payload.file) {
+      headers["Content-Type"] = "multipart/form-data; boundary=main";
+      payload = restUtils->constructAttachmentUpload(payload.file.content, payload.file.name || "unknown", !!content, content);
+    }
+
+    apiRequest("/webhooks/id/token", UNDEFINED, "POST", endpoint, headers, payload, false);
+  }
 }

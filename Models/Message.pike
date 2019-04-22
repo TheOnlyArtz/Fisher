@@ -32,10 +32,10 @@ class Message {
     id = data.id;
     guild = RestUtils()->fetchCacheGuild(data.guild_id, client);
     channel = RestUtils()->fetchCacheChannel(data.channel_id, client);
-    if (data.author) {
-      author = client.users->get(data.author.id); // auto fetch
-      member = guild.members->get(author.id); // auto fetch
-    }
+    if (data.author && data.author.discriminator != "0000") {
+      author = RestUtils()->fetchCacheUser(data.author.id,client);
+      member = guild.members->get(author.id) || Val.Null; // TODO: auto fetch
+    } else author = data.author;
     content = data.content;
     timestamp = data.timestamp;
     editedTimestamp = data.edited_timestamp || data.editedTimestamp;
