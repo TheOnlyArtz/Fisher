@@ -37,7 +37,16 @@ class RestUtils {
 
     Guild g = client.api->getGuild(guildId);
 
-    client.guilds.assign(guildId, g);
+    client.guilds->assign(guildId, g);
     return g;
+  }
+
+  mixed fetchCacheChannel(string channelId, Client client) {
+    if (client.channels->get(channelId)) return client.channels->get(channelId);
+
+    mixed c = client.api->getChannel(channelId);
+    client.channels->assign(channelId, c);
+
+    return c;
   }
 }
