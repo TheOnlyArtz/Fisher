@@ -161,7 +161,6 @@ class APIManager {
       headers["Content-Type"] = "multipart/form-data; boundary=main";
       payload = restUtils->constructAttachmentUpload(payload.file.content, payload.file.name || "unknown", !!content, content);
 
-      // payload = (["payload_json": (["file": payload.file])])
     }
     mixed resp = apiRequest("channels/id/messages", channelId, "POST", endpoint, headers, payload, false);
   }
@@ -253,21 +252,17 @@ class APIManager {
 
     apiRequest("channels/id/messages/bulk-delete", channelId, "POST", endpoint, headers,(["messages": snowflakes.id]), false);
   }
-  /* TODO!!! completely broken for now */
+
+  // Fill up nullables calculate them (array/deny) for specific channel.
   void editChannelPermissions(string channelId, string|Role|GuildMember roleOrMember, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = "";
-    mixed channel = client.channels->get(channelId);
-    // if (!channel)
-      //TODO auto fetch with getChannel
-    Permission existingOverwrites = Permission(client, ([]), UNDEFINED);
-    existingOverwrites = channel.permissionOverwrites->get(objectp(roleOrMember) ? roleOrMember.id : roleOrMember);
-    write("%O", channel.permissionOverwrites);
+    mixed channel = restUtils->fetchCacheChannel(channelId, client);
+
     payload = ([
-      "allow": payload.allow || existingOverwrites.allow,
-      "deny": payload.deny || existingOverwrites.deny,
-      "type": existingOverwrites.type,
-      "id": existingOverwrites.id
+      "allow": payload.allow,
+      "deny": payload.deny,
+      "type": payload.type,
     ]);
 
     if (objectp(roleOrMember))
@@ -276,6 +271,13 @@ class APIManager {
       endpoint = sprintf("/channels/%s/permissions/%s", channelId, roleOrMember);
 
     apiRequest("channels/id/permissions/id", channelId, "PUT", endpoint, headers, payload, false);
+  }
+
+  void deleteChannelPermission(string channelId, string overwriteId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/permissions/%s", channelId, overwriteId);
+
+    apiRequest("channels/id/permissions/id", channelId, "DELETE", endpoint, headers, UNDEFINED, true);
   }
 
   array(Invite) getChannelInvites(string channelId) {
@@ -777,5 +779,116 @@ class APIManager {
     string endpoint = sprintf("/users/@me/guilds/%s", guildId);
 
     apiRequest("/users/@me/guilds/id", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  Webhook createWebhook(string channelId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/webhooks", channelId);
+
+    mapping data = apiRequest("/channels/id/webhooks", UNDEFINED, "POST", endpoint, headers, payload, false);
+
+    return Webhook(client, data);
+  }
+
+  array(Webhook) getChannelWebhooks(string channelId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s/webhooks", channelId);
+
+    array data = apiRequest("/channels/id/webhooks", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+    array(Webhook) webhooks = ({});
+
+    foreach(data, mapping webhook) {
+      webhooks = Array.push(webhooks, Webhook(client, webhook));
+    }
+
+    return webhooks;
+  }
+
+
+  array(Webhook) getGuildWebhooks(string channelId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/guilds/%s/webhooks", channelId);
+
+    array data = apiRequest("/guilds/id/webhooks", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+    array(Webhook) webhooks = ({});
+
+    foreach(data, mapping webhook) {
+      webhooks = Array.push(webhooks, Webhook(client, webhook));
+    }
+
+    return webhooks;
+  }
+
+  Webhook getWebhook(string webhookId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s", webhookId);
+
+    mapping data = apiRequest("/webhooks/id", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+
+    return Webhook(client, data);
+  }
+
+  Webhook getWebhookWithToken(string webhookId, string token) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s/%s", webhookId, token);
+
+    mapping data = apiRequest("/webhooks/id/token", UNDEFINED, "GET", endpoint, headers, UNDEFINED, true);
+
+    return Webhook(client, data);
+  }
+
+  Webhook modifyWebhook(string webhookId, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s", webhookId);
+
+    mapping data = apiRequest("/webhooks/id", UNDEFINED, "PATCH", endpoint, headers, payload, false);
+
+    return Webhook(client, data);
+  }
+
+  Webhook modifyWebhookWithToken(string webhookId, string token, mapping payload) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s/%s", webhookId, token);
+
+    mapping data = apiRequest("/webhooks/id/token", UNDEFINED, "PATCH", endpoint, headers, payload, false);
+
+    return Webhook(client, data);
+  }
+
+  void deleteWebhook(string webhookId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s", webhookId);
+
+    mapping data = apiRequest("/webhooks/id", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  void deleteWebhookWithToken(string webhookId, string webhookToken) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s/%s", webhookId, webhookToken);
+
+    mapping data = apiRequest("/webhooks/id/token", UNDEFINED, "DELETE", endpoint, headers, UNDEFINED, true);
+  }
+
+  void executeWebhook(string webhookId, string webhookToken, string content, mapping additional) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/webhooks/%s/%s", webhookId, webhookToken);
+
+    additional = additional || ([]);
+    mapping|string payload = ([
+      "content": content,
+      "nonce": additional["nonce"] || Val.null,
+      "tts": additional["tts"] ? true : false,
+      "file": additional["file"] ||  Val.null,
+      "embeds": additional["embeds"] || Val.null,
+      "payload_json": additional["payload_json"] || ""
+    ]);
+
+    // TODO add support for querystring and JSON form params all together
+    if (payload.file) {
+      headers["Content-Type"] = "multipart/form-data; boundary=main";
+      payload = restUtils->constructAttachmentUpload(payload.file.content, payload.file.name || "unknown", !!content, content);
+    }
+
+    apiRequest("/webhooks/id/token", UNDEFINED, "POST", endpoint, headers, payload, false);
   }
 }

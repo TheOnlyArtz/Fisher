@@ -17,6 +17,7 @@
 #include "Models/ActivitySecrets.pike"
 #include "Models/Activity.pike"
 #include "Models/Presence.pike"
+#include "Models/Webhook.pike"
 #include "Utils/Permission.pike"
 #include "Utils/RestUtils.pike"
 #include "Utils/Misc.pike"
