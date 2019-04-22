@@ -95,8 +95,11 @@ class APIManager {
 
   /* CHANNEL */
 
-  mixed getChannel(string id) {
-    mixed resp = apiRequest("channels/id", id, "GET", "/channels/"+id, getHeaders());
+  mixed getChannel(string channelId) {
+    mapping headers = getHeaders();
+    string endpoint = sprintf("/channels/%s", channelId);
+
+    mixed resp = apiRequest("channels/id", channelId, "GET", endpoint, headers, UNDEFINED, true);
     if (resp.code) return resp;
 
     return getChannelAccordingToType(resp.type, resp, client);
