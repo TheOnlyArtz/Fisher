@@ -290,14 +290,24 @@ class EventDispatcher {
   }
 
   void messageCreate(mapping data) {
+    mixed channel = client.channels->get(data.channel_id);
+    Message message = channel.messages->get(data.id);
+
+    if (channel && message) {
+      write("%O", "runs");
+      message["embeds"] = data["embeds"];
+      return;
+    }
+
     Message theMessage = Message(client, data);
 
     // TODO: Have max_messages cache to every channel
-    if (!theMessage.channel) return;
-    theMessage.channel.messages->assign(theMessage.id, theMessage);
-    theMessage.channel.lastMessageId = theMessage.id;
+    if (!channel) return;
+    channel.messages->assign(theMessage.id, theMessage);
+    channel.lastMessageId = theMessage.id;
 
     client->emit("messageCreate", theMessage, client);
+
   }
 
   void messageUpdate(mapping data) {
