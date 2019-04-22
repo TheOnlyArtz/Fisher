@@ -31,7 +31,7 @@ class Message {
   void create(Client client, mapping data) {
     id = data.id;
     guild = RestUtils()->fetchCacheGuild(data.guild_id, client);
-    channel = client.channels->get(data.channel_id); // auto fetch
+    channel = RestUtils()->fetchCacheChannel(data.channel_id, client);
     if (data.author) {
       author = client.users->get(data.author.id); // auto fetch
       member = guild.members->get(author.id); // auto fetch

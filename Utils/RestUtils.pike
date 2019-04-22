@@ -49,4 +49,13 @@ class RestUtils {
 
     return c;
   }
+
+  User fetchCacheUser(string userId, Client client) {
+    if (client.users->get(userId)) return client.users->get(userId);
+
+    User u = client.api->getUser(userId);
+    client.users->assign(userId, u);
+
+    return u;
+  }
 }

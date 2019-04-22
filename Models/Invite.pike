@@ -17,14 +17,14 @@ class Invite {
 
   void create(Client client, mapping data) {
     code = data.code;
-    guild = client.guilds->get(data.guild.id) || data.guild;
-    channel = guild && guild.channels->get(data.channel.id) ? guild.channels->get(data.channel.id) : data.channel;
-    targetUser = data.target_user ? client.users->get(data.target_user.id) || data.target_user : Val.null;
+    guild = RestUtils()->fetchCacheGuild(data.guild.id, client) || data.guild;
+    channel = guild ? RestUtils()->fetchCacheChannel(data.channel.id, client) : data.channel;
+    targetUser = data.target_user ? RestUtils()->fetchCacheUser(data.target_user.id, client) : Val.null;
     targetUserType = data.target_user_type || data.targetUserType || Val.null;
     approximatePresenceCount = data.approximate_presence_count || data.approximatePresenceCount || Val.null;
     approximateMemberCount = data.approximate_member_count || data.approximateMemberCount || Val.null;
 
-    inviter = client.users->get(data.inviter.id) || User(client, data.inviter);
+    inviter = RestUtils()->fetchCacheUser(data.inviter.id, client) || User(client, data.inviter);
     uses = data.uses;
     maxUses = data.max_uses || data.maxUses;
     maxAge = data.max_age || data.maxAge;
