@@ -144,7 +144,7 @@ class APIManager {
     string endpoint = sprintf("/channels/%s/messages", channelId);
 
     additional = additional || ([]);
-    mapping payload = ([
+    mapping|string payload = ([
       "content": content,
       "nonce": additional["nonce"] || Val.null,
       "tts": additional["tts"] ? true : false,
@@ -152,17 +152,14 @@ class APIManager {
       "embed": additional["embed"] || Val.null,
       "payload_json": additional["payload_json"] || ""
     ]);
-    mixed requestStr;
+
     if (payload.file) {
       headers["Content-Type"] = "multipart/form-data; boundary=main";
-      // headers["Content-Disposition"] = "";
-      requestStr = "\r\n--main\r\nContent-Disposition: form-data; name=\"file\";\r\n\r\n" + payload.file + "\r\n--main--";
-
-      write("%b\n", String.width(requestStr)>8);
+      payload = RestUtils()->constructAttachmentUpload(payload.file.content, payload.file.name || "unknown", !!content, content);
 
       // payload = (["payload_json": (["file": payload.file])])
     }
-    mixed resp = apiRequest("channels/id/messages", channelId, "POST", endpoint, headers, requestStr, false);
+    mixed resp = apiRequest("channels/id/messages", channelId, "POST", endpoint, headers, payload, false);
   }
 
   void createReaction(string channelId, string messageId, string|Emoji emoji) {

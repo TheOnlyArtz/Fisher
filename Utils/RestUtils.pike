@@ -15,4 +15,24 @@ class RestUtils {
         break;
     }
   }
+
+  string constructAttachmentUpload(string file, string name, bool content, string contentStr) {
+    string CONTENT_TYPE = "Content-Type: application/octet-stream;";
+    string CONTENT_DISPOS_ATTACH = sprintf("Content-Disposition: form-data; name=\"file\"; filename=\"%s\";", name);
+    string CONTENT_DISPOS_CONTENT = sprintf("Content-Disposition: form-data; name=\"content\";");
+
+    string start = sprintf("\r\n--main\r\n%s\r\n%s\r\n\r\n%s\r\n", CONTENT_TYPE,CONTENT_DISPOS_ATTACH,file);
+
+    if (content) {
+      string mid = sprintf("--main\r\n%s\r\n\r\n%s\r\n", CONTENT_DISPOS_CONTENT, contentStr);
+      return start + mid + "--main--";
+    }
+
+    write("%O", start + "--main--");
+    return start + "--main--";
+  }
+  // ^ related
+  string constructAttachReq() {
+
+  }
 }
