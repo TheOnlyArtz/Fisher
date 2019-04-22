@@ -77,4 +77,13 @@ class RestUtils {
 
     return r;
   }
+
+  GuildMember fetchCacheGuildMember(string memberId, Client client, Guild|void guild) {
+    if (guild.members->get(memberId)) return guild.members->get(memberId);
+
+    GuildMember g = client.api->getRole(memberId);
+    if (guild) guild.members->assign(memberId, g);
+
+    return g;
+  }
 }
