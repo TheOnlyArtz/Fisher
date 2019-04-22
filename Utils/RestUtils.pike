@@ -28,7 +28,6 @@ class RestUtils {
       return start + mid + "--main--";
     }
 
-    write("%O", start + "--main--");
     return start + "--main--";
   }
 }
