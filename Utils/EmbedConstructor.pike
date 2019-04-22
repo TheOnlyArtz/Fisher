@@ -13,7 +13,9 @@ class EmbedConstructor {
   mapping|Val.Null author;
   array|Val.Null fields;
 
-  void create() {}
+  void create() {
+    
+  }
 
   this_program assignTitle(string t) {
     title = t;
