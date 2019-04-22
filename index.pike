@@ -21,6 +21,7 @@
 #include "Utils/RestUtils.pike"
 #include "Utils/Misc.pike"
 #include "Utils/EventUtils.pike"
+#include "Utils/EmbedConstructor.pike"
 
 #include "Models/GuildIntegration.pike"
 #include "Models/GuildTextChannel.pike"
