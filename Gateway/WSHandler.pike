@@ -65,6 +65,9 @@ class WSHandler {
         case "GUILD_EMOJIS_UPDATE":
           eventDispatcher->guildEmojisUpdate(data);
           break;
+        case "GUILD_INTEGRATION_UPDATE":
+          eventDispatcher->guildIntegrationUpdate(data);
+          break;
         case "GUILD_MEMBER_ADD":
           eventDispatcher->guildMemberAdd(data);
           break;
