@@ -17,7 +17,7 @@ class ChannelCategory {
     type = data.type;
     name = data.name;
     parentId = data.parent_id || data.parentId;
-    guild = g;
+    guild = g || RestUtils()->fetchCacheGuild(data.guild_id, client);
 
     permissionOverwrites = Gallon(([]));
     foreach(data.permission_overwrites, mapping data) {

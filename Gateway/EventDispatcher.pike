@@ -37,8 +37,8 @@ class EventDispatcher {
   void channelCreate(mapping data) {
     mixed channelO = RestUtils()->getChannelAccordingToType(data.type, data, client);
     if (data.type == 0 || data.type == 2 || data.type == 4) {
-      Guild guild = client.guilds->get(data.guild_id);
-      if (guild) guild.channels->assign(data.id, channelO);
+      Guild guild = RestUtils()->fetchCacheGuild(data.guild_id, client);
+      guild.channels->assign(data.id, channelO);
     }
      client.channels->assign(data.id, channelO);
      client->emit("channelCreate", channelO, client);

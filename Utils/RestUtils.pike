@@ -30,4 +30,14 @@ class RestUtils {
 
     return start + "--main--";
   }
+
+  /* Auto fetch section */
+  Guild fetchCacheGuild(string guildId, Client client) {
+    if (client.guilds->get(guildId)) return client.guilds->get(guildId);
+
+    Guild g = client.api->getGuild(guildId);
+
+    client.guilds.assign(guildId, g);
+    return g;
+  }
 }

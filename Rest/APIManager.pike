@@ -138,7 +138,6 @@ class APIManager {
     return Message(client, resp);
   }
 
-  /* TODO: => https://github.com/pikelang/Pike/issues/33 */
   Message|void createMessage(string channelId, string content, mapping|void additional) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/channels/%s/messages", channelId);
@@ -337,9 +336,8 @@ class APIManager {
   array(Emoji) getGuildEmojis(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/emojis", guildId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: If guild is not cached, auto fetch it
     array data = apiRequest("guilds/id/emojis", guildId, "GET", endpoint, headers, UNDEFINED, true);
     array(Emoji) emojis = ({});
 
@@ -351,9 +349,8 @@ class APIManager {
   Emoji getGuildEmoji(string guildId, string emojiId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/emojis/%s", guildId, emojiId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: If guild is not cached, auto fetch it
     mapping data = apiRequest("guilds/id/emojis/id", guildId, "GET", endpoint ,headers, UNDEFINED, true);
 
     return Emoji(client, guild, data);
@@ -364,9 +361,8 @@ class APIManager {
   Emoji createGuildEmoji(string guildId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/emojis", guildId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: If guild is not cached, auto fetch it
     payload["image"] = "data:image/png;base64,"+payload["image"];
     mapping data = apiRequest("guilds/id/emojis", guildId, "POST", endpoint ,headers, payload, false);
 
@@ -376,9 +372,8 @@ class APIManager {
   Emoji modifyGuildEmoji(string guildId, string emojiId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/emojis/%s", guildId, emojiId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: If guild is not cached, auto fetch it
     mapping data = apiRequest("guillds/id/emojis/id", guildId, "PATCH", endpoint, headers, payload, false);
 
     write("%O\n", Emoji(client, guild, data));
@@ -435,9 +430,8 @@ class APIManager {
   array(ChannelVoice|ChannelCategory|GuildTextChannel) getGuildChannels(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/channels", guildId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: If guild is not cached, auto fetch it
     array|mixed data = apiRequest("/guilds/id/channels", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
     array(ChannelVoice|ChannelCategory|GuildTextChannel) channels = ({});
@@ -451,9 +445,8 @@ class APIManager {
   ChannelVoice|ChannelCategory|GuildTextChannel createGuildChannel(string guildId, mapping payload) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/channels", guildId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: Auto fetch using get guild
     if (!payload["name"])
     throw("All parameters are optional excluding [name]");
     else {
@@ -472,9 +465,8 @@ class APIManager {
   GuildMember getGuildMember(string guildId, string userId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/members/%s", guildId, userId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: Auto fetch using get guild
     mapping data = apiRequest("/guilds/id/members/id", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
     return GuildMember(client, guild, data);
@@ -483,9 +475,8 @@ class APIManager {
   array(GuildMember) getGuildMembers(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/members/", guildId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: Auto fetch using get guild
     array data = apiRequest("/guilds/id/members", guildId, "GET", endpoint, headers, UNDEFINED, true);
     array(GuildMember) members = ({});
 
@@ -566,9 +557,8 @@ class APIManager {
   array(Role) getGuildRoles(string guildId) {
     mapping headers = getHeaders();
     string endpoint = sprintf("/guilds/%s/roles", guildId);
-    Guild guild = client.guilds->get(guildId);
+    Guild guild = RestUtils()->fetchCacheGuild(guildId, client);
 
-    // TODO: Auto fetch using get guild
     array data = apiRequest("/guilds/id/roles", guildId, "GET", endpoint, headers, UNDEFINED, true);
 
     array(Role) roles = ({});
@@ -669,7 +659,7 @@ class APIManager {
       integrations = Array.push(integrations, GuildIntegration(client, integration));
     }
 
-    return integrations; // TODO integration model
+    return integrations;
   }
 
   GuildIntegration createGuildIntegration(string guildId, mapping payload) {
