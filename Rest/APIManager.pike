@@ -161,7 +161,6 @@ class APIManager {
       headers["Content-Type"] = "multipart/form-data; boundary=main";
       payload = restUtils->constructAttachmentUpload(payload.file.content, payload.file.name || "unknown", !!content, content);
 
-      // payload = (["payload_json": (["file": payload.file])])
     }
     mixed resp = apiRequest("channels/id/messages", channelId, "POST", endpoint, headers, payload, false);
   }
