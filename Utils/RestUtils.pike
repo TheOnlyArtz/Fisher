@@ -31,8 +31,4 @@ class RestUtils {
     write("%O", start + "--main--");
     return start + "--main--";
   }
-  // ^ related
-  string constructAttachReq() {
-
-  }
 }
