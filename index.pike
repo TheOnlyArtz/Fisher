@@ -25,7 +25,7 @@
 
 #include "Models/GuildIntegration.pike"
 #include "Models/GuildTextChannel.pike"
-#include "Models/Caching/ClientCaching.pike"
+#include "Models/Caching/ClientCacher.pike"
 #include "Models/Attachment.pike"
 #include "Models/Reaction.pike"
 #include "Models/ReactionEmoji.pike"
