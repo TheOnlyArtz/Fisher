@@ -92,6 +92,12 @@ class WSHandler {
         case "MESSAGE_UPDATE":
           eventDispatcher->messageUpdate(data);
           break;
+        case "MESSAGE_DELETE":
+          eventDispatcher->messageDelete(data);
+          break;
+        case "MESSAGE_DELETE_BULK":
+          eventDispatcher->messageDeleteBulk(data);
+          break;
         case "MESSAGE_REACTION_ADD":
           eventDispatcher->messageReactionAdd(data);
           break;

@@ -338,9 +338,19 @@ class EventDispatcher {
     client->emit("messageDelete", theMessage, client);
   }
 
-  // TODO after REST implementation
   void messageDeleteBulk(mapping data) {
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
+    if (!channel) return;
 
+    array(Message) deletedCachedMessages = ({});
+    foreach(data.ids, string msgId) {
+      if (channel.messages->get(msgId)) {
+        channel.messages->delete(msgId);
+        deletedCachedMessages = Array.push(deletedCachedMessages, channel.messages->get(msgId));
+      }
+    }
+
+    client->emit("messageDeleteBulk", client, deletedCachedMessages);
   }
 
   // TODO: figure out the count
