@@ -98,7 +98,7 @@ class EventDispatcher {
   }
 
   void guildUpdate(mapping data) {
-    Guild oldGuild = client.guilds->get(data.id);
+    Guild oldGuild = restUtils->fetchCacheGuild(data.id, client);
     if (!oldGuild) return;
 
     Guild newGuild = Guild(client, data);
@@ -113,7 +113,7 @@ class EventDispatcher {
   }
 
   void guildDelete(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
     client.guilds->delete(data.guild_id);
@@ -123,8 +123,8 @@ class EventDispatcher {
   }
 
   void guildBanAdd(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
-    User user = client.users->get(data.user.id) ? client.users->get(data.user.id) : User(client, data.user);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
+    User user = restUtils->fetchCacheUser(data.user.id, client);
 
     if (client.users->get(data.user.id))
       client.users->delete(data.user.id);
@@ -137,7 +137,7 @@ class EventDispatcher {
   }
 
   void guildBanRemove(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     User user = User(client, data.user);
 
     if (guild)
@@ -149,7 +149,7 @@ class EventDispatcher {
   * - START -
   */
   void guildEmojisUpdate(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild || !guild.emojis) return;
 
     Gallon deletedEmojis = Gallon(copy_value(guild.emojis.iterable));
@@ -158,7 +158,7 @@ class EventDispatcher {
     Emoji newEmoji;
 
     foreach(data.emojis, mapping emoji) {
-      cached = guild.emojis->get(emoji.id);
+      cached = restUtils->fetchCacheEmoji(emoji.id, client, guild);
       newEmoji = Emoji(client, guild, emoji);
       if (cached) {
         diffs =  MiscUtils()->mappingDiff(cached, newEmoji);
@@ -179,7 +179,6 @@ class EventDispatcher {
   }
 
   void emojiUpdate(Emoji newEmoji, Emoji cached, array diffs, Client client) {
-    write("%O", newEmoji.name);
     client.emojis->assign(newEmoji.id, newEmoji);
     cached.guild.emojis->assign(newEmoji.id, newEmoji);
     client->emit("guildEmojiUpdate", newEmoji, cached, diffs, client);
@@ -205,7 +204,7 @@ class EventDispatcher {
 
   // TODO: Guild integrations update
   void guildMemberAdd(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
     GuildMember member = GuildMember(client, guild, data);
@@ -218,7 +217,7 @@ class EventDispatcher {
   }
 
   void guildMemberRemove(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
     User user = client.users->get(data.user.id);
@@ -232,7 +231,7 @@ class EventDispatcher {
   }
 
   void guildMemberUpdate(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
     GuildMember cached = guild.members->get(data.user.id);
@@ -253,7 +252,7 @@ class EventDispatcher {
   }
 
   void guildRoleCreate(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
     guild.roles->assign(data.role.id, Role(client, guild, data.role));
@@ -264,10 +263,10 @@ class EventDispatcher {
 
   void guildRoleUpdate(mapping data) {
 
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    Role cached = guild.roles->get(data.role.id);
+    Role cached = restUtils->fetchCacheRole(data.role.id, client, guild);
     if (!cached) return;
 
     Role newRole = Role(client, guild, data.role);
@@ -282,10 +281,10 @@ class EventDispatcher {
   }
 
   void guildRoleDelete(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    Role deletedRole = guild.roles->get(data.role_id);
+    Role deletedRole = restUtils->fetchCacheRole(data.role_id, client, guild);
     if (!deletedRole) return;
     guild.roles->delete(data.role_id);
     client->emit("guildRoleDelete", guild, deletedRole, client);
@@ -391,10 +390,10 @@ class EventDispatcher {
     for each member, the difference count will be so high
   */
   void presenceUpdate(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    GuildMember cached = guild.members->get(data.user.id);
+    GuildMember cached = guild.members->get(data.user.id); // AUTO FETCH
     if (!cached) return;
 
     GuildMember newMember = GuildMember(client, guild, data);

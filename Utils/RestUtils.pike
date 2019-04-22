@@ -58,4 +58,23 @@ class RestUtils {
 
     return u;
   }
+
+  Emoji fetchCacheEmoji(string emojiId, Client client, Guild|void guild) {
+    if (client.emojis->get(emojiId)) return client.emojis->get(emojiId);
+
+    Emoji e = client.api->getEmoji(emojiId);
+    client.emojis->assign(emojiId, e);
+    if (guild) guild.emojis->assign(emojiId, e);
+
+    return e;
+  }
+
+  Role fetchCacheRole(string roleId, Client client, Guild|void guild) {
+    if (guild.roles->get(roleId)) return guild.roles->get(roleId);
+
+    Role r = client.api->getRole(roleId);
+    if (guild) guild.roles->assign(roleId, r);
+
+    return r;
+  }
 }
