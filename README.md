@@ -143,6 +143,31 @@ void handleRoleDelete(Guild guild, Role newRole, Role cached, array diffs, Clien
 void handleRoleDelete(Guild guild, Role deletedRole, Client client);
 ```
 
+### channelCreate
+- when emitted:
+```pike
+void handleChannelCreate(mixed channel, Client client);
+```
+### channelUpdate
+```pike
+void handleChannelUpdate(mixed newChannel, mixed cache, array diffs, Client client);
+```
+
+### channelDelete
+```pike
+void handleChannelDelete(mixed cached, Client client);
+```
+
+### channelPinsUpdate
+```pike
+void handleChannelPinsUpdate(mixed channel, Client client);
+```
+
+### guildIntegrationsUpdate
+```pike
+void handleGuildIntegrationsUpdate(Guild guild, Client client);
+```
+
 ### messageCreate
 - when emitted:
 ```pike
