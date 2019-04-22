@@ -1,15 +1,15 @@
 class Message {
-  string id;
+  string|Val.Null id;
   GuildTextChannel channel;// TO DO TEXTCHANNEL
-  User author;
-  string content;
-  string timestamp;
-  bool tts;
-  bool mentionEveryone;
+  User|Val.Null author;
+  string|Val.Null content;
+  string|Val.Null timestamp;
+  bool|Val.Null tts;
+  bool|Val.Null mentionEveryone;
 
-  Gallon mentions; // EVERYONE, USERS, ROLES
-  Gallon attachments;
-  Gallon embeds;
+  Gallon|Val.Null mentions; // EVERYONE, USERS, ROLES
+  Gallon|Val.Null attachments;
+  array embeds;
 
   Gallon|Val.Null reactions;
   GuildMember|Val.Null member;
@@ -18,8 +18,8 @@ class Message {
   string|Val.Null nonce;
   string|Val.Null webhookId;
 
-  bool pinned;
-  int type;
+  bool|Val.Null pinned;
+  int|Val.Null type;
   // TODO message activity and message application
 
   /**
@@ -30,10 +30,12 @@ class Message {
 
   void create(Client client, mapping data) {
     id = data.id;
-    guild = client.guilds->get(data.guild_id) || Val.null;
-    channel = client.channels->get(data.channel_id);
-    author = client.users->get(data.author.id);
-    member = guild ? guild.members->get(author.id) : Val.null;
+    guild = RestUtils()->fetchCacheGuild(data.guild_id, client);
+    channel = RestUtils()->fetchCacheChannel(data.channel_id, client);
+    if (data.author) {
+      author = client.users->get(data.author.id); // auto fetch
+      member = guild.members->get(author.id); // auto fetch
+    }
     content = data.content;
     timestamp = data.timestamp;
     editedTimestamp = data.edited_timestamp || data.editedTimestamp;
@@ -42,7 +44,7 @@ class Message {
 
     mentions = Gallon(([]));
     attachments = Gallon(([]));
-    embeds = Gallon(([]));
+    embeds = data.embeds;
     reactions = Gallon(([]));
     nonce = data.nonce;
     pinned = data.pinned;

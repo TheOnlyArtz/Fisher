@@ -8,6 +8,7 @@
 */
 class MessageCacher {
   void cacheReactions(Client client, Message message, array data) {
+    if (!message.reactions || !data) return;
     Reaction reaction;
     for (int i = 0; i < sizeof(data); i++) {
       reaction = Reaction(client, message, data[i]);
@@ -16,6 +17,7 @@ class MessageCacher {
   }
 
   void cacheMentions(Client client, Message message, array data) {
+    if (!message.mentions || !data) return;
     mixed user;
     for (int i = 0; i < sizeof(data); i++) {
       user = message.guild ? GuildMember(client, message.guild, data[i]) : User(client, data[i]);
@@ -24,6 +26,7 @@ class MessageCacher {
   }
 
   void cacheAttachments(Client client, Message message, array data) {
+    if (!message.attachments || !data) return;
     for (int i = 0; i < sizeof(data); i++)
       message.attachments->assign(data[i].id, Attachment(client, data[i]));
   }

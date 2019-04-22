@@ -60,7 +60,7 @@ class EventHandlers {
     guildEmojiUpdate = ({}); // ✅
     guildEmojiRemove = ({}); // ✅
     guildEmojiAdd = ({}); // ✅
-    guildIntegrationUpdate = ({}); // HOLD
+    guildIntegrationUpdate = ({}); // ✅
     guildMemberAdd = ({}); // ✅
     guildMemberRemove = ({}); // ✅
     guildMemberUpdate = ({}); // ✅

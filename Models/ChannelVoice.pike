@@ -13,7 +13,7 @@ class ChannelVoice {
     id = data.id;
     parentId = data.parent_id || data.parentId;
     position = data.position;
-    guild = g;
+    guild = g || RestUtils()->fetchCacheGuild(data.guild_id, client);
     nsfw = data.nsfw;
     userLimit = data.user_limit || data.userLimit;
     bitrate = data.bitrate;

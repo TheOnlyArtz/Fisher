@@ -1,4 +1,4 @@
-class ClientCaching() {
+class ClientCacher {
   protected Client client;
 
   void create(Client c) {
@@ -21,7 +21,7 @@ class ClientCaching() {
   }
 
   void cacheDMs(mixed channel, object ChannelType) {
-      Guild g = client.guilds->get(channel["guild_id"]);
+      Guild g = RestUtils()->fetchCacheGuild(channel["guild_id"], client);
       client.channels->assign(channel["id"], ChannelType(client, channel));
   }
 

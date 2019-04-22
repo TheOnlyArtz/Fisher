@@ -21,9 +21,11 @@
 #include "Utils/RestUtils.pike"
 #include "Utils/Misc.pike"
 #include "Utils/EventUtils.pike"
+#include "Utils/EmbedConstructor.pike"
 
+#include "Models/GuildIntegration.pike"
 #include "Models/GuildTextChannel.pike"
-#include "Models/Caching/ClientCaching.pike"
+#include "Models/Caching/ClientCacher.pike"
 #include "Models/Attachment.pike"
 #include "Models/Reaction.pike"
 #include "Models/ReactionEmoji.pike"

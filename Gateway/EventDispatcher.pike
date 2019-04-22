@@ -8,6 +8,7 @@ class EventDispatcher {
   Client client;
 
   protected GuildCacher guildCacher;
+  protected RestUtils restUtils;
   /**
   * The constructor
   */
@@ -15,6 +16,7 @@ class EventDispatcher {
     wsHandler = w;
     client = w.client;
     guildCacher = GuildCacher(client);
+    restUtils = RestUtils();
   }
 
   /**
@@ -35,20 +37,20 @@ class EventDispatcher {
   }
 
   void channelCreate(mapping data) {
-    mixed channelO = RestUtils()->getChannelAccordingToType(data.type, data, client);
+    mixed channelO = restUtils->getChannelAccordingToType(data.type, data, client);
     if (data.type == 0 || data.type == 2 || data.type == 4) {
-      Guild guild = client.guilds->get(data.guild_id);
-      if (guild) guild.channels->assign(data.id, channelO);
+      Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
+      guild.channels->assign(data.id, channelO);
     }
      client.channels->assign(data.id, channelO);
      client->emit("channelCreate", channelO, client);
   }
 
   void channelUpdate(mapping data) {
-    mixed cached = client.channels->get(data.id);
+    mixed cached = restUtils->fetchCacheChannel(data.id, client);
     if (!cached) return;
 
-    mixed newChannel = RestUtils()->getChannelAccordingToType(cached.type, data, client);
+    mixed newChannel = restUtils->getChannelAccordingToType(cached.type, data, client);
     MiscUtils()->fixNullables(newChannel, cached);
     client.channels->assign(cached.id, newChannel);
     if (cached.guild) cached.guild.channels->assign(cached.id, newChannel);
@@ -71,7 +73,7 @@ class EventDispatcher {
   }
 
   void channelPinsUpdate(mapping data) {
-    mixed channel = client.channels->get(data.id);
+    mixed channel = restUtils->fetchCacheChannel(data.id, client);
     if (!channel) return;
 
     client->emit("channelPinsUpdate", channel, client);
@@ -96,7 +98,7 @@ class EventDispatcher {
   }
 
   void guildUpdate(mapping data) {
-    Guild oldGuild = client.guilds->get(data.id);
+    Guild oldGuild = restUtils->fetchCacheGuild(data.id, client);
     if (!oldGuild) return;
 
     Guild newGuild = Guild(client, data);
@@ -111,7 +113,7 @@ class EventDispatcher {
   }
 
   void guildDelete(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
     client.guilds->delete(data.guild_id);
@@ -121,8 +123,8 @@ class EventDispatcher {
   }
 
   void guildBanAdd(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
-    User user = client.users->get(data.user.id) ? client.users->get(data.user.id) : User(client, data.user);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
+    User user = restUtils->fetchCacheUser(data.user.id, client);
 
     if (client.users->get(data.user.id))
       client.users->delete(data.user.id);
@@ -135,7 +137,7 @@ class EventDispatcher {
   }
 
   void guildBanRemove(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     User user = User(client, data.user);
 
     if (guild)
@@ -147,7 +149,7 @@ class EventDispatcher {
   * - START -
   */
   void guildEmojisUpdate(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild || !guild.emojis) return;
 
     Gallon deletedEmojis = Gallon(copy_value(guild.emojis.iterable));
@@ -156,13 +158,12 @@ class EventDispatcher {
     Emoji newEmoji;
 
     foreach(data.emojis, mapping emoji) {
-      cached = guild.emojis->get(emoji.id);
+      cached = restUtils->fetchCacheEmoji(emoji.id, client, guild);
       newEmoji = Emoji(client, guild, emoji);
-
       if (cached) {
         diffs =  MiscUtils()->mappingDiff(cached, newEmoji);
         deletedEmojis->delete(emoji.id);
-        if (sizeof(diffs) > 1) {
+        if (sizeof(diffs) != 0) {
           // Emit guildEmojisUpdate
           emojiUpdate(newEmoji, cached, diffs, client);
         }
@@ -201,9 +202,15 @@ class EventDispatcher {
   * - END -
   */
 
-  // TODO: Guild integrations update
+  void guildIntegrationsUpdate(mapping data) {
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
+    if (!guild) return;
+
+    client->emit("guildIntegrationsUpdate", client, guild);
+  }
+
   void guildMemberAdd(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
     GuildMember member = GuildMember(client, guild, data);
@@ -216,10 +223,10 @@ class EventDispatcher {
   }
 
   void guildMemberRemove(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    User user = client.user->get(data.user.id);
+    User user = client.users->get(data.user.id);
     if (!user) user = User(client, data);
 
     // Remove from caching
@@ -230,10 +237,10 @@ class EventDispatcher {
   }
 
   void guildMemberUpdate(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    GuildMember cached = guild.members->get(data.user.id);
+    GuildMember cached = restUtils->fetchCacheUser(data.user.id, client);
     if (!cached) return;
 
     GuildMember newMember = GuildMember(client, guild, data);
@@ -251,21 +258,21 @@ class EventDispatcher {
   }
 
   void guildRoleCreate(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
     guild.roles->assign(data.role.id, Role(client, guild, data.role));
-    Role role = guild.roles->get(data.role.id);
+    Role role = restUtils->fetchCacheRole(data.role.id, client, guild);
 
     client->emit("guildRoleCreate", guild, role, client);
   }
 
   void guildRoleUpdate(mapping data) {
 
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    Role cached = guild.roles->get(data.role.id);
+    Role cached = restUtils->fetchCacheRole(data.role.id, client, guild);
     if (!cached) return;
 
     Role newRole = Role(client, guild, data.role);
@@ -280,16 +287,18 @@ class EventDispatcher {
   }
 
   void guildRoleDelete(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    Role deletedRole = guild.roles->get(data.role_id);
+    Role deletedRole = restUtils->fetchCacheRole(data.role_id, client, guild);
     if (!deletedRole) return;
     guild.roles->delete(data.role_id);
     client->emit("guildRoleDelete", guild, deletedRole, client);
   }
 
   void messageCreate(mapping data) {
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
+
     Message theMessage = Message(client, data);
 
     // TODO: Have max_messages cache to every channel
@@ -298,10 +307,11 @@ class EventDispatcher {
     theMessage.channel.lastMessageId = theMessage.id;
 
     client->emit("messageCreate", theMessage, client);
+
   }
 
   void messageUpdate(mapping data) {
-    mixed channel = client.channels->get(data.channel_id);
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!channel) return;
 
     Message cached = channel.messages->get(data.id);
@@ -312,16 +322,15 @@ class EventDispatcher {
     channel.messages->assign(data.id, newMessage);
 
     array diffs = MiscUtils()->mappingDiff(cached, newMessage);
-
     if (sizeof(diffs) != 0)
       client->emit("messageUpdate", newMessage, cached, diffs, client);
   }
 
   void messageDelete(mapping data) {
-    mixed channel = client.channels->get(data.channel_id);
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!channel) return;
 
-    Message theMessage = channel.messages->get(data.id);
+    Message theMessage = channel.messages->get(data.id); // TODO auto message cache
     if (!theMessage) return;
 
     channel.messages->delete(data.id);
@@ -329,20 +338,30 @@ class EventDispatcher {
     client->emit("messageDelete", theMessage, client);
   }
 
-  // TODO after REST implementation
   void messageDeleteBulk(mapping data) {
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
+    if (!channel) return;
 
+    array(Message) deletedCachedMessages = ({});
+    foreach(data.ids, string msgId) {
+      if (channel.messages->get(msgId)) {
+        channel.messages->delete(msgId);
+        deletedCachedMessages = Array.push(deletedCachedMessages, channel.messages->get(msgId));
+      }
+    }
+
+    client->emit("messageDeleteBulk", client, deletedCachedMessages);
   }
 
   // TODO: figure out the count
   void messageReactionAdd(mapping data) {
-    mixed cachedChannel = client.channels->get(data.channel_id);
+    mixed cachedChannel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!cachedChannel) return;
 
-    Message cachedMessage = cachedChannel.messages->get(data.message_id);
+    Message cachedMessage = cachedChannel.messages->get(data.message_id); // TODO Auto fetch message
     if (!cachedMessage) return;
 
-    Reaction theReaction = cachedMessage.reactions->get(data.emoji.id);
+    Reaction theReaction = cachedMessage.reactions->get(data.emoji.id); // TODO A-Fetch reaction
     if (!theReaction) theReaction = Reaction(client, cachedMessage, data);
 
     cachedMessage.reactions->assign(theReaction.emoji.id, theReaction);
@@ -352,7 +371,7 @@ class EventDispatcher {
   }
 
   void messageReactionRemove(mapping data) {
-    mixed cachedChannel = client.channels->get(data.channel_id);
+    mixed cachedChannel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!cachedChannel) return;
 
     Message cachedMessage = cachedChannel.messages->get(data.message_id);
@@ -370,7 +389,7 @@ class EventDispatcher {
   }
 
   void messageReactionRemoveAll(mapping data) {
-    mixed cachedChannel = client.channels->get(data.channel_id);
+    mixed cachedChannel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!cachedChannel) return;
 
     Message cachedMessage = cachedChannel.messages->get(data.message_id);
@@ -387,10 +406,10 @@ class EventDispatcher {
     for each member, the difference count will be so high
   */
   void presenceUpdate(mapping data) {
-    Guild guild = client.guilds->get(data.guild_id);
+    Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    GuildMember cached = guild.members->get(data.user.id);
+    GuildMember cached = restUtils->fetchCacheGuildMember(data.user.id, client, guild); // AUTO FETCH
     if (!cached) return;
 
     GuildMember newMember = GuildMember(client, guild, data);
@@ -404,10 +423,10 @@ class EventDispatcher {
   }
 
   void typingStart(mapping data) {
-    mixed channel = client.channels->get(data.channel_id);
+    mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
     if (!channel) return;
 
-    User user = client.users->get(data.user_id);
+    User user = restUtils->fetchCacheUser(data.user_id, client);
     if (!user) return;
 
     client->emit("typingStart", user, channel, client);
