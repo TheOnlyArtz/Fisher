@@ -22,8 +22,7 @@ void messageCreate(Message message, Client client) {
     ->addField("Discriminator", message.author.discriminator)
     ->addField("Status", message.member.presence.game.name || "uncached");
     // To send an embed you need to construct it calling _->construct();
-    // When you don't want to fill up a voidable argument pass in UNDEFINED
-    // Since it's a lower level API, you need to send embeds as an array of well.. embed objects
+    // When you don't want to fill up a void-able argument pass in UNDEFINED
     mapping payload = ([
       "embed": embed->construct()
     ]);
