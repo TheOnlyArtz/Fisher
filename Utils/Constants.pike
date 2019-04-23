@@ -12,7 +12,7 @@ class Constants {
           "d": ([
             "token": token,
             "properties": ([
-                "$os": "Fisher",
+                "$os": System.uname()["sysname"],
                 "$browser": "Fisher",
                 "$device": "Fisher",
                 "$referrer": "",
