@@ -11,7 +11,7 @@
 
 First, we will open a new folder for our bot, now run the following:
 ```
-https://github.com/TheOnlyArtz/Fisher.git
+git clone https://github.com/TheOnlyArtz/Fisher.git
 ```
 This will clone the stable branch.
 Now go ahead and make a new file named `name.pike` (it can be whatever you want).
