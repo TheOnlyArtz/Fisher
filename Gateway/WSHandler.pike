@@ -117,6 +117,8 @@ class WSHandler {
           eventDispatcher->userUpdate(data);
           break;
       }
+
+      Thread.this_thread().kill();
     }
   }
 }

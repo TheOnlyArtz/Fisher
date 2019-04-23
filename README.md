@@ -1,6 +1,25 @@
-### Fisher
+## Fisher
 - Fisher is a solution to interact with the Discord API using Pike
 - Fisher is VERY new and mid development
+
+## Installation
+```
+// Requirements
+- git
+- Pike v8.0 release 702+
+```
+
+First, we will open a new folder for our bot, now run the following:
+```
+git clone https://github.com/TheOnlyArtz/Fisher.git
+```
+This will clone the stable branch.
+Now go ahead and make a new file named `name.pike` (it can be whatever you want).
+Go ahead and `include` Fisher
+```pike
+#include "Fisher/index.pike"
+```
+Great! Now you have Fisher installed successfully and you can start using it.
 
 #### Example usage v0.0.1
 ```pike

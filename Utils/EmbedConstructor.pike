@@ -14,7 +14,7 @@ class EmbedConstructor {
   array|Val.Null fields;
 
   void create() {
-    
+
   }
 
   this_program assignTitle(string t) {
@@ -47,39 +47,78 @@ class EmbedConstructor {
     return this;
   }
 
-  this_program assignFooter(mapping f) {
-    footer = f;
+  this_program assignFooter(string text, string|void iconUrl, string|void proxyIconUrl) {
+    footer = ([
+      "text": text || Val.null,
+      "icon_url": iconUrl || Val.null,
+      "proxy_icon_url": proxyIconUrl || Val.null
+    ]);
+
     return this;
   }
 
-  this_program assignImage(mapping i) {
-    image = i;
+  this_program assignImage(string|void url, string|void proxyUrl, int|void height, int|void width) {
+    image = ([
+      "url": url || Val.null,
+      "proxy_url": proxyUrl || Val.null,
+      "height": height || Val.null,
+      "width": width || Val.null
+    ]);
+
     return this;
   }
 
-  this_program assignVideo(mapping v) {
-    video = v;
+  this_program assignVideo(string|void url, int|void height, int|void width) {
+    video = ([
+      "url": url || Val.null,
+      "height": height || Val.null,
+      "width": width || Val.null
+    ]);
+
     return this;
   }
 
-  this_program assignThumbnail(mapping t) {
-    thumbnail = t;
+  this_program assignThumbnail(string|void url, string|void proxyUrl, int|void height, int|void width) {
+    thumbnail = ([
+      "url": url || Val.null,
+      "proxy_url": proxyUrl || Val.null,
+      "height": height || Val.null,
+      "width": width || Val.null
+    ]);
+
     return this;
   }
 
-  this_program assignProvider(mapping p) {
-    provider = p;
+  this_program assignProvider(string|void name, string|void url) {
+    provider = ([
+      "name": name,
+      "url": url
+    ]);
+
     return this;
   }
 
-  this_program assignAuthor(mapping a) {
-    author = a;
+  this_program assignAuthor(string|void name, string|void url, string|void iconUrl, string|void proxyIconUrl) {
+    author = ([
+      "name": name || Val.null,
+      "url": url || Val.null,
+      "icon_url": iconUrl || Val.null,
+      "proxy_icon_url": proxyIconUrl || Val.null
+    ]);
+
     return this;
   }
 
-  this_program addField(mapping f) {
-    if (sizeof(fields) == 25) throw("Can't set more than 25 fields in a single embed!");
-    fields = Array.push(fields || ({}), f);
+  this_program addField(string name, string value, bool|void isInline) {
+    if (sizeof(fields || ({})) == 25) throw("Can't set more than 25 fields in a single embed!");
+    mapping payload = ([
+      "name": name,
+      "value": value,
+      "inline": isInline ? Val.true : Val.false
+    ]);
+
+    fields = Array.push(fields || ({}), payload);
+
     return this;
   }
 

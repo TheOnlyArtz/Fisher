@@ -1,5 +1,5 @@
 class Presence {
-  Activity game;
+  Activity|Val.Null game;
   string|int status;
 
   void create(mapping data) {
