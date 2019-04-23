@@ -44,4 +44,15 @@ class GuildCacher {
       client.cacher->cacheEmoji(guild, emoji);
     }
   }
+
+  void cachePresences(Guild guild, array data) {
+    GuildMember member;
+    Presence toAssign;
+    foreach(data, mixed presence) {
+      member = RestUtils()->fetchCacheGuildMember(presence.user.id, client, guild);
+      toAssign = Presence(presence);
+      guild.presences->assign(member.id, toAssign);
+      member.presence = toAssign;
+    }
+  }
 }

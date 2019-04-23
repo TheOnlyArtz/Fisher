@@ -91,6 +91,7 @@ class EventDispatcher {
     guildCacher->cacheMembers(guild, data.members);
     guildCacher->cacheChannels(guild, data.channels);
     guildCacher->cacheEmojis(guild, data.emojis);
+    guildCacher->cachePresences(guild, data.presences);
     client.cacher->cacheGuild(guild);
 
     if (!alreadyInside)
