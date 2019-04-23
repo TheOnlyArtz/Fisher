@@ -1,5 +1,40 @@
 class Constants {
 
+  string CDN_LINK = "https://cdn.discordapp.com/";
+  Gallon cdnConstructors = Gallon(([
+    "customEmoji": lambda(string id) {
+      return sprintf("emojis/%s.png", id);
+    },
+
+    "guildIcon": lambda(string id, string icon) {
+      return sprintf("icons/%s/%s.png", id, icon);
+    },
+
+    "guildSplash": lambda(string id, string splash) {
+      return sprintf("splashes/%s/%s.png", id, splash);
+    },
+
+    "guildBanner": lambda(string id, string banner) {
+      return sprintf("splashes/%s/%s.png", id, banner);
+    },
+
+    "defaultUserAvatar": lambda(string discriminator) {
+      return sprintf("embed/avatars/%s.png", discriminator);
+    },
+
+    "userAvatar": lambda(string id, string avatar, string|void extension) {
+      return sprintf("avatars/%s/%s.%s", id, avatar, extension||"png");
+    },
+
+    "appIcon": lambda(string id, string icon) {
+      return sprintf("app-icons/%s/%s.png", id, icon);
+    },
+
+    "appAsset": lambda(string id, string assetId) {
+      return sprintf("app-assets/%s/%s.png", id, assetId);
+    }
+  ]));
+
   mapping clientOptions = ([
     "maxMessageCaching": 300
   ]);
