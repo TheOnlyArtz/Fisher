@@ -126,8 +126,7 @@ class APIManager {
   array(Message)|void getChannelMessages(string id, mapping payload) {
     mapping headers = getHeaders();
     mixed resp = apiRequest("channels/id/messages", id, "GET", "/channels/"+id+"/messages", headers, payload, true);
-    if (resp[0].code) return;
-    if (mappingp(resp)) return throw(({sprintf("ERROR: %O", resp)}));
+
     array messages = ({});
     foreach(resp, mapping key) {
       messages = Array.push(messages, Message(client, key));
@@ -383,7 +382,6 @@ class APIManager {
 
     mapping data = apiRequest("guillds/id/emojis/id", guildId, "PATCH", endpoint, headers, payload, false);
 
-    write("%O\n", Emoji(client, guild, data));
     return Emoji(client, guild, data);
   }
 
