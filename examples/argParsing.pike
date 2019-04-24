@@ -19,7 +19,7 @@ void messageCreate(Message message, Client client) {
   // Pop the first elements (the command)
   string argumentsAsString = arguments * " "; // This will return a string joined by \s
   /* End of argument parsing */
-  
+
   if (command == "say") {
     if (!sizeof(argumentsAsString))
       return client.api->createMessage(message.channel.id, "Arguments are required!");
@@ -37,7 +37,7 @@ void messageCreate(Message message, Client client) {
     client.api->deleteMessage(message.channel.id, message.id);
 
     // Since arguments is an array of strings we have to cast it to int.
-    client.api->bulkDeleteMessages(message.channel.id, (int) arguments[0]);
-    client.api->createMessage(message.channel.id, sprintf("Deleted %d messages :)", (int) arguments[0]));
+    client.api->bulkDeleteMessages(message.channel.id, messageAmount);
+    client.api->createMessage(message.channel.id, sprintf("Deleted %d messages :)", messageAmount));
   }
 }
