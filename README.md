@@ -23,7 +23,7 @@ Great! Now you have Fisher installed successfully and you can start using it.
 
 #### Example usage v0.0.1
 ```pike
-#include "Client.pike"
+#include "pathToIndex.pike"
 
 int main() {
   Client client = Client("TOKEN");
