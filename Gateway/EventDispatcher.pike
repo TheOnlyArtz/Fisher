@@ -86,7 +86,6 @@ class EventDispatcher {
   void guildCreate(mapping data) {
     Guild guild = Guild(client, data);
     bool alreadyInside = client.guilds->get(data.id);
-
     guildCacher->cacheRoles(guild, data.roles);
     guildCacher->cacheMembers(guild, data.members);
     guildCacher->cacheChannels(guild, data.channels);
