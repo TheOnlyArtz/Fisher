@@ -11,11 +11,15 @@ int main() {
 void messageCreate(Message message, Client client) {
   string prefix = "!";
   if (message.author.bot || !has_prefix(message.content, prefix)) return; // Return for bots! (Please do.)
+
+  /* Start of argument parsing */
   array(string) arguments = (message.content  - prefix )/ " "; // This will return an array of strings accordingly
   string command = arguments[0];
   arguments = Array.shift(arguments)[1];
   // Pop the first elements (the command)
   string argumentsAsString = arguments * " "; // This will return a string joined by \s
+  /* End of argument parsing */
+  
   if (command == "say") {
     if (!sizeof(argumentsAsString))
       return client.api->createMessage(message.channel.id, "Arguments are required!");
