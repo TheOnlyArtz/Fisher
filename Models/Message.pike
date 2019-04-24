@@ -30,8 +30,8 @@ class Message {
 
   void create(Client client, mapping data) {
     id = data.id;
-    guild = RestUtils()->fetchCacheGuild(data.guild_id, client);
     channel = RestUtils()->fetchCacheChannel(data.channel_id, client);
+    guild = RestUtils()->fetchCacheGuild(channel.guild_id, client);
     if (data.author && data.author.discriminator != "0000") {
       author = RestUtils()->fetchCacheUser(data.author.id,client);
       member = guild.members->get(author.id) || Val.Null; // TODO: auto fetch
