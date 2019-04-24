@@ -1,13 +1,7 @@
 // include library here according to path
-<<<<<<< HEAD
 
 int main() {
   Client client = Client("<token>");
-=======
-#include "../index.pike"
-int main() {
-  Client client = Client("NTcwNjQ4NDk5OTk4NDI1MTE4.XMCQAA.UTdx5brJKoLVT4iu-UbhXZf_aI8");
->>>>>>> 95f571229b47a5b48c5519b4d22320754049b0f6
   client->login();
 
   client->handle("messageCreate", messageCreate);
