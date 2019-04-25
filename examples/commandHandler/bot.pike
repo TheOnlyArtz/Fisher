@@ -1,4 +1,4 @@
-#include "../../index.pike"
+// include pike here
 
 // We can use the client options in order to store more data in our client!
 // Let's go ahead and add our settings as we set a property called commands
@@ -6,10 +6,8 @@
 // You can find more information about Gallon here:
 // https://github.com/TheOnlyArtz/Fisher/blob/rest/Utils/Gallon.pike
 int main() {
-  Client client = Client("NTcwNjQ4NDk5OTk4NDI1MTE4.XMCyeg.Y1fCKRYp8ZW77AZi6UaxZB-eJbk");
-  client.options = ([
-    "commands": Gallon(([]))
-  ]);
+  Client client = Client("<token>");
+  client.options["commands"] = Gallon(([]));
 
   client->login(); // Tell the client to establish a connection with Discord.
 
