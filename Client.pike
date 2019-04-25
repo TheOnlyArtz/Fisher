@@ -35,6 +35,7 @@ class Client {
   * The constructor
   */
   void create(string t, mapping|void options) {
+    options = options || ([]);
     token = t;
     wsManager = WSManager(this);
     api = APIManager(this);
