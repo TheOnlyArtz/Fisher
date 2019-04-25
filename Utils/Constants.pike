@@ -18,8 +18,9 @@ class Constants {
       return sprintf("splashes/%s/%s.png", id, banner);
     },
 
-    "defaultUserAvatar": lambda(string discriminator) {
-      return sprintf("embed/avatars/%s.png", discriminator);
+    "defaultUserAvatar": lambda(mixed discriminator) {
+      discriminator = (int) discriminator;
+      return sprintf("embed/avatars/%d.png", discriminator % 5);
     },
 
     "userAvatar": lambda(string id, string avatar, string|void extension) {

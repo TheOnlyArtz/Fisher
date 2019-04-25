@@ -415,10 +415,12 @@ class EventDispatcher {
     MiscUtils()->fixNullables(newMember, cached);
     guild.members->assign(data.user.id, newMember);
     newMember.presence = Presence(data);
+    array diffs = ({});
 
-    array diffs = MiscUtils()->mappingDiff(newMember.presence.game, cached.presence.game);
-    if (sizeof(diffs) != 0)
-      client->emit("presenceUpdate", newMember, cached, diffs, client);
+    if (cached.presence && newMember.presence && newMember.presence.game && cached.presence.game)
+      diffs = MiscUtils()->mappingDiff(newMember.presence.game, cached.presence.game);
+
+    client->emit("presenceUpdate", newMember, cached, diffs, client);
   }
 
   void typingStart(mapping data) {
