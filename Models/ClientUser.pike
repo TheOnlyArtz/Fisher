@@ -31,7 +31,9 @@ class ClientUser {
     discriminator = data.discriminator;
     id = data.id;
     avatar = data.avatar || discriminator % 5;
-    avatarUrl = Constants().CDN_LINK + Constants().cdnConstructors->get("userAvatar")(id, avatar);
+    avatarUrl = data.avatar ?
+      Constants().CDN_LINK + Constants().cdnConstructors->get("userAvatar")(id, avatar) :
+      Constants().CDN_LINK + Constants().cdnConstructors->get("defaultUserAvatar")(discriminator);
     username = data.username;
     email = data.email;
     mfaEnabled = data.mfa_enabled || data.mfaEnabled;

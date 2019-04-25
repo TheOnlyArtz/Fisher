@@ -32,7 +32,11 @@ class User {
     username = data.username;
     discriminator = data.discriminator;
     avatar = data.avatar || discriminator % 5;
-    avatarUrl = Constants().CDN_LINK + Constants().cdnConstructors->get("userAvatar")(id, avatar);
+
+    avatarUrl = data.avatar ?
+      Constants().CDN_LINK + Constants().cdnConstructors->get("userAvatar")(id, avatar) :
+      Constants().CDN_LINK + Constants().cdnConstructors->get("defaultUserAvatar")(discriminator);
+
     bot = data.bot;
     mfa_enabled = data.enabled;
     locale = data.locale;
