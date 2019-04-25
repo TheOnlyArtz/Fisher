@@ -162,6 +162,8 @@ class APIManager {
 
     }
     mixed resp = apiRequest("channels/id/messages", channelId, "POST", endpoint, headers, payload, false);
+
+    return Message(client, resp);
   }
 
   void createReaction(string channelId, string messageId, string|Emoji emoji) {
