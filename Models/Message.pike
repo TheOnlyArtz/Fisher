@@ -31,10 +31,11 @@ class Message {
   void create(Client client, mapping data) {
     id = data.id;
     channel = RestUtils()->fetchCacheChannel(data.channel_id, client);
-    guild = RestUtils()->fetchCacheGuild(channel.guild_id, client);
+    if (channel.guild_id)
+      guild = RestUtils()->fetchCacheGuild(channel.guild_id, client);
     if (data.author && data.author.discriminator != "0000") {
       author = RestUtils()->fetchCacheUser(data.author.id,client);
-      member = guild.members->get(author.id) || Val.Null; // TODO: auto fetch
+      member = guild ? RestUtils()->fetchCacheGuildMember(author.id, client, guild) : RestUtils()->fetchCacheUser(author.id, client);
     } else author = data.author;
     content = data.content;
     timestamp = data.timestamp;

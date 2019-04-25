@@ -41,6 +41,7 @@ class Guild {
   string joinedAt;
 
   string|Val.Null icon;
+  string|Val.Null iconUrl;
   string|Val.Null splash;
   string|Val.Null afkChannelId;
   string|Val.Null embedChannelId;
@@ -86,6 +87,7 @@ class Guild {
     id = data.id;
     name = data.name;
     icon = data.icon;
+    iconUrl = Constants().CDN_LINK + Constants().cdnConstructors->get("guildIcon")(id, data.icon);
     splash = data.splash;
     owner = data.owner;
     ownerId = data.owner_id || data.ownerId;

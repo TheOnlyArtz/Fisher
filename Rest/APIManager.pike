@@ -102,8 +102,6 @@ class APIManager {
     string endpoint = sprintf("/channels/%s", channelId);
 
     mixed resp = apiRequest("channels/id", channelId, "GET", endpoint, headers, UNDEFINED, true);
-    if (resp.code) return resp;
-
     return getChannelAccordingToType(resp.type, resp, client);
   }
 
@@ -162,6 +160,8 @@ class APIManager {
 
     }
     mixed resp = apiRequest("channels/id/messages", channelId, "POST", endpoint, headers, payload, false);
+
+    return Message(client, resp);
   }
 
   void createReaction(string channelId, string messageId, string|Emoji emoji) {

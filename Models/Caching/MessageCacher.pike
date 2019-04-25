@@ -20,7 +20,7 @@ class MessageCacher {
     if (!message.mentions || !data) return;
     mixed user;
     for (int i = 0; i < sizeof(data); i++) {
-      user = message.guild ? GuildMember(client, message.guild, data[i]) : User(client, data[i]);
+      user = message.guild ? RestUtils()->fetchCacheGuildMember(data[i].id, client, message.guild) : User(client, data[i]);
       message.mentions->assign(data[i].id, user);
     }
   }

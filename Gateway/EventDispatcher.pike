@@ -57,7 +57,6 @@ class EventDispatcher {
 
     array diffs = MiscUtils()->mappingDiff(cached, newChannel);
 
-    write("%O\n", diffs);
     if (sizeof(diffs) != 0)
       client->emit("channelUpdate", newChannel, cached, diffs, client);
   }
@@ -86,12 +85,12 @@ class EventDispatcher {
   void guildCreate(mapping data) {
     Guild guild = Guild(client, data);
     bool alreadyInside = client.guilds->get(data.id);
+    client.cacher->cacheGuild(guild);
     guildCacher->cacheRoles(guild, data.roles);
+    guildCacher->cacheEmojis(guild, data.emojis);
     guildCacher->cacheMembers(guild, data.members);
     guildCacher->cacheChannels(guild, data.channels);
-    guildCacher->cacheEmojis(guild, data.emojis);
     guildCacher->cachePresences(guild, data.presences);
-    client.cacher->cacheGuild(guild);
 
     if (!alreadyInside)
       client->emit("guildCreate", guild, client);
@@ -385,7 +384,7 @@ class EventDispatcher {
       cachedMessage.reactions->delete(data.emoji.id);
 
     // Return message since cachedReaction can be deleted when it's count == 0
-    client->emit("messageReactionRemove", cachedReaction, cachedMessage, client);
+    client->emit("messageReactionRemove", cachedReaction, client);
   }
 
   void messageReactionRemoveAll(mapping data) {
@@ -409,7 +408,7 @@ class EventDispatcher {
     Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    GuildMember cached = restUtils->fetchCacheGuildMember(data.user.id, client, guild); // AUTO FETCH
+    GuildMember cached = restUtils->fetchCacheGuildMember(data.user.id, client, guild);
     if (!cached) return;
 
     GuildMember newMember = GuildMember(client, guild, data);
@@ -436,11 +435,10 @@ class EventDispatcher {
     User cached = client.user;
     if (!cached) return; // Shouldn't happen lol
 
-    User newUser = User(client, data);
+    User newUser = ClientUser(client, data);
     MiscUtils()->fixNullables(newUser, cached);
 
     array diffs = MiscUtils()->mappingDiff(newUser, cached);
-    write("%O\n", diffs);
     if (sizeof(diffs) != 0)
       client->emit("userUpdate", newUser, cached, diffs, client);
   }

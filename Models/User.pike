@@ -17,6 +17,7 @@ class User {
   string discriminator;
   string locale;
   string|Val.Null avatar;
+  string|Val.Null avatarUrl;
   string email;
   bool bot;
   bool mfa_enabled;
@@ -30,7 +31,8 @@ class User {
     id = data.id;
     username = data.username;
     discriminator = data.discriminator;
-    avatar = data.avatar;
+    avatar = data.avatar || discriminator % 5;
+    avatarUrl = Constants().CDN_LINK + Constants().cdnConstructors->get("userAvatar")(id, avatar);
     bot = data.bot;
     mfa_enabled = data.enabled;
     locale = data.locale;
