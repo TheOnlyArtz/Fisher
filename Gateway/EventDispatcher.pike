@@ -57,7 +57,6 @@ class EventDispatcher {
 
     array diffs = MiscUtils()->mappingDiff(cached, newChannel);
 
-    write("%O\n", diffs);
     if (sizeof(diffs) != 0)
       client->emit("channelUpdate", newChannel, cached, diffs, client);
   }
@@ -440,7 +439,6 @@ class EventDispatcher {
     MiscUtils()->fixNullables(newUser, cached);
 
     array diffs = MiscUtils()->mappingDiff(newUser, cached);
-    write("%O\n", diffs);
     if (sizeof(diffs) != 0)
       client->emit("userUpdate", newUser, cached, diffs, client);
   }
