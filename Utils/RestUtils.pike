@@ -34,7 +34,6 @@ class RestUtils {
   /* Auto fetch section */
   Guild fetchCacheGuild(string guildId, Client client) {
     if (client.guilds->get(guildId)) return client.guilds->get(guildId);
-
     Guild g = client.api->getGuild(guildId);
 
     client.guilds->assign(guildId, g);
@@ -81,8 +80,8 @@ class RestUtils {
   GuildMember fetchCacheGuildMember(string memberId, Client client, Guild|void guild) {
     if (guild.members->get(memberId)) return guild.members->get(memberId);
 
-    GuildMember g = client.api->getRole(memberId);
-    if (guild) guild.members->assign(memberId, g);
+    GuildMember g = client.api->getGuildMember(guild.id, memberId);
+    guild.members->assign(memberId, g);
 
     return g;
   }

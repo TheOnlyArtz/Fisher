@@ -17,10 +17,9 @@ class GuildCacher {
     foreach(data, mixed member) {
       array roles = member.roles;
 
-      member = GuildMember(client, guild, member);
-      member.presence = Presence((["activities": ({})]));
-      guild.members->assign(member.user.id, member);
       client.cacher->cacheUser(member.user);
+      member = GuildMember(client, guild, member);
+      guild.members->assign(member.user.id, member);
     }
   }
 
@@ -49,9 +48,9 @@ class GuildCacher {
     GuildMember member;
     Presence toAssign;
     foreach(data, mixed presence) {
-      member = RestUtils()->fetchCacheGuildMember(presence.user.id, client, guild);
+      member = guild.members->get(presence.user.id);
       toAssign = Presence(presence);
-      guild.presences->assign(member.id, toAssign);
+      guild.presences->assign(presence.user.id, toAssign);
       member.presence = toAssign;
     }
   }

@@ -24,7 +24,7 @@ class GuildMember {
   * @param {mapping} data - The data
   */
   void create(Client c, Guild g, mapping data) {
-    user = User(client, data.user);
+    user = RestUtils()->fetchCacheUser(data.user.id, c);
     nickname = data.nick;
     roles = Gallon(([]));
     joinedAt = data.joined_at || data.joinedAt;

@@ -35,7 +35,7 @@ class Message {
       guild = RestUtils()->fetchCacheGuild(channel.guild_id, client);
     if (data.author && data.author.discriminator != "0000") {
       author = RestUtils()->fetchCacheUser(data.author.id,client);
-      member = guild ? RestUtils()->fetchCacheGuildMember(author.id, client, guild) : Val.Null; // TODO: auto fetch
+      member = guild ? RestUtils()->fetchCacheGuildMember(author.id, client, guild) : RestUtils()->fetchCacheUser(author.id, client);
     } else author = data.author;
     content = data.content;
     timestamp = data.timestamp;

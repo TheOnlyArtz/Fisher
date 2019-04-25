@@ -8,7 +8,7 @@ class GuildTextChannel {
   protected Client client;
   void create(Client c, mapping data, void|Guild g) {
     client = c;
-    if (g) guild_id = g.id;
+    guild_id = g ? g.id : data.guild_id;
     guild = g || RestUtils()->fetchCacheGuild(guild_id, client);
     name = data.name;
     parentId = data.parent_id || data.parentId;

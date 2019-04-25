@@ -85,12 +85,12 @@ class EventDispatcher {
   void guildCreate(mapping data) {
     Guild guild = Guild(client, data);
     bool alreadyInside = client.guilds->get(data.id);
+    client.cacher->cacheGuild(guild);
     guildCacher->cacheRoles(guild, data.roles);
+    guildCacher->cacheEmojis(guild, data.emojis);
     guildCacher->cacheMembers(guild, data.members);
     guildCacher->cacheChannels(guild, data.channels);
-    guildCacher->cacheEmojis(guild, data.emojis);
     guildCacher->cachePresences(guild, data.presences);
-    client.cacher->cacheGuild(guild);
 
     if (!alreadyInside)
       client->emit("guildCreate", guild, client);
@@ -408,7 +408,7 @@ class EventDispatcher {
     Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    GuildMember cached = restUtils->fetchCacheGuildMember(data.user.id, client, guild); // AUTO FETCH
+    GuildMember cached = restUtils->fetchCacheGuildMember(data.user.id, client, guild);
     if (!cached) return;
 
     GuildMember newMember = GuildMember(client, guild, data);

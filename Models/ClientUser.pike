@@ -20,7 +20,7 @@ class ClientUser {
   bool mfaEnabled;
   mapping presence;
   string | Val.Null email;
-
+  string|Val.Null avatarUrl;
   protected Client client;
   /**
   * The constructor
@@ -30,6 +30,8 @@ class ClientUser {
     avatar = data.avatar;
     discriminator = data.discriminator;
     id = data.id;
+    avatar = data.avatar || discriminator % 5;
+    avatarUrl = Constants().CDN_LINK + Constants().cdnConstructors->get("userAvatar")(id, avatar);
     username = data.username;
     email = data.email;
     mfaEnabled = data.mfa_enabled || data.mfaEnabled;
