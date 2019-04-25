@@ -385,7 +385,7 @@ class EventDispatcher {
       cachedMessage.reactions->delete(data.emoji.id);
 
     // Return message since cachedReaction can be deleted when it's count == 0
-    client->emit("messageReactionRemove", cachedReaction, cachedMessage, client);
+    client->emit("messageReactionRemove", cachedReaction, client);
   }
 
   void messageReactionRemoveAll(mapping data) {
@@ -436,7 +436,7 @@ class EventDispatcher {
     User cached = client.user;
     if (!cached) return; // Shouldn't happen lol
 
-    User newUser = User(client, data);
+    User newUser = ClientUser(client, data);
     MiscUtils()->fixNullables(newUser, cached);
 
     array diffs = MiscUtils()->mappingDiff(newUser, cached);

@@ -215,8 +215,7 @@ void handleMessageReactionAdd(Reaction theReaction, Client client);
 ### messageReactionRemove
 - when emitted:
 ```pike
-// Should not return the message
-void handleMessageReactionRemove(Reaction cachedReaction, Message cachedMessage, Client client);
+void handleMessageReactionRemove(Reaction cachedReaction, Client client);
 ```
 
 ### messageReactionRemoveAll
@@ -241,6 +240,5 @@ void handleTypingStart(User user, mixed channel, Client client);
 Can be a little bit tricky, this is only the client's (bot) update event.
 - when emitted:
 ```pike
-// TODO: It actually should return ClientUser.
-void handleUserUpdate(User newUser, User cached, array diffs, Client client);
+void handleUserUpdate(User newUser, User cached, array diffs, ClientUser client);
 ```
