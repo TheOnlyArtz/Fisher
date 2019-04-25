@@ -21,6 +21,9 @@ Go ahead and `include` Fisher
 ```
 Great! Now you have Fisher installed successfully and you can start using it.
 
+## Updating
+Updating is as easy as running `git pull` in Fisher's path!
+
 #### Example usage v0.0.1
 ```pike
 #include "pathToIndex.pike"
