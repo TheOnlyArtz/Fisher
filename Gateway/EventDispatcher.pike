@@ -239,7 +239,7 @@ class EventDispatcher {
     Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    GuildMember cached = restUtils->fetchCacheUser(data.user.id, client);
+    GuildMember cached = restUtils->fetchCacheGuildMember(data.user.id, client, guild);
     if (!cached) return;
 
     GuildMember newMember = GuildMember(client, guild, data);
