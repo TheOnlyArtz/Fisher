@@ -70,9 +70,7 @@ class RestUtils {
 
   mixed fetchCacheRoles(string roleId, Client client, Guild|void guild) {
     if (guild.roles->get(roleId)) return guild.roles->get(roleId);
-    write("%O\n", guild.id);
     array(Role) r = client.api->getGuildRoles(guild.id);
-    write("%O\n", r);
     foreach(r, Role role) {
       guild.roles->assign(role.id, role);
     }
