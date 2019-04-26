@@ -3,7 +3,7 @@ class GuildTextChannel {
 
   string topic;
   string lastMessageId;
-  Gallon messages;
+  Cache messages;
 
   protected Client client;
   void create(Client c, mapping data, void|Guild g) {
@@ -19,8 +19,7 @@ class GuildTextChannel {
     topic = data.topic;
     lastMessageId = data.last_message_id;
 
-    messages = Gallon(([]));
-
+    messages = Cache(client.ttlList, "messages");
     permissionOverwrites = Gallon(([]));
     foreach(data.permission_overwrites, mapping data) {
       permissionOverwrites->assign(data.id, Permission(client, data, guild||UNDEFINED));
