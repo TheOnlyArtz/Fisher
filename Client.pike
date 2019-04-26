@@ -20,16 +20,18 @@ class Client {
   Protocols.WebSocket.Connection ws;
 
   // Caching
-  Gallon users;
-  Gallon presences;
-  Gallon guilds;
-  Gallon channels;
-  Gallon emojis;
+  Cache users;
+  Cache presences;
+  Cache guilds;
+  Cache channels;
+  Cache emojis;
 
   mapping options;
   // Others
   ClientUser user;
   ClientCacher cacher;
+
+  TTLCache ttlList;
 
   /*
   * The constructor
@@ -41,12 +43,15 @@ class Client {
     api = APIManager(this);
     handlers = EventHandlers();
     // Caching
-    users = Gallon(([]));
-    presences = Gallon(([]));
-    guilds = Gallon(([]));
-    channels = Gallon(([]));
-    emojis = Gallon(([]));
+    if (options.TTLCache == true) {
+      ttlList = TTLCache();
+    }
 
+    users = Cache(ttlList, "users");
+    // presences = Cache(ttlList, "presences"); // TODO
+    guilds = Cache(ttlList, "guilds");
+    channels = Cache(ttlList, "channels");
+    emojis = Cache(ttlList, "emojis");
     cacher = ClientCacher(this);
     eventsClient = this;
   }
