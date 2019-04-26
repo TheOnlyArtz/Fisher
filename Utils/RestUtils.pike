@@ -71,7 +71,7 @@ class RestUtils {
   Role fetchCacheRole(string roleId, Client client, Guild|void guild) {
     if (guild.roles->get(roleId)) return guild.roles->get(roleId);
 
-    Role r = client.api->getRole(roleId);
+    Role r = client.api->getGuildRole(guild.id, roleId);
     if (guild) guild.roles->assign(roleId, r);
 
     return r;
