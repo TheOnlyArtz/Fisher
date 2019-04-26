@@ -15,8 +15,10 @@ class Permission {
 
     if (!objectp(guild))
       return;
-    else if (data.type == "role")
-      overwriteable = RestUtils()->fetchCacheRole(data.id, client, guild);
+    else if (data.type == "role") {
+      RestUtils()->fetchCacheRoles(data.id, client, guild);
+      overwriteable = guild.roles->get(data.id);
+    }
     else if (data.type == "member")
       overwriteable = RestUtils()->fetchCacheGuildMember(data.id, client, guild);
   }

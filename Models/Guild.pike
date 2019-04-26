@@ -67,12 +67,12 @@ class Guild {
   int memberCount;
   int maxMembers;
 
-  Gallon roles;
-  Gallon emojis;
+  Cache roles;
+  Cache emojis;
   Gallon voiceStates;
-  Gallon members;
-  Gallon channels;
-  Gallon presences;
+  Cache members;
+  Cache channels;
+  Cache presences;
 
   array(string) features;
 
@@ -100,12 +100,12 @@ class Guild {
     verificationLevel = data.verification_level || data.verificationLevel;
     defaultMessageNotifications = data.default_message_notifications || data.defaultMessageNotifications;
     explicitContentFilter = data.explicit_content_filter || data.explicitContentFilter;
-    roles = Gallon(([]));
-    emojis = Gallon(([]));
+    roles = Cache(c.ttlList, "roles");
+    emojis = Cache(c.ttlList, "emojis");
     voiceStates = Gallon(([]));
-    members = Gallon(([]));
-    channels = Gallon(([]));
-    presences = Gallon(([]));
+    members = Cache(c.ttlList, "members");
+    channels = Cache(c.ttlList, "channels");
+    presences = Cache(c.ttlList, "presences");
 
     features = data.features;
 

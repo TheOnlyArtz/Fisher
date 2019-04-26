@@ -1,5 +1,7 @@
 #include "Utils/Gallon.pike"
 #include "Models/Caching/Disposal.pike"
+#include "Models/Caching/Cache.pike"
+#include "Models/Caching/TTLCache.pike"
 #include "Utils/Constants.pike"
 
 #include "Gateway/EventDispatcher.pike"

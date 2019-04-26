@@ -261,7 +261,7 @@ class EventDispatcher {
     if (!guild) return;
 
     guild.roles->assign(data.role.id, Role(client, guild, data.role));
-    Role role = restUtils->fetchCacheRole(data.role.id, client, guild);
+    Role role = Role(client, guild, data.role);
 
     client->emit("guildRoleCreate", guild, role, client);
   }
@@ -271,7 +271,8 @@ class EventDispatcher {
     Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    Role cached = restUtils->fetchCacheRole(data.role.id, client, guild);
+    restUtils->fetchCacheRoles(data.role.id, client, guild);
+    Role cached = guild.roles->get(data.role.id);
     if (!cached) return;
 
     Role newRole = Role(client, guild, data.role);
@@ -289,7 +290,8 @@ class EventDispatcher {
     Guild guild = restUtils->fetchCacheGuild(data.guild_id, client);
     if (!guild) return;
 
-    Role deletedRole = restUtils->fetchCacheRole(data.role_id, client, guild);
+    restUtils->fetchCacheRoles(data.role.id, client, guild);
+    Role deletedRole = guild.roles->get(data.role.id);
     if (!deletedRole) return;
     guild.roles->delete(data.role_id);
     client->emit("guildRoleDelete", guild, deletedRole, client);
@@ -297,7 +299,6 @@ class EventDispatcher {
 
   void messageCreate(mapping data) {
     mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
-
     Message theMessage = Message(client, data);
 
     // TODO: Have max_messages cache to every channel

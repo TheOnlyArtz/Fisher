@@ -565,11 +565,12 @@ class APIManager {
     Guild guild = restUtils->fetchCacheGuild(guildId, client);
 
     array data = apiRequest("/guilds/id/roles", guildId, "GET", endpoint, headers, UNDEFINED, true);
-
     array(Role) roles = ({});
     foreach(data, mapping role) {
       roles = Array.push(roles, Role(client, guild, role));
     }
+
+    return roles;
   }
 
   Role getGuildRole(string guildId, string roleId) {
