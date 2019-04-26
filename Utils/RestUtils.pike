@@ -68,13 +68,16 @@ class RestUtils {
     return e;
   }
 
-  Role fetchCacheRole(string roleId, Client client, Guild|void guild) {
+  mixed fetchCacheRoles(string roleId, Client client, Guild|void guild) {
     if (guild.roles->get(roleId)) return guild.roles->get(roleId);
+    write("%O\n", guild.id);
+    array(Role) r = client.api->getGuildRoles(guild.id);
+    write("%O\n", r);
+    foreach(r, Role role) {
+      guild.roles->assign(role.id, role);
+    }
 
-    Role r = client.api->getGuildRole(guild.id, roleId);
-    if (guild) guild.roles->assign(roleId, r);
-
-    return r;
+    // return r;
   }
 
   GuildMember fetchCacheGuildMember(string memberId, Client client, Guild|void guild) {
