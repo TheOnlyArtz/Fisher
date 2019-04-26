@@ -18,12 +18,12 @@ class Cache {
     mapping payload;
     if (majorParameter) {
       payload = ([
-        "expires": time() + (10),
+        "expires": time() + (10 * 60),
         cacheType: majorParameter
       ]);
     } else {
       payload = ([
-        "expires": time() + (10)
+        "expires": time() + (10 * 60)
       ]);
     }
 
@@ -34,7 +34,7 @@ class Cache {
     mixed val = desiredList->get(key);
     if (!val) return;
 
-    val["expires"] = time() + (10);
+    val["expires"] = time() + (10 * 60);
   }
 
   /**

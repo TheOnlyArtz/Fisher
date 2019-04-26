@@ -32,7 +32,7 @@ class TTLCache {
     loopTTLlist(messagesTTL);
     loopTTLlist(membersTTL);
     loopTTLlist(presencesTTL);
-    call_out(Thread.Thread, 5, dispose);
+    call_out(Thread.Thread, 5 * 60, dispose);
     Thread.this_thread()->kill();
   }
 
