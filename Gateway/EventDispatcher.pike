@@ -299,6 +299,7 @@ class EventDispatcher {
 
   void messageCreate(mapping data) {
     mixed channel = restUtils->fetchCacheChannel(data.channel_id, client);
+    if (!channel) return;
     Message theMessage = Message(client, data);
 
     // TODO: Have max_messages cache to every channel
