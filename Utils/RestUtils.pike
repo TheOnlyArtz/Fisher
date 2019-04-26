@@ -44,6 +44,7 @@ class RestUtils {
     if (client.channels->get(channelId)) return client.channels->get(channelId);
 
     mixed c = client.api->getChannel(channelId);
+    if (c.guild) c.guild.channels->assign(channelId, c);
     client.channels->assign(channelId, c);
 
     return c;
