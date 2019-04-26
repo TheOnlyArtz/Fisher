@@ -17,7 +17,7 @@ class ChannelCategory {
     type = data.type;
     name = data.name;
     parentId = data.parent_id || data.parentId;
-    if (g) guild_id = g.id;
+    guild_id = g ? g.id : data.guild_id;
     guild = g || RestUtils()->fetchCacheGuild(guild_id, client);
 
     permissionOverwrites = Gallon(([]));
