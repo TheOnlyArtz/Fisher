@@ -11,18 +11,17 @@ class ChannelCategory {
   inherit GuildChannel;
 
   void create(Client c, mapping data, void|Guild g) {
-    client = c;
 
     id = data.id;
     type = data.type;
     name = data.name;
     parentId = data.parent_id || data.parentId;
     guild_id = g ? g.id : data.guild_id;
-    guild = g || RestUtils()->fetchCacheGuild(guild_id, client);
+    guild = g || RestUtils()->fetchCacheGuild(guild_id, c);
 
     permissionOverwrites = Gallon(([]));
     foreach(data.permission_overwrites, mapping data) {
-      permissionOverwrites->assign(data.id, Permission(client, data, guild||UNDEFINED));
+      permissionOverwrites->assign(data.id, Permission(c, data, guild||UNDEFINED));
     }
   }
 }

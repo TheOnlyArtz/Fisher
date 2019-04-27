@@ -5,8 +5,6 @@ class Permission {
   string id;
 
   GuildMember|Role|Val.Null overwriteable;
-  protected Client client;
-
   void create(Client client, mapping data, Guild|void guild) {
     allow = data.allow;
     deny = data.deny;

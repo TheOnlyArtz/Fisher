@@ -16,7 +16,6 @@ class GuildMember {
   bool muted;
   Presence presence;
   Guild guild;
-  protected Client client;
 
   /**
   * The constructor
@@ -24,7 +23,7 @@ class GuildMember {
   * @param {mapping} data - The data
   */
   void create(Client c, Guild g, mapping data) {
-    user = c.users->get(data.user.id) || User(client, data.user);
+    user = c.users->get(data.user.id) || User(c, data.user);
     nickname = data.nick;
     roles = Gallon(([]));
     joinedAt = data.joined_at || data.joinedAt;
@@ -32,7 +31,6 @@ class GuildMember {
     muted = data.mute;
 
     guild = g;
-    client = c;
 
     foreach(data.roles, string key) {
       roles->assign(key, guild.roles->get(key));

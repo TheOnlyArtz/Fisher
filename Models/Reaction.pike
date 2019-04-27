@@ -4,11 +4,9 @@ class Reaction {
   ReactionEmoji emoji;
   User|string user;
   Message message;
-  protected Client client;
 
   // emote is basically emoji... just so conflicts won't happen.
   void create(Client c, Message msg, mapping data) {
-    client = c;
     count = data.count || 0;
     me = data.me;
     message = msg;

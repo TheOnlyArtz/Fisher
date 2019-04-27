@@ -25,8 +25,6 @@ class User {
   int flags;
   int premiumType;
 
-  protected Client client;
-
   void create(Client c, mapping data) {
     id = data.id;
     username = data.username;
@@ -44,8 +42,6 @@ class User {
     email = data.email;
     flags = data.flags;
     premiumType = data.premium_type || data.premiumType;
-
-    client = c;
   }
 
   string whenCreated() {

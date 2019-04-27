@@ -20,7 +20,6 @@ class Role {
   int position;
   int permissions;
 
-  protected Client client;
   protected Guild guild;
   /**
   * The constructor
@@ -28,7 +27,6 @@ class Role {
   * @param {mapping} data
   */
   void create(Client c, Guild g, mapping data) {
-    client = c;
     guild = g;
     id = data.id;
     name = data.name;

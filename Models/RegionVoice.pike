@@ -8,11 +8,9 @@ class RegionVoice {
   bool custom;
 
   Guild guild;
-  protected Client client;
   void create(Client c, Guild g, mapping data) {
-    client = c;
     guild = g;
-    
+
     id = data.id;
     name = data.name;
     vip = data.vip;

@@ -76,14 +76,12 @@ class Guild {
 
   array(string) features;
 
-  protected Client client;
-
   /**
   * The constructor
   * @param {mapping} data - The guild data
   * @param {Client} client - The client
   */
-  void create(Client c, mapping data) {
+  void create(Client client, mapping data) {
     id = data.id;
     name = data.name;
     icon = data.icon;
@@ -100,12 +98,12 @@ class Guild {
     verificationLevel = data.verification_level || data.verificationLevel;
     defaultMessageNotifications = data.default_message_notifications || data.defaultMessageNotifications;
     explicitContentFilter = data.explicit_content_filter || data.explicitContentFilter;
-    roles = Cache(c.ttlList, "roles");
-    emojis = Cache(c.ttlList, "emojis");
+    roles = Cache(client.ttlList, "roles");
+    emojis = Cache(client.ttlList, "emojis");
     voiceStates = Gallon(([]));
-    members = Cache(c.ttlList, "members");
-    channels = Cache(c.ttlList, "channels");
-    presences = Cache(c.ttlList, "presences");
+    members = Cache(client.ttlList, "members");
+    channels = Cache(client.ttlList, "channels");
+    presences = Cache(client.ttlList, "presences");
 
     features = data.features;
 
@@ -121,7 +119,5 @@ class Guild {
     description = data.description;
     vanityUrlCode = data.vanity_url_code || data.vanityUrlCode;
     maxPresences = data.max_presences || data.maxPresences;
-
-    client = c;
   }
 }

@@ -17,16 +17,13 @@ class Emoji {
   bool|Val.Null managed;
   bool|Val.Null animated;
 
-  protected Client client;
-
   void create(Client c, Guild g, mapping data) {
-    client = c;
     guild = g;
 
     id = data.id;
     name = data.name;
     roles = Gallon(([]));
-    user = user ? User(client, data) : Val.null;
+    user = user ? User(c, data) : Val.null;
     requireColons = data.require_colons || data.requireColons;
     managed = data.managed;
     animated = data.animated;

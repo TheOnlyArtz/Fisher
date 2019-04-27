@@ -16,5 +16,4 @@ class GuildChannel {
   int type;
   string id;
   string guild_id;
-  protected Client client;
 }
